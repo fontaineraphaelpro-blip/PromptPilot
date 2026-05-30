@@ -1,0 +1,6 @@
+#!/bin/sh
+# Push automatique vers GitHub après chaque commit local
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+if [ -n "$branch" ]; then
+  git push origin "$branch" 2>/dev/null || git push -u origin "$branch"
+fi
