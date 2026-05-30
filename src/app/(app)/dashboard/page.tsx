@@ -65,7 +65,7 @@ export default async function DashboardPage() {
             <CardDescription>Prompts aujourd&apos;hui</CardDescription>
             <CardTitle>
               {unlimited ? (
-                <span className="text-primary">Illimité</span>
+                <span className="text-foreground">Illimité</span>
               ) : (
                 <>
                   {todayUsage} / {FREE_DAILY_LIMIT}
@@ -98,9 +98,9 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Link href="/history">
-          <Card className="hover:border-primary/30 transition-colors cursor-pointer h-full">
+          <Card className="hover-lift cursor-pointer h-full glass-card">
             <CardContent className="flex items-center gap-4 p-6">
-              <History className="h-8 w-8 text-primary" />
+              <History className="h-8 w-8" />
               <div>
                 <p className="font-semibold">Historique</p>
                 <p className="text-sm text-muted-foreground">Voir tous vos prompts</p>
@@ -110,9 +110,9 @@ export default async function DashboardPage() {
           </Card>
         </Link>
         <Link href="/favorites">
-          <Card className="hover:border-primary/30 transition-colors cursor-pointer h-full">
+          <Card className="hover-lift cursor-pointer h-full glass-card">
             <CardContent className="flex items-center gap-4 p-6">
-              <Star className="h-8 w-8 text-primary" />
+              <Star className="h-8 w-8" />
               <div>
                 <p className="font-semibold">Favoris</p>
                 <p className="text-sm text-muted-foreground">Prompts sauvegardés</p>
@@ -150,7 +150,7 @@ export default async function DashboardPage() {
           <Card>
             <CardContent className="py-8 text-center text-muted-foreground text-sm">
               Aucun prompt encore.{" "}
-              <Link href="/generate" className="text-primary hover:underline">
+              <Link href="/generate" className="text-foreground hover:underline">
                 Créer le premier
               </Link>
             </CardContent>

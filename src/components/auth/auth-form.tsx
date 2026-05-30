@@ -82,7 +82,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto glass-card">
       <CardHeader>
         <CardTitle>{isLogin ? "Connexion" : "Inscription"}</CardTitle>
         <CardDescription>
@@ -137,7 +137,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 />
                 <label htmlFor="acceptTerms" className="text-sm text-muted-foreground leading-tight">
                   J&apos;accepte les{" "}
-                  <Link href="/terms" className="text-primary hover:underline" target="_blank">
+                  <Link href="/terms" className="text-foreground hover:underline" target="_blank">
                     conditions d&apos;utilisation
                   </Link>{" "}
                   et la{" "}
@@ -162,14 +162,14 @@ export function AuthForm({ mode }: AuthFormProps) {
           {isLogin ? (
             <>
               Pas de compte ?{" "}
-              <Link href="/signup" className="text-primary hover:underline">
+              <Link href="/signup" className="text-foreground hover:underline">
                 S&apos;inscrire
               </Link>
             </>
           ) : (
             <>
               Déjà inscrit ?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href="/login" className="text-foreground hover:underline">
                 Se connecter
               </Link>
             </>

@@ -56,6 +56,41 @@ DATABASE_URL = ${{Postgres.DATABASE_URL}}
 
 ---
 
+## Dépannage — logs que tu vois
+
+### `next start --hostname 0.0.0.0` (sans `[promptpilot]`)
+
+Railway lance une **ancienne** commande ou une commande personnalisée.
+
+1. Service web → **Settings** → **Start Command** → vide ou :
+   ```
+   node scripts/start-production.mjs
+   ```
+2. **Redeploy** après un push du dernier code GitHub.
+
+Logs corrects :
+
+```
+[promptpilot] Synchronisation du schéma PostgreSQL…
+[promptpilot] Démarrage Next.js…
+```
+
+### `[auth][error] MissingSecret`
+
+Ajoute **`AUTH_SECRET`** (min. 16 caractères) dans les variables du **service web** :
+
+```bash
+openssl rand -base64 32
+```
+
+Puis `AUTH_URL` et `NEXT_PUBLIC_APP_URL` = l’URL publique Railway (`https://….up.railway.app`).
+
+### `Environment variable not found: DATABASE_URL`
+
+Le service web n’a pas accès à Postgres → étape 2 ci-dessous.
+
+---
+
 ## Étape 4 — Vérifier les logs au déploiement
 
 Dans **Deployments** → dernier deploy → **View logs**, tu dois voir :

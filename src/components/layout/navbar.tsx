@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface NavbarProps {
   user?: { email: string } | null;
@@ -9,18 +12,32 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-card/80 backdrop-blur-md">
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="glass-nav sticky top-0 z-50"
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg text-white">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-black transition-transform group-hover:scale-105">
             <Sparkles className="h-4 w-4" />
           </span>
-          <span>{APP_NAME}</span>
+          <span className="font-semibold tracking-tight">{APP_NAME}</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-          <Link href="/#how" className="hover:text-foreground">Comment ça marche</Link>
-          <Link href="/#pricing" className="hover:text-foreground">Tarifs</Link>
-          <Link href="/pricing" className="hover:text-foreground">Plans</Link>
+        <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
+          {["Comment ça marche", "Tarifs", "Plans"].map((label, i) => {
+            const href = i === 0 ? "/#how" : i === 1 ? "/#pricing" : "/pricing";
+            return (
+              <Link
+                key={label}
+                href={href}
+                className="transition-colors hover:text-foreground relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full"
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
         <div className="flex items-center gap-2">
           {user ? (
@@ -44,6 +61,6 @@ export function Navbar({ user }: NavbarProps) {
           )}
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

@@ -47,36 +47,41 @@ export function DashboardSidebar({ plan }: DashboardSidebarProps) {
 
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border bg-card lg:flex lg:flex-col">
-      <div className="flex h-16 items-center gap-2 border-b border-border px-6">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg text-white">
+      <div className="flex h-16 items-center gap-2.5 border-b border-border px-6">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
           <Sparkles className="h-4 w-4" />
         </span>
-        <span className="font-semibold">{APP_NAME}</span>
+        <span className="font-semibold tracking-tight">{APP_NAME}</span>
       </div>
       <nav className="flex-1 space-y-1 p-4">
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-              pathname === href || (href !== "/dashboard" && pathname.startsWith(href))
-                ? "bg-primary/10 text-primary font-medium"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
-        ))}
+        {navItems.map(({ href, label, icon: Icon }) => {
+          const active =
+            pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
+                active
+                  ? "bg-white text-black font-medium"
+                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </Link>
+          );
+        })}
       </nav>
       <div className="border-t border-border p-4">
         <Badge variant={plan === "free" ? "free" : "pro"} className="mb-3">
           Plan {PLAN_LABELS[plan]}
         </Badge>
         <button
+          type="button"
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-white/5 hover:text-foreground transition-colors"
         >
           <LogOut className="h-4 w-4" />
           Déconnexion

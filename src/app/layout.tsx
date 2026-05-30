@@ -53,7 +53,7 @@ export default function RootLayout({
         <AuthSessionProvider>
           {children}
         </AuthSessionProvider>
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" theme="dark" richColors />
       </body>
     </html>
   );

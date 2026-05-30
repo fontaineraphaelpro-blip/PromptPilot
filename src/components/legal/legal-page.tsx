@@ -21,7 +21,7 @@ export function LegalPage({ title, updatedAt, children }: LegalPageProps) {
       <p className="text-sm text-muted-foreground mt-2">
         Dernière mise à jour : {updatedAt}
       </p>
-      <div className="prose prose-slate mt-8 max-w-none text-muted-foreground space-y-4 text-sm leading-relaxed">
+      <div className="prose prose-invert mt-8 max-w-none text-muted-foreground space-y-4 text-sm leading-relaxed">
         {children}
       </div>
     </article>

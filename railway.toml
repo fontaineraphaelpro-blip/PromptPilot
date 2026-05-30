@@ -4,7 +4,7 @@ buildCommand = "npx prisma generate && npm run build"
 
 [deploy]
 # db push au démarrage (scripts/start-production.mjs) — plus fiable que release seul
-startCommand = "npm start"
+startCommand = "node scripts/start-production.mjs"
 releaseCommand = "npx prisma db push --skip-generate || true"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 180

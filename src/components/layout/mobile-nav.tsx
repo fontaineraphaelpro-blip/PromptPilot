@@ -16,15 +16,15 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 glass-nav lg:hidden">
       <div className="flex justify-around py-2">
         {items.map(({ href, icon: Icon, label }) => (
           <Link
             key={href}
             href={href}
             className={cn(
-              "flex flex-col items-center gap-0.5 px-3 py-1 text-xs",
-              pathname.startsWith(href) ? "text-primary" : "text-muted-foreground"
+              "flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors",
+              pathname.startsWith(href) ? "text-foreground" : "text-muted-foreground"
             )}
           >
             <Icon className="h-5 w-5" />
@@ -34,8 +34,8 @@ export function MobileNav() {
         <Link
           href="/settings"
           className={cn(
-            "flex flex-col items-center gap-0.5 px-3 py-1 text-xs",
-            pathname.startsWith("/settings") ? "text-primary" : "text-muted-foreground"
+            "flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors",
+            pathname.startsWith("/settings") ? "text-foreground" : "text-muted-foreground"
           )}
         >
           <Menu className="h-5 w-5" />

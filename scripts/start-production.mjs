@@ -17,11 +17,23 @@ function run(cmd, args) {
   }
 }
 
-if (!process.env.DATABASE_URL) {
+const missing = [];
+if (!process.env.DATABASE_URL?.trim()) missing.push("DATABASE_URL");
+if (!process.env.AUTH_SECRET?.trim()) missing.push("AUTH_SECRET");
+
+if (missing.length > 0) {
   console.error(
-    "[promptpilot] ERREUR: DATABASE_URL manquante.\n" +
-      "Sur Railway: ajoute un service PostgreSQL et lie DATABASE_URL au service web\n" +
-      "(Variables → Add Reference → Postgres → DATABASE_URL)."
+    "[promptpilot] ERREUR — variables manquantes sur Railway:\n" +
+      missing.map((v) => `  • ${v}`).join("\n") +
+      "\n\nDATABASE_URL:\n" +
+      "  1. + New → Database → PostgreSQL\n" +
+      "  2. Service web → Variables → Add Reference → Postgres → DATABASE_URL\n\n" +
+      "AUTH_SECRET:\n" +
+      "  Génère: openssl rand -base64 32\n" +
+      "  Variables → AUTH_SECRET = (colle la valeur)\n\n" +
+      "Recommandé aussi:\n" +
+      "  AUTH_URL = https://ton-app.up.railway.app\n" +
+      "  NEXT_PUBLIC_APP_URL = (même URL)\n"
   );
   process.exit(1);
 }
