@@ -3,18 +3,24 @@
  * Nécessite DATABASE_URL dans les variables d'environnement.
  */
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
-function run(cmd, args) {
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const repairSqlPath = join(__dirname, "..", "prisma", "repair-partial-schema.sql");
+
+function run(cmd, args, { allowFail = false } = {}) {
   console.log(`[promptpilot] ${cmd} ${args.join(" ")}`);
   const result = spawnSync(cmd, args, {
     stdio: "inherit",
     shell: true,
     env: process.env,
   });
-  if (result.status !== 0) {
+  if (result.status !== 0 && !allowFail) {
     console.error(`[promptpilot] Échec: ${cmd} (code ${result.status})`);
-    process.exit(result.status ?? 1);
+    return false;
   }
+  return result.status === 0;
 }
 
 const authSecret =
@@ -42,7 +48,24 @@ if (missing.length > 0) {
 }
 
 console.log("[promptpilot] Synchronisation du schéma PostgreSQL…");
-run("npx", ["prisma", "db", "push", "--skip-generate"]);
+let pushed = run("npx", ["prisma", "db", "push", "--skip-generate"]);
+
+if (!pushed) {
+  console.warn(
+    "[promptpilot] Échec db push — réparation schéma partiel (user_id text → uuid)…"
+  );
+  run("npx", ["prisma", "db", "execute", "--file", repairSqlPath], {
+    allowFail: true,
+  });
+  pushed = run("npx", ["prisma", "db", "push", "--skip-generate"]);
+}
+
+if (!pushed) {
+  console.error(
+    "[promptpilot] Impossible de synchroniser la base. Vérifie DATABASE_URL ou réinitialise Postgres sur Railway."
+  );
+  process.exit(1);
+}
 
 console.log("[promptpilot] Seed des templates (si vide)…");
 const seed = spawnSync("npx", ["prisma", "db", "seed"], {
@@ -55,11 +78,6 @@ if (seed.status !== 0) {
 }
 
 console.log("[promptpilot] Démarrage Next.js…");
-run("npx", [
-  "next",
-  "start",
-  "--hostname",
-  "0.0.0.0",
-  "-p",
-  process.env.PORT || "3000",
-]);
+if (!run("npx", ["next", "start", "--hostname", "0.0.0.0", "-p", process.env.PORT || "3000"])) {
+  process.exit(1);
+}

@@ -119,6 +119,17 @@ ERREUR: DATABASE_URL manquante
 
 ---
 
+## Erreur `user_id` text vs `uuid`
+
+Si les logs affichent `foreign key constraint ... incompatible types: text and uuid` :
+
+1. Le correctif automatique supprime les tables `profiles`, `prompts`, `daily_usage` puis recrée le schéma (les **comptes users** sont conservés).
+2. Redéploie après le dernier push GitHub.
+
+En dernier recours : Railway → Postgres → **Reset database** (efface tout), puis redéploie.
+
+---
+
 ## Créer la DB manuellement (optionnel)
 
 Dans **Postgres** → **Data** → **Connect** → copie `DATABASE_URL`, puis en local :
