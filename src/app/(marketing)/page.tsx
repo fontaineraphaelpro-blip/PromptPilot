@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { HeroSection } from "@/components/landing/hero-section";
+import { FunnelWizard } from "@/components/conversion/funnel-wizard";
+import { SocialProof } from "@/components/conversion/social-proof";
+import { FinalCtaSection } from "@/components/conversion/final-cta-section";
 import { AIMarquee } from "@/components/landing/ai-marquee";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { PricingSection } from "@/components/landing/pricing-section";
@@ -13,6 +16,8 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <FunnelWizard />
+      <SocialProof />
       <AIMarquee />
 
       <section className="px-4 py-24 sm:px-6 border-t border-border/40">
@@ -91,6 +96,7 @@ export default function HomePage() {
 
       <PricingSection />
       <FaqSection />
+      <FinalCtaSection />
     </>
   );
 }

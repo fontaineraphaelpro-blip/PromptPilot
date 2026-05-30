@@ -6,8 +6,8 @@ export function Footer() {
   return (
     <footer className="border-t border-border/60 bg-black mt-auto">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid gap-12 md:grid-cols-4">
-          <div className="md:col-span-2">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
+          <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2.5 font-semibold text-lg">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
                 <Sparkles className="h-4 w-4" />
@@ -17,6 +17,31 @@ export function Footer() {
             <p className="mt-4 text-sm text-muted-foreground max-w-sm leading-relaxed">
               Transforme tes idées en prompts experts pour ChatGPT, Claude, Cursor, Midjourney et plus.
             </p>
+          </div>
+          <div>
+            <p className="font-medium text-sm mb-4 text-foreground">Ressources SEO</p>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li>
+                <Link href="/blog" className="transition-colors hover:text-foreground">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides" className="transition-colors hover:text-foreground">
+                  Guides
+                </Link>
+              </li>
+              <li>
+                <Link href="/comparatif" className="transition-colors hover:text-foreground">
+                  Comparatifs
+                </Link>
+              </li>
+              <li>
+                <Link href="/prompts-ia" className="transition-colors hover:text-foreground">
+                  Prompts par IA
+                </Link>
+              </li>
+            </ul>
           </div>
           <div>
             <p className="font-medium text-sm mb-4 text-foreground">Produit</p>

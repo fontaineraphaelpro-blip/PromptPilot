@@ -1,12 +1,20 @@
 import { z } from "zod";
 
+/** Railway colle parfois l'URL sans https:// — Next.js exige une URL valide au build. */
+export function normalizeAppUrl(raw?: string | null): string {
+  const value = raw?.trim();
+  if (!value) return "http://localhost:3000";
+  if (/^https?:\/\//i.test(value)) return value.replace(/\/$/, "");
+  return `https://${value.replace(/\/$/, "")}`;
+}
+
 const serverSchema = z.object({
   DATABASE_URL: z.string().min(1),
   AUTH_SECRET: z.string().min(16),
   OPENAI_API_KEY: z.string().min(1).optional(),
   STRIPE_SECRET_KEY: z.string().min(1).optional(),
   STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
-  NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_APP_URL: z.string().optional(),
   NEXT_PUBLIC_STRIPE_PRO_PRICE_ID: z.string().optional(),
   NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID: z.string().optional(),
 });
@@ -38,5 +46,5 @@ export function isStripeConfigured(): boolean {
 }
 
 export function getAppUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  return normalizeAppUrl(process.env.NEXT_PUBLIC_APP_URL);
 }

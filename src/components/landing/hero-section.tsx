@@ -48,16 +48,19 @@ export function HeroSection() {
 
         <FadeInHero delay={0.35}>
           <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button size="lg" className="group min-w-[220px]" asChild>
-              <Link href="/signup">
-                Créer mon prompt gratuitement
+            <Button size="lg" className="group min-w-[240px]" asChild>
+              <Link href="/#funnel">
+                Commencer — c&apos;est gratuit
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="min-w-[180px] border-white/20" asChild>
-              <Link href="/#examples">Voir les exemples</Link>
+              <Link href="/#examples">Voir avant / après</Link>
             </Button>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            ↓ Parcours guidé en 3 étapes — sans carte bancaire
+          </p>
         </FadeInHero>
 
         <FadeInHero delay={0.5}>

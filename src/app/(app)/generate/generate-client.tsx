@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { PromptGeneratorForm } from "@/components/generate/prompt-generator-form";
 import { PromptResultCard } from "@/components/generate/prompt-result-card";
 import type { GeneratePromptFormValues } from "@/lib/validations/prompt";
 import type { GeneratePromptResult } from "@/types";
-import type { Plan } from "@/lib/constants";
+import type { Plan, TargetAI } from "@/lib/constants";
+import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,25 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<(GeneratePromptResult & { id?: string }) | null>(null);
   const [lastInput, setLastInput] = useState<GeneratePromptFormValues | null>(null);
+  const [funnelReady, setFunnelReady] = useState(false);
+
+  const funnelDefaults = useMemo(() => {
+    const draft = getFunnelDraft();
+    if (!draft) return undefined;
+    const ai = draft.targetAi as TargetAI;
+    return {
+      userIdea: draft.idea,
+      targetAI: ai,
+    } satisfies Partial<GeneratePromptFormValues>;
+  }, [funnelReady]);
+
+  useEffect(() => {
+    const draft = getFunnelDraft();
+    if (draft) {
+      setFunnelReady(true);
+      toast.success("Ton idée est prête — lance la génération !", { duration: 5000 });
+    }
+  }, []);
 
   async function handleSubmit(data: GeneratePromptFormValues) {
     if (!openaiReady) {
@@ -131,6 +151,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           onSubmit={handleSubmit}
           isLoading={isLoading}
           disabled={atLimit || !openaiReady}
+          defaultValues={funnelDefaults}
         />
       ) : (
         <PromptResultCard

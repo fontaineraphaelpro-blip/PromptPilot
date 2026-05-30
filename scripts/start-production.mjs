@@ -17,9 +17,12 @@ function run(cmd, args) {
   }
 }
 
+const authSecret =
+  process.env.AUTH_SECRET?.trim() || process.env.NEXTAUTH_SECRET?.trim();
+
 const missing = [];
 if (!process.env.DATABASE_URL?.trim()) missing.push("DATABASE_URL");
-if (!process.env.AUTH_SECRET?.trim()) missing.push("AUTH_SECRET");
+if (!authSecret) missing.push("AUTH_SECRET (ou NEXTAUTH_SECRET)");
 
 if (missing.length > 0) {
   console.error(

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { getStripe, getPriceIdForPlan } from "@/lib/stripe";
 import { getOrCreateProfile, updateProfileByUserId } from "@/lib/profile";
+import { getAppUrl } from "@/lib/env";
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
 
     const profile = await getOrCreateProfile(user.id, user.email ?? "");
     const stripe = getStripe();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const appUrl = getAppUrl();
 
     let customerId = profile.stripe_customer_id;
 

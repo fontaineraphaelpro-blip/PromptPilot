@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 
 interface AuthFormProps {
   mode: "login" | "signup";
@@ -70,8 +71,9 @@ export function AuthForm({ mode }: AuthFormProps) {
         );
       }
 
-      toast.success(isLogin ? "Connexion réussie" : "Bienvenue sur PromptPilot !");
-      router.push(redirect);
+      toast.success(isLogin ? "Connexion réussie" : "Bienvenue — ton prompt t'attend !");
+      const funnelDraft = !isLogin ? getFunnelDraft() : null;
+      router.push(funnelDraft ? "/generate" : redirect);
       router.refresh();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erreur d'authentification";
@@ -88,7 +90,9 @@ export function AuthForm({ mode }: AuthFormProps) {
         <CardDescription>
           {isLogin
             ? "Accédez à votre espace PromptPilot"
-            : "Créez votre compte gratuit — 3 prompts/jour"}
+            : getFunnelDraft()
+              ? "Dernière étape : débloque ton prompt complet en 30 secondes"
+              : "Créez votre compte gratuit — 3 prompts/jour"}
         </CardDescription>
       </CardHeader>
       <CardContent>

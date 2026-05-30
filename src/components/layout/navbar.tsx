@@ -25,19 +25,21 @@ export function Navbar({ user }: NavbarProps) {
           </span>
           <span className="font-semibold tracking-tight">{APP_NAME}</span>
         </Link>
-        <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          {["Comment ça marche", "Tarifs", "Plans"].map((label, i) => {
-            const href = i === 0 ? "/#how" : i === 1 ? "/#pricing" : "/pricing";
-            return (
-              <Link
-                key={label}
-                href={href}
-                className="transition-colors hover:text-foreground relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full"
-              >
-                {label}
-              </Link>
-            );
-          })}
+        <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex lg:gap-8">
+          {[
+            { label: "Comment ça marche", href: "/#how" },
+            { label: "Blog", href: "/blog" },
+            { label: "Prompts IA", href: "/prompts-ia" },
+            { label: "Tarifs", href: "/pricing" },
+          ].map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
+              className="transition-colors hover:text-foreground relative after:absolute after:bottom-[-4px] after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full"
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
         <div className="flex items-center gap-2">
           {user ? (
@@ -55,7 +57,7 @@ export function Navbar({ user }: NavbarProps) {
                 <Link href="/login">Connexion</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/signup">Commencer</Link>
+                <Link href="/#funnel">Commencer</Link>
               </Button>
             </>
           )}
