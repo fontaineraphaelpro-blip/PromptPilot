@@ -3,9 +3,10 @@ builder = "nixpacks"
 buildCommand = "npx prisma generate && npm run build"
 
 [deploy]
+# db push au démarrage (scripts/start-production.mjs) — plus fiable que release seul
 startCommand = "npm start"
-releaseCommand = "npx prisma db push && npx prisma db seed"
+releaseCommand = "npx prisma db push --skip-generate || true"
 healthcheckPath = "/api/health"
-healthcheckTimeout = 120
+healthcheckTimeout = 180
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
