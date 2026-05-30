@@ -59,7 +59,6 @@ model Prompt {
 
   @@index([userId])
   @@index([createdAt(sort: Desc)])
-  @@index([shareToken])
   @@map("prompts")
 }
 

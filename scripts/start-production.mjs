@@ -7,7 +7,10 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const repairSqlPath = join(__dirname, "..", "prisma", "repair-partial-schema.sql");
+const rootDir = join(__dirname, "..");
+const schemaPath = join(rootDir, "prisma", "schema.prisma");
+const repairSqlPath = join(rootDir, "prisma", "repair-partial-schema.sql");
+const migrateFeaturesPath = join(rootDir, "prisma", "migrate-prompt-features.sql");
 
 function run(cmd, args, { allowFail = false } = {}) {
   console.log(`[promptpilot] ${cmd} ${args.join(" ")}`);
@@ -15,12 +18,35 @@ function run(cmd, args, { allowFail = false } = {}) {
     stdio: "inherit",
     shell: true,
     env: process.env,
+    cwd: rootDir,
   });
   if (result.status !== 0 && !allowFail) {
     console.error(`[promptpilot] Échec: ${cmd} (code ${result.status})`);
     return false;
   }
   return result.status === 0;
+}
+
+function dbPush() {
+  return run("npx", [
+    "prisma",
+    "db",
+    "push",
+    "--skip-generate",
+    "--accept-data-loss",
+  ]);
+}
+
+function dbExecute(file) {
+  return run("npx", [
+    "prisma",
+    "db",
+    "execute",
+    "--file",
+    file,
+    "--schema",
+    schemaPath,
+  ]);
 }
 
 const authSecret =
@@ -48,16 +74,22 @@ if (missing.length > 0) {
 }
 
 console.log("[promptpilot] Synchronisation du schéma PostgreSQL…");
-let pushed = run("npx", ["prisma", "db", "push", "--skip-generate"]);
+let pushed = dbPush();
 
 if (!pushed) {
   console.warn(
-    "[promptpilot] Échec db push — réparation schéma partiel (user_id text → uuid)…"
+    "[promptpilot] db push échoué — migration additive v1.4 (colonnes score, tags, partage)…"
   );
-  run("npx", ["prisma", "db", "execute", "--file", repairSqlPath], {
-    allowFail: true,
-  });
-  pushed = run("npx", ["prisma", "db", "push", "--skip-generate"]);
+  dbExecute(migrateFeaturesPath);
+  pushed = dbPush();
+}
+
+if (!pushed) {
+  console.warn(
+    "[promptpilot] Échec persistant — réparation schéma partiel (user_id text → uuid, tables recréées)…"
+  );
+  dbExecute(repairSqlPath);
+  pushed = dbPush();
 }
 
 if (!pushed) {
@@ -72,12 +104,22 @@ const seed = spawnSync("npx", ["prisma", "db", "seed"], {
   stdio: "inherit",
   shell: true,
   env: process.env,
+  cwd: rootDir,
 });
 if (seed.status !== 0) {
   console.warn("[promptpilot] Seed ignoré ou déjà fait (non bloquant).");
 }
 
 console.log("[promptpilot] Démarrage Next.js…");
-if (!run("npx", ["next", "start", "--hostname", "0.0.0.0", "-p", process.env.PORT || "3000"])) {
+if (
+  !run("npx", [
+    "next",
+    "start",
+    "--hostname",
+    "0.0.0.0",
+    "-p",
+    process.env.PORT || "3000",
+  ])
+) {
   process.exit(1);
 }
