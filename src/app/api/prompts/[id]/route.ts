@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
-export async function PATCH(
-  request: Request,
+export async function DELETE(
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
@@ -13,14 +13,11 @@ export async function PATCH(
     return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
   }
 
-  const { is_favorite } = await request.json();
-
-  const updated = await prisma.prompt.updateMany({
+  const deleted = await prisma.prompt.deleteMany({
     where: { id, userId: user.id },
-    data: { isFavorite: is_favorite },
   });
 
-  if (updated.count === 0) {
+  if (deleted.count === 0) {
     return NextResponse.json({ error: "Prompt introuvable" }, { status: 404 });
   }
 

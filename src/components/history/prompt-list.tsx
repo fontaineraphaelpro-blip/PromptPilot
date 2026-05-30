@@ -11,7 +11,6 @@ import { useCopy } from "@/hooks/use-copy";
 import { Copy, Star, Trash2, Check, Search } from "lucide-react";
 import { toast } from "sonner";
 import type { PromptRecord } from "@/types";
-import { createClient } from "@/lib/supabase/client";
 
 interface PromptListProps {
   prompts: PromptRecord[];
@@ -50,9 +49,8 @@ export function PromptList({ prompts: initial }: PromptListProps) {
   }
 
   async function handleDelete(id: string) {
-    const supabase = createClient();
-    const { error } = await supabase.from("prompts").delete().eq("id", id);
-    if (error) {
+    const res = await fetch(`/api/prompts/${id}`, { method: "DELETE" });
+    if (!res.ok) {
       toast.error("Erreur suppression");
       return;
     }

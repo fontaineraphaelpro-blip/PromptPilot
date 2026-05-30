@@ -1,33 +1,34 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
 import { getTodayUsage } from "@/lib/usage";
 import { hasUnlimitedPrompts, PLAN_LABELS } from "@/lib/plans";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Wand2, History, Star, ArrowRight } from "lucide-react";
-import type { PromptRecord } from "@/types";
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) return null;
 
   const profile = await getOrCreateProfile(user.id, user.email ?? "");
   const todayUsage = await getTodayUsage(user.id);
   const unlimited = hasUnlimitedPrompts(profile.plan);
 
-  const { data: recentPrompts } = await supabase
-    .from("prompts")
-    .select("id, original_idea, target_ai, created_at, is_favorite")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-    .limit(5);
+  const recentRows = await prisma.prompt.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+    select: {
+      id: true,
+      originalIdea: true,
+      targetAi: true,
+      createdAt: true,
+    },
+  });
 
   const firstName = user.email?.split("@")[0] ?? "utilisateur";
 
@@ -124,23 +125,21 @@ export default async function DashboardPage() {
             <Link href="/history">Tout voir</Link>
           </Button>
         </div>
-        {recentPrompts && recentPrompts.length > 0 ? (
+        {recentRows.length > 0 ? (
           <ul className="space-y-2">
-            {(recentPrompts as Pick<PromptRecord, "id" | "original_idea" | "target_ai" | "created_at">[]).map(
-              (p) => (
-                <li key={p.id}>
-                  <Link
-                    href={`/history/${p.id}`}
-                    className="block rounded-lg border border-border bg-card p-4 hover:bg-muted/50 transition-colors"
-                  >
-                    <p className="font-medium line-clamp-1">{p.original_idea}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {p.target_ai} · {new Date(p.created_at).toLocaleDateString("fr-FR")}
-                    </p>
-                  </Link>
-                </li>
-              )
-            )}
+            {recentRows.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={`/history/${p.id}`}
+                  className="block rounded-lg border border-border bg-card p-4 hover:bg-muted/50 transition-colors"
+                >
+                  <p className="font-medium line-clamp-1">{p.originalIdea}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {p.targetAi} · {p.createdAt.toLocaleDateString("fr-FR")}
+                  </p>
+                </Link>
+              </li>
+            ))}
           </ul>
         ) : (
           <Card>

@@ -1,28 +1,26 @@
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { mapPrompt } from "@/lib/mappers";
 import { PromptList } from "@/components/history/prompt-list";
 import { EmptyState } from "@/components/shared/empty-state";
 import { History } from "lucide-react";
-import type { PromptRecord } from "@/types";
 
 export default async function HistoryPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) return null;
 
-  const { data: prompts } = await supabase
-    .from("prompts")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+  const rows = await prisma.prompt.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const prompts = rows.map(mapPrompt);
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <h1 className="text-2xl font-bold">Historique</h1>
-      {prompts && prompts.length > 0 ? (
-        <PromptList prompts={prompts as PromptRecord[]} />
+      {prompts.length > 0 ? (
+        <PromptList prompts={prompts} />
       ) : (
         <EmptyState
           icon={History}

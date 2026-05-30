@@ -1,4 +1,8 @@
--- PromptPilot Supabase Schema
+-- ⚠️ OBSOLÈTE — La base de données est sur Railway PostgreSQL + Prisma.
+-- Voir prisma/schema.prisma et npm run db:push
+-- Ce fichier est conservé uniquement comme référence historique.
+
+-- PromptPilot Supabase Schema (legacy)
 -- Run in Supabase SQL Editor
 
 -- Profiles

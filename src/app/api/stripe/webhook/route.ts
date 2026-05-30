@@ -2,14 +2,11 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
 import { getStripe, planFromPriceId } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
-
-function getServiceSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+import {
+  updateProfileByStripeCustomerId,
+  updateProfileByUserId,
+} from "@/lib/profile";
+import type { Plan } from "@/lib/constants";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -34,22 +31,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  const supabase = getServiceSupabase();
-
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.user_id;
-      const plan = session.metadata?.plan as "pro" | "creator" | undefined;
+      const plan = session.metadata?.plan as Plan | undefined;
 
       if (userId && plan) {
-        await supabase
-          .from("profiles")
-          .update({
-            plan,
-            stripe_subscription_id: session.subscription as string,
-          })
-          .eq("user_id", userId);
+        await updateProfileByUserId(userId, {
+          plan,
+          stripeSubscriptionId: session.subscription as string,
+        });
       }
       break;
     }
@@ -58,17 +50,15 @@ export async function POST(request: Request) {
       const subscription = event.data.object as Stripe.Subscription;
       const customerId = subscription.customer as string;
       const priceId = subscription.items.data[0]?.price.id;
-      const plan = subscription.status === "active"
-        ? planFromPriceId(priceId ?? "")
-        : "free";
+      const plan: Plan =
+        subscription.status === "active"
+          ? planFromPriceId(priceId ?? "")
+          : "free";
 
-      await supabase
-        .from("profiles")
-        .update({
-          plan,
-          stripe_subscription_id: subscription.id,
-        })
-        .eq("stripe_customer_id", customerId);
+      await updateProfileByStripeCustomerId(customerId, {
+        plan,
+        stripeSubscriptionId: subscription.id,
+      });
       break;
     }
 
@@ -76,10 +66,10 @@ export async function POST(request: Request) {
       const subscription = event.data.object as Stripe.Subscription;
       const customerId = subscription.customer as string;
 
-      await supabase
-        .from("profiles")
-        .update({ plan: "free", stripe_subscription_id: null })
-        .eq("stripe_customer_id", customerId);
+      await updateProfileByStripeCustomerId(customerId, {
+        plan: "free",
+        stripeSubscriptionId: null,
+      });
       break;
     }
   }

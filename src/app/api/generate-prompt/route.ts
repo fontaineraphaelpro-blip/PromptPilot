@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { generatePromptSchema } from "@/lib/validations/prompt";
 import { generatePromptWithOpenAI } from "@/lib/openai/generate";
 import { getOrCreateProfile } from "@/lib/profile";
 import { checkUsageLimit, incrementUsage } from "@/lib/usage";
+import { prisma } from "@/lib/db";
 import type { GeneratePromptInput } from "@/types";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getAuthUser();
 
     if (!user) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
@@ -58,34 +56,28 @@ export async function POST(request: Request) {
 
     const result = await generatePromptWithOpenAI(input);
 
-    const { data: saved, error: saveError } = await supabase
-      .from("prompts")
-      .insert({
-        user_id: user.id,
-        original_idea: input.userIdea,
-        target_ai: input.targetAI,
-        task_type: input.taskType,
-        detail_level: input.detailLevel,
+    const saved = await prisma.prompt.create({
+      data: {
+        userId: user.id,
+        originalIdea: input.userIdea,
+        targetAi: input.targetAI,
+        taskType: input.taskType,
+        detailLevel: input.detailLevel,
         tone: input.tone,
         language: input.language,
-        generated_prompt: result.generated_prompt,
-        short_variant: result.short_variant,
-        detailed_variant: result.detailed_variant,
-        expert_variant: result.expert_variant,
-        ai_tips: result.ai_tips,
-      })
-      .select("id")
-      .single();
-
-    if (saveError) {
-      console.error("Save prompt error:", saveError);
-    }
+        generatedPrompt: result.generated_prompt,
+        shortVariant: result.short_variant,
+        detailedVariant: result.detailed_variant,
+        expertVariant: result.expert_variant,
+        aiTips: result.ai_tips,
+      },
+    });
 
     await incrementUsage(user.id);
 
     return NextResponse.json({
       ...result,
-      id: saved?.id,
+      id: saved.id,
       usage: {
         used: usage.used + 1,
         limit: usage.limit,

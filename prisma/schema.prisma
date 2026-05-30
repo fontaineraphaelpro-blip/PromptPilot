@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id                   String   @id @default(uuid()) @db.Uuid
+  userId               String   @unique @map("user_id")
+  email                String
+  plan                 String   @default("free")
+  stripeCustomerId     String?  @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?  @map("stripe_subscription_id")
+  preferredLanguage    String   @default("Français") @map("preferred_language")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  @@map("profiles")
+}
+
+model Prompt {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id")
+  originalIdea    String   @map("original_idea")
+  targetAi        String   @map("target_ai")
+  taskType        String   @map("task_type")
+  detailLevel     String   @map("detail_level")
+  tone            String
+  language        String   @default("Français")
+  generatedPrompt String   @map("generated_prompt")
+  shortVariant    String   @default("") @map("short_variant")
+  detailedVariant String @default("") @map("detailed_variant")
+  expertVariant   String   @default("") @map("expert_variant")
+  aiTips          String   @default("") @map("ai_tips")
+  isFavorite      Boolean  @default(false) @map("is_favorite")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@map("prompts")
+}
+
+model DailyUsage {
+  id          String @id @default(uuid()) @db.Uuid
+  userId      String @map("user_id")
+  date        String
+  promptCount Int    @default(0) @map("prompt_count")
+
+  @@unique([userId, date])
+  @@map("daily_usage")
+}
+
+model Template {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  category    String
+  targetAi    String   @map("target_ai")
+  description String
+  content     String
+  isPremium   Boolean  @default(false) @map("is_premium")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("templates")
+}

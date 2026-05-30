@@ -1,17 +1,13 @@
 import type { Plan } from "@/lib/constants";
 import type { Profile } from "@/types";
-import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/db";
+import { mapProfile } from "@/lib/mappers";
 
 export async function getProfile(userId: string): Promise<Profile | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  return data as Profile;
+  const row = await prisma.profile.findUnique({
+    where: { userId },
+  });
+  return row ? mapProfile(row) : null;
 }
 
 export async function getOrCreateProfile(
@@ -21,20 +17,53 @@ export async function getOrCreateProfile(
   const existing = await getProfile(userId);
   if (existing) return existing;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .insert({
-      user_id: userId,
+  const row = await prisma.profile.create({
+    data: {
+      userId,
       email,
-      plan: "free" as Plan,
-    })
-    .select()
-    .single();
+      plan: "free",
+    },
+  });
 
-  if (error || !data) {
-    throw new Error("Impossible de créer le profil");
+  return mapProfile(row);
+}
+
+export async function updateProfileByUserId(
+  userId: string,
+  data: {
+    plan?: Plan;
+    stripeCustomerId?: string | null;
+    stripeSubscriptionId?: string | null;
   }
+): Promise<void> {
+  await prisma.profile.update({
+    where: { userId },
+    data: {
+      ...(data.plan !== undefined && { plan: data.plan }),
+      ...(data.stripeCustomerId !== undefined && {
+        stripeCustomerId: data.stripeCustomerId,
+      }),
+      ...(data.stripeSubscriptionId !== undefined && {
+        stripeSubscriptionId: data.stripeSubscriptionId,
+      }),
+    },
+  });
+}
 
-  return data as Profile;
+export async function updateProfileByStripeCustomerId(
+  stripeCustomerId: string,
+  data: {
+    plan?: Plan;
+    stripeSubscriptionId?: string | null;
+  }
+): Promise<void> {
+  await prisma.profile.updateMany({
+    where: { stripeCustomerId },
+    data: {
+      ...(data.plan !== undefined && { plan: data.plan }),
+      ...(data.stripeSubscriptionId !== undefined && {
+        stripeSubscriptionId: data.stripeSubscriptionId,
+      }),
+    },
+  });
 }

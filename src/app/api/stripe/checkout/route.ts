@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { getStripe, getPriceIdForPlan } from "@/lib/stripe";
-import { getOrCreateProfile } from "@/lib/profile";
+import { getOrCreateProfile, updateProfileByUserId } from "@/lib/profile";
 
 export async function POST(request: Request) {
   try {
@@ -11,10 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Plan invalide" }, { status: 400 });
     }
 
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getAuthUser();
 
     if (!user) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
@@ -29,13 +26,10 @@ export async function POST(request: Request) {
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: user.email,
-        metadata: { supabase_user_id: user.id },
+        metadata: { user_id: user.id },
       });
       customerId = customer.id;
-      await supabase
-        .from("profiles")
-        .update({ stripe_customer_id: customerId })
-        .eq("user_id", user.id);
+      await updateProfileByUserId(user.id, { stripeCustomerId: customerId });
     }
 
     const session = await stripe.checkout.sessions.create({

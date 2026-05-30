@@ -1,49 +1,28 @@
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import type { Plan } from "@/lib/constants";
 import { hasUnlimitedPrompts } from "@/lib/plans";
-import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/db";
 
 function todayDateString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
 export async function getTodayUsage(userId: string): Promise<number> {
-  const supabase = await createClient();
   const today = todayDateString();
-
-  const { data } = await supabase
-    .from("daily_usage")
-    .select("prompt_count")
-    .eq("user_id", userId)
-    .eq("date", today)
-    .maybeSingle();
-
-  return data?.prompt_count ?? 0;
+  const row = await prisma.dailyUsage.findUnique({
+    where: { userId_date: { userId, date: today } },
+  });
+  return row?.promptCount ?? 0;
 }
 
 export async function incrementUsage(userId: string): Promise<void> {
-  const supabase = await createClient();
   const today = todayDateString();
 
-  const { data: existing } = await supabase
-    .from("daily_usage")
-    .select("id, prompt_count")
-    .eq("user_id", userId)
-    .eq("date", today)
-    .maybeSingle();
-
-  if (existing) {
-    await supabase
-      .from("daily_usage")
-      .update({ prompt_count: existing.prompt_count + 1 })
-      .eq("id", existing.id);
-  } else {
-    await supabase.from("daily_usage").insert({
-      user_id: userId,
-      date: today,
-      prompt_count: 1,
-    });
-  }
+  await prisma.dailyUsage.upsert({
+    where: { userId_date: { userId, date: today } },
+    create: { userId, date: today, promptCount: 1 },
+    update: { promptCount: { increment: 1 } },
+  });
 }
 
 export async function checkUsageLimit(

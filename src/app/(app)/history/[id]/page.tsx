@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { mapPrompt } from "@/lib/mappers";
 import { PromptDetailClient } from "@/components/history/prompt-detail-client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import type { PromptRecord } from "@/types";
 
 export default async function HistoryDetailPage({
   params,
@@ -12,21 +13,16 @@ export default async function HistoryDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) return null;
 
-  const { data: prompt } = await supabase
-    .from("prompts")
-    .select("*")
-    .eq("id", id)
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const row = await prisma.prompt.findFirst({
+    where: { id, userId: user.id },
+  });
 
-  if (!prompt) notFound();
+  if (!row) notFound();
+
+  const prompt = mapPrompt(row);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -37,14 +33,12 @@ export default async function HistoryDetailPage({
         </Link>
       </Button>
       <div>
-        <h1 className="text-xl font-bold line-clamp-2">
-          {(prompt as PromptRecord).original_idea}
-        </h1>
+        <h1 className="text-xl font-bold line-clamp-2">{prompt.original_idea}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {(prompt as PromptRecord).target_ai} · {(prompt as PromptRecord).task_type}
+          {prompt.target_ai} · {prompt.task_type}
         </p>
       </div>
-      <PromptDetailClient prompt={prompt as PromptRecord} />
+      <PromptDetailClient prompt={prompt} />
     </div>
   );
 }

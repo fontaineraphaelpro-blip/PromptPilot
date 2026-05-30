@@ -1,22 +1,18 @@
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
+import { prisma } from "@/lib/db";
+import { mapTemplate } from "@/lib/mappers";
 import { TemplateGrid } from "@/components/templates/template-grid";
-import type { Template } from "@/types";
 
 export default async function TemplatesPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) return null;
 
   const profile = await getOrCreateProfile(user.id, user.email ?? "");
 
-  const { data: templates } = await supabase
-    .from("templates")
-    .select("*")
-    .order("category");
+  const rows = await prisma.template.findMany({
+    orderBy: { category: "asc" },
+  });
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -26,10 +22,7 @@ export default async function TemplatesPage() {
           Prompts pré-écrits par catégorie. Les templates premium nécessitent le plan Pro.
         </p>
       </div>
-      <TemplateGrid
-        templates={(templates ?? []) as Template[]}
-        plan={profile.plan}
-      />
+      <TemplateGrid templates={rows.map(mapTemplate)} plan={profile.plan} />
     </div>
   );
 }

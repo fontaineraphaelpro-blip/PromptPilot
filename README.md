@@ -6,7 +6,8 @@ SaaS qui transforme une idée vague en prompt ultra détaillé, optimisé pour l
 
 - **Next.js 16** (App Router) + TypeScript
 - **Tailwind CSS 4** + composants style shadcn/ui
-- **Supabase** — Auth + PostgreSQL + RLS
+- **Railway PostgreSQL** — Base de données (Prisma)
+- **Supabase** — Authentification uniquement (email/password)
 - **OpenAI API** — Génération de prompts (`gpt-4o-mini`)
 - **Stripe** — Abonnements Pro / Creator
 - **Zod** + React Hook Form — Validation
@@ -25,25 +26,37 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 
 ## Configuration
 
-### 1. Supabase
+### 1. Base de données Railway (PostgreSQL)
 
-1. Créer un projet sur [supabase.com](https://supabase.com).
-2. **SQL Editor** → exécuter le fichier `supabase/schema.sql`.
-3. **Authentication** → activer Email provider.
-4. **Settings → API** → copier :
+1. Sur [railway.app](https://railway.app), dans ton projet → **+ New** → **Database** → **PostgreSQL**.
+2. Clique sur Postgres → **Connect** → copie `DATABASE_URL`.
+3. Dans ton service **PromptPilot** → **Variables** → ajoute `DATABASE_URL` (ou utilise **Add Reference** pour lier Postgres au service web).
+4. En local, colle la même URL dans `.env.local` puis :
+
+```bash
+npm run db:push   # crée les tables
+npm run db:seed   # insère les templates
+```
+
+Au déploiement, `railway.toml` exécute automatiquement `prisma db push` + seed.
+
+### 2. Supabase (auth seulement)
+
+1. Créer un projet sur [supabase.com](https://supabase.com) — **pas besoin** d'exécuter `supabase/schema.sql` (tables sur Railway).
+2. **Authentication** → activer Email provider.
+3. **Settings → API** → copier :
    - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
    - `anon public` → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `service_role` → `SUPABASE_SERVICE_ROLE_KEY` (webhook Stripe uniquement, jamais côté client)
-5. **Authentication → URL Configuration** :
-   - Site URL : `http://localhost:3000`
-   - Redirect URLs : `http://localhost:3000/auth/callback`
+4. **Authentication → URL Configuration** :
+   - Site URL : ton URL Railway ou `http://localhost:3000`
+   - Redirect URLs : `https://TON-URL/auth/callback`
 
-### 2. OpenAI
+### 3. OpenAI
 
 1. Créer une clé sur [platform.openai.com](https://platform.openai.com/api-keys).
 2. `OPENAI_API_KEY=sk-...`
 
-### 3. Stripe
+### 4. Stripe
 
 1. Créer un compte [stripe.com](https://stripe.com) (mode Test).
 2. **Products** → créer 2 abonnements récurrents :
@@ -60,7 +73,7 @@ Copier le signing secret → `STRIPE_WEBHOOK_SECRET`
 
 5. Activer le **Customer Portal** dans Stripe Dashboard → Settings → Billing → Customer portal.
 
-### 4. App URL
+### 5. App URL
 
 ```
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -107,8 +120,11 @@ src/
 ├── hooks/
 ├── lib/           # Supabase, OpenAI, Stripe, validations
 ├── types/
+prisma/
+├── schema.prisma
+└── seed.ts
 supabase/
-└── schema.sql
+└── schema.sql   # obsolète — voir Prisma
 ```
 
 ## Scripts
@@ -118,6 +134,8 @@ npm run dev      # Développement
 npm run build    # Build production
 npm run start    # Production
 npm run lint     # ESLint
+npm run db:push  # Sync schéma → PostgreSQL
+npm run db:seed  # Templates initiaux
 npm run hooks    # Activer push auto après chaque git commit
 npm run ship     # git add + commit + push (message: npm run ship -- "mon message")
 ```
