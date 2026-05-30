@@ -10,6 +10,7 @@ import { TARGET_AIS, TASK_TYPES } from "@/lib/constants";
 import { useCopy } from "@/hooks/use-copy";
 import { Copy, Star, Trash2, Check, Search } from "lucide-react";
 import { toast } from "sonner";
+import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import type { PromptRecord } from "@/types";
 import type { Plan } from "@/lib/constants";
 import { canUseFavorites } from "@/lib/plans";
@@ -41,7 +42,7 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
 
   async function toggleFavorite(id: string, current: boolean) {
     if (!favoritesAllowed) {
-      toast.error("Favoris réservés au plan Pro — 9€/mois");
+      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
       return;
     }
     const res = await fetch(`/api/prompts/${id}/favorite`, {
@@ -55,7 +56,7 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
       );
       toast.success(current ? "Retiré des favoris" : "Ajouté aux favoris");
     } else if (res.status === 403) {
-      toast.error("Favoris réservés au plan Pro — 9€/mois");
+      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
     } else {
       toast.error("Impossible de mettre à jour le favori");
     }

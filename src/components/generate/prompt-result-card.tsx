@@ -18,6 +18,7 @@ import {
 import type { GeneratePromptResult } from "@/types";
 import type { Plan } from "@/lib/constants";
 import { hasAdvancedVariants, canUseFavorites } from "@/lib/plans";
+import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +57,10 @@ export function PromptResultCard({
 
   async function handleCopy() {
     if (activeTab === "expert" && !expertUnlocked) {
-      toast.error("La variante Expert est réservée au plan Creator");
+      toastUpgradeRequired(
+        "La variante Expert est réservée au plan Creator (19€/mois).",
+        "creator"
+      );
       return;
     }
     const text = variants[activeTab] ?? result.generated_prompt;
@@ -154,18 +158,14 @@ export function PromptResultCard({
               Sauvegarder
             </Button>
           )}
-          {onToggleFavorite && result.id && favoritesAllowed && (
+          {result.id && onToggleFavorite && (
             <Button variant="outline" onClick={onToggleFavorite}>
               <Star className={`h-4 w-4 ${isFavorite ? "fill-primary text-primary" : ""}`} />
-              {isFavorite ? "Retirer favori" : "Favori"}
-            </Button>
-          )}
-          {onToggleFavorite && result.id && !favoritesAllowed && (
-            <Button variant="outline" asChild>
-              <Link href="/pricing?plan=pro">
-                <Star className="h-4 w-4" />
-                Favoris (Pro)
-              </Link>
+              {favoritesAllowed
+                ? isFavorite
+                  ? "Retirer favori"
+                  : "Favori"
+                : "Ajouter aux favoris"}
             </Button>
           )}
           {onRegenerate && (

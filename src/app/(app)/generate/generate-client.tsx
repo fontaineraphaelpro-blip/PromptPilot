@@ -7,9 +7,11 @@ import { PromptResultCard } from "@/components/generate/prompt-result-card";
 import type { GeneratePromptFormValues } from "@/lib/validations/prompt";
 import type { GeneratePromptResult } from "@/types";
 import { TARGET_AIS, type Plan, type TargetAI } from "@/lib/constants";
+import { canUseFavorites } from "@/lib/plans";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { toast } from "sonner";
+import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +31,7 @@ interface GenerateClientProps {
 export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<(GeneratePromptResult & { id?: string }) | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [lastInput, setLastInput] = useState<GeneratePromptFormValues | null>(null);
   const [funnelReady, setFunnelReady] = useState(false);
 
@@ -94,7 +97,10 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           return;
         }
         if (res.status === 429) {
-          toast.error(json.message ?? "Limite quotidienne atteinte");
+          toastUpgradeRequired(
+            json.message ?? "Limite quotidienne atteinte — passe au Pro pour continuer.",
+            "pro"
+          );
           return;
         }
         if (res.status === 503) {
@@ -105,6 +111,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
       }
 
       setResult(json);
+      setIsFavorite(false);
       toast.success("Prompt généré avec succès !");
     } catch (err) {
       toast.error(
@@ -117,6 +124,34 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
 
   async function handleRegenerate() {
     if (lastInput) await handleSubmit(lastInput);
+  }
+
+  async function toggleFavorite() {
+    if (!result?.id) return;
+
+    if (!canUseFavorites(plan)) {
+      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      return;
+    }
+
+    const res = await fetch(`/api/prompts/${result.id}/favorite`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_favorite: !isFavorite }),
+    });
+
+    if (res.ok) {
+      setIsFavorite(!isFavorite);
+      toast.success(isFavorite ? "Retiré des favoris" : "Ajouté aux favoris");
+      return;
+    }
+
+    if (res.status === 403) {
+      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      return;
+    }
+
+    toast.error("Impossible de mettre à jour le favori");
   }
 
   const atLimit = usage.limit !== null && !usage.allowed;
@@ -180,10 +215,13 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         <PromptResultCard
           result={result}
           plan={plan}
+          isFavorite={isFavorite}
+          onToggleFavorite={result.id ? toggleFavorite : undefined}
           onRegenerate={handleRegenerate}
           onReset={() => {
             setResult(null);
             setLastInput(null);
+            setIsFavorite(false);
           }}
         />
       )}
@@ -196,13 +234,17 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         </Card>
       )}
 
-      {plan === "free" && !atLimit && (
-        <p className="text-center text-xs text-muted-foreground">
-          Plan Free · {usage.remaining ?? 0} génération(s) restante(s) aujourd&apos;hui ·{" "}
-          <Link href="/pricing" className="text-primary hover:underline">
-            Passer au Pro
-          </Link>
-        </p>
+      {plan === "free" && !atLimit && !result && (
+        <Card className="border-white/10 bg-white/[0.02]">
+          <CardContent className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-xs text-muted-foreground">
+              Plan Free · {usage.remaining ?? 0} génération(s) restante(s) aujourd&apos;hui
+            </p>
+            <Button size="sm" variant="outline" asChild>
+              <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>
+            </Button>
+          </CardContent>
+        </Card>
       )}
       {plan === "pro" && (
         <p className="text-center text-xs text-muted-foreground">

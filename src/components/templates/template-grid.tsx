@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCopy } from "@/hooks/use-copy";
 import { Copy, Check, Lock, Wand2, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
+import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import type { Template } from "@/types";
 import { TEMPLATE_CATEGORIES } from "@/lib/constants";
 import { canAccessPremiumTemplates } from "@/lib/plans";
@@ -136,7 +137,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   async function handleCopy(id: string, content: string, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toast.error("Passez au Pro (9€) pour accéder à ce template");
+      toastUpgradeRequired("Passez au Pro (9€) pour accéder à ce template.", "pro");
       return;
     }
     await copy(content, id);
@@ -145,7 +146,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   function handleUse(t: Template, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toast.error("Passez au Pro (9€) pour utiliser ce template");
+      toastUpgradeRequired("Passez au Pro (9€) pour utiliser ce template.", "pro");
       return;
     }
     saveTemplatePrefill({
