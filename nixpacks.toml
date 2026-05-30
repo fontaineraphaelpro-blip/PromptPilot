@@ -5,7 +5,8 @@ NIXPACKS_NODE_VERSION = "22"
 nixPkgs = ["nodejs_22"]
 
 [phases.install]
-cmds = ["npm ci"]
+# npm ci échoue avec les optional deps bundle (emnapi) — npm install est plus fiable sur Linux
+cmds = ["npm install --no-audit --no-fund"]
 
 [phases.build]
 cmds = ["npx prisma generate", "npm run build"]
