@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
-import { getStripe, getPriceIdForPlan } from "@/lib/stripe";
+import {
+  getStripe,
+  getPlanCheckoutRef,
+  buildPaymentLinkUrl,
+  stripeConfigErrorMessage,
+} from "@/lib/stripe";
 import { getOrCreateProfile, updateProfileByUserId } from "@/lib/profile";
 import { getAppUrl } from "@/lib/env";
 
@@ -19,6 +24,18 @@ export async function POST(request: Request) {
     }
 
     const profile = await getOrCreateProfile(user.id, user.email ?? "");
+    const checkoutRef = getPlanCheckoutRef(plan);
+
+    if (checkoutRef.type === "payment_link") {
+      const url = buildPaymentLinkUrl(
+        checkoutRef.value,
+        user.id,
+        plan,
+        user.email
+      );
+      return NextResponse.json({ url });
+    }
+
     const stripe = getStripe();
     const appUrl = getAppUrl();
 
@@ -37,7 +54,7 @@ export async function POST(request: Request) {
       customer: customerId,
       mode: "subscription",
       payment_method_types: ["card"],
-      line_items: [{ price: getPriceIdForPlan(plan), quantity: 1 }],
+      line_items: [{ price: checkoutRef.value, quantity: 1 }],
       success_url: `${appUrl}/dashboard?checkout=success`,
       cancel_url: `${appUrl}/pricing?checkout=cancelled`,
       metadata: { user_id: user.id, plan },
@@ -46,6 +63,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Checkout error:", error);
-    return NextResponse.json({ error: "Erreur checkout" }, { status: 500 });
+    const configMessage = stripeConfigErrorMessage(error);
+    return NextResponse.json(
+      {
+        error: configMessage ?? "Erreur checkout",
+        message: configMessage,
+      },
+      { status: configMessage ? 503 : 500 }
+    );
   }
 }

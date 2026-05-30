@@ -39,7 +39,7 @@ export function PricingPageClient() {
         } else if (res.status === 401) {
           router.push(`/login?redirect=/pricing&plan=${plan}`);
         } else {
-          toast.error(data.error ?? "Impossible de lancer le paiement");
+          toast.error(data.message ?? data.error ?? "Impossible de lancer le paiement");
         }
       } catch {
         toast.error("Erreur réseau");
