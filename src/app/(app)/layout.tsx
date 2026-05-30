@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
@@ -9,16 +9,13 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   if (!user) {
     redirect("/login");
   }
 
-  const profile = await getOrCreateProfile(user.id, user.email ?? "");
+  const profile = await getOrCreateProfile(user.id, user.email);
 
   return (
     <div className="flex min-h-screen">

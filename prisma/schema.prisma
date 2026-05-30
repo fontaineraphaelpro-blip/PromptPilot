@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  profile      Profile?
+
+  @@map("users")
+}
+
 model Profile {
   id                   String   @id @default(uuid()) @db.Uuid
   userId               String   @unique @map("user_id")
@@ -17,6 +28,7 @@ model Profile {
   preferredLanguage    String   @default("Français") @map("preferred_language")
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }
@@ -32,7 +44,7 @@ model Prompt {
   language        String   @default("Français")
   generatedPrompt String   @map("generated_prompt")
   shortVariant    String   @default("") @map("short_variant")
-  detailedVariant String @default("") @map("detailed_variant")
+  detailedVariant String   @default("") @map("detailed_variant")
   expertVariant   String   @default("") @map("expert_variant")
   aiTips          String   @default("") @map("ai_tips")
   isFavorite      Boolean  @default(false) @map("is_favorite")

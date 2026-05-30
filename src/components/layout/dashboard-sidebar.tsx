@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { APP_NAME } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/client";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import type { Plan } from "@/lib/constants";
@@ -40,8 +40,7 @@ export function DashboardSidebar({ plan }: DashboardSidebarProps) {
   const router = useRouter();
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await signOut({ redirect: false });
     router.push("/login");
     router.refresh();
   }

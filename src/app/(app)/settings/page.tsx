@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
 import { PLAN_LABELS } from "@/lib/plans";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,14 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { CreditCard, Trash2 } from "lucide-react";
 
 export default async function SettingsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) return null;
 
-  const profile = await getOrCreateProfile(user.id, user.email ?? "");
+  const profile = await getOrCreateProfile(user.id, user.email);
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">

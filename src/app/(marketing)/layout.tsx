@@ -1,20 +1,17 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 
 export default async function MarketingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   return (
     <>
-      <Navbar user={user ? { email: user.email ?? "" } : null} />
+      <Navbar user={user ? { email: user.email } : null} />
       <main className="flex-1">{children}</main>
       <Footer />
     </>

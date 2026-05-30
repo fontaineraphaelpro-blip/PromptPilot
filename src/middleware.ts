@@ -1,12 +1,39 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  return updateSession(request);
-}
+const protectedPaths = [
+  "/dashboard",
+  "/generate",
+  "/history",
+  "/favorites",
+  "/templates",
+  "/settings",
+];
+
+export default auth((req) => {
+  const { pathname } = req.nextUrl;
+  const isLoggedIn = !!req.auth;
+
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+
+  if (isProtected && !isLoggedIn) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
+
+  if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/auth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

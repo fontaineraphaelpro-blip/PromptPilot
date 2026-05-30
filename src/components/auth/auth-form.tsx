@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { signIn } from "next-auth/react";
 import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,24 +37,39 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   async function onSubmit(data: LoginInput | SignupInput) {
     setLoading(true);
-    const supabase = createClient();
 
     try {
-      if (isLogin) {
-        const { email, password } = data as LoginInput;
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Connexion réussie");
-        router.push(redirect);
-        router.refresh();
-      } else {
-        const { email, password } = data as SignupInput;
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        toast.success("Compte créé ! Vérifiez votre email si confirmation activée.");
-        router.push("/dashboard");
-        router.refresh();
+      const email = data.email.toLowerCase().trim();
+      const password = data.password;
+
+      if (!isLogin) {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          throw new Error(json.error ?? "Erreur inscription");
+        }
+        toast.success("Compte créé ! Connexion en cours…");
       }
+
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        throw new Error(
+          isLogin ? "Email ou mot de passe incorrect" : "Connexion impossible après inscription"
+        );
+      }
+
+      toast.success(isLogin ? "Connexion réussie" : "Bienvenue sur PromptPilot !");
+      router.push(redirect);
+      router.refresh();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erreur d'authentification";
       toast.error(message);

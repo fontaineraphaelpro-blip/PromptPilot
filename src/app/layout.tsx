@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
+import { AuthSessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        {children}
+        <AuthSessionProvider>
+          {children}
+        </AuthSessionProvider>
         <Toaster position="top-center" richColors />
       </body>
     </html>
