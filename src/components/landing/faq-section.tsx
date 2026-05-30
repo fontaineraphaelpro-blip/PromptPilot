@@ -16,8 +16,12 @@ const faqs = [
     a: "Le plan Free inclut 3 générations par jour. Les plans Pro et Creator sont illimités.",
   },
   {
+    q: "Quelle différence entre Pro (9€) et Creator (19€) ?",
+    a: "Pro : prompts illimités, historique complet, favoris et templates premium (variantes Principal, Court, Détaillé). Creator : tout Pro + variante Expert débloquée, niveau Expert par défaut au générateur et support prioritaire.",
+  },
+  {
     q: "Mes prompts sont-ils sauvegardés ?",
-    a: "Oui, chaque génération est enregistrée dans ton historique. Tu peux les marquer en favoris.",
+    a: "Oui, chaque génération est enregistrée dans ton historique. Les favoris sont disponibles à partir du plan Pro.",
   },
   {
     q: "Puis-je annuler mon abonnement ?",

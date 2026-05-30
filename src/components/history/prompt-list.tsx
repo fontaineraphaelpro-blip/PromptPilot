@@ -11,12 +11,15 @@ import { useCopy } from "@/hooks/use-copy";
 import { Copy, Star, Trash2, Check, Search } from "lucide-react";
 import { toast } from "sonner";
 import type { PromptRecord } from "@/types";
+import type { Plan } from "@/lib/constants";
+import { canUseFavorites } from "@/lib/plans";
 
 interface PromptListProps {
   prompts: PromptRecord[];
+  plan?: Plan;
 }
 
-export function PromptList({ prompts: initial }: PromptListProps) {
+export function PromptList({ prompts: initial, plan = "free" }: PromptListProps) {
   const [prompts, setPrompts] = useState(initial);
   const [search, setSearch] = useState("");
   const [filterAI, setFilterAI] = useState("Tous");
@@ -34,7 +37,13 @@ export function PromptList({ prompts: initial }: PromptListProps) {
     return matchSearch && matchAI && matchTask;
   });
 
+  const favoritesAllowed = canUseFavorites(plan);
+
   async function toggleFavorite(id: string, current: boolean) {
+    if (!favoritesAllowed) {
+      toast.error("Favoris réservés au plan Pro — 9€/mois");
+      return;
+    }
     const res = await fetch(`/api/prompts/${id}/favorite`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -45,6 +54,8 @@ export function PromptList({ prompts: initial }: PromptListProps) {
         prev.map((p) => (p.id === id ? { ...p, is_favorite: !current } : p))
       );
       toast.success(current ? "Retiré des favoris" : "Ajouté aux favoris");
+    } else if (res.status === 403) {
+      toast.error("Favoris réservés au plan Pro — 9€/mois");
     } else {
       toast.error("Impossible de mettre à jour le favori");
     }
@@ -122,6 +133,7 @@ export function PromptList({ prompts: initial }: PromptListProps) {
                   size="sm"
                   variant="outline"
                   onClick={() => toggleFavorite(p.id, p.is_favorite)}
+                  title={favoritesAllowed ? "Favori" : "Favoris — plan Pro requis"}
                 >
                   <Star
                     className={`h-3 w-3 ${p.is_favorite ? "fill-primary text-primary" : ""}`}

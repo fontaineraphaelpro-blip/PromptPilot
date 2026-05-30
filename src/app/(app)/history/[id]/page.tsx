@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAuthUser } from "@/lib/auth";
+import { getOrCreateProfile } from "@/lib/profile";
 import { prisma } from "@/lib/db";
 import { mapPrompt } from "@/lib/mappers";
 import { PromptDetailClient } from "@/components/history/prompt-detail-client";
@@ -15,6 +16,8 @@ export default async function HistoryDetailPage({
   const { id } = await params;
   const user = await getAuthUser();
   if (!user) return null;
+
+  const profile = await getOrCreateProfile(user.id, user.email);
 
   const row = await prisma.prompt.findFirst({
     where: { id, userId: user.id },
@@ -38,7 +41,7 @@ export default async function HistoryDetailPage({
           {prompt.target_ai} · {prompt.task_type}
         </p>
       </div>
-      <PromptDetailClient prompt={prompt} />
+      <PromptDetailClient prompt={prompt} plan={profile.plan} />
     </div>
   );
 }

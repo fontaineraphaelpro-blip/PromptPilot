@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
-import { PLAN_LABELS, PLAN_PRICES } from "@/lib/plans";
+import { PLAN_LABELS, getPlanBadgeVariant, getPlanFeaturesSummary } from "@/lib/plans";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,17 +28,11 @@ export default async function BillingPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Plan actuel
-            <Badge variant={profile.plan === "free" ? "free" : "pro"}>
+            <Badge variant={getPlanBadgeVariant(profile.plan)}>
               {PLAN_LABELS[profile.plan]}
             </Badge>
           </CardTitle>
-          <CardDescription>
-            {profile.plan === "free"
-              ? "3 prompts gratuits par jour · historique limité"
-              : profile.plan === "pro"
-                ? `${PLAN_PRICES.pro.label} · prompts illimités`
-                : `${PLAN_PRICES.creator.label} · toutes les fonctionnalités`}
-          </CardDescription>
+          <CardDescription>{getPlanFeaturesSummary(profile.plan)}</CardDescription>
         </CardHeader>
         <CardContent>
           {profile.stripe_customer_id ? (

@@ -13,6 +13,8 @@ import {
   TASK_TYPES,
   TONES,
 } from "@/lib/constants";
+import type { Plan } from "@/lib/constants";
+import { hasAdvancedVariants } from "@/lib/plans";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,15 +28,19 @@ interface PromptGeneratorFormProps {
   isLoading: boolean;
   disabled?: boolean;
   defaultValues?: Partial<GeneratePromptFormValues>;
+  plan?: Plan;
 }
 
-const defaultFormValues: GeneratePromptFormValues = {
+function getDefaultDetailLevel(plan: Plan = "free"): GeneratePromptFormValues["detailLevel"] {
+  return hasAdvancedVariants(plan) ? "Expert" : "Détaillé";
+}
+
+const baseFormValues = {
   userIdea: "",
-  targetAI: "Cursor",
-  taskType: "Développement",
-  detailLevel: "Expert",
-  tone: "Professionnel",
-  language: "Français",
+  targetAI: "Cursor" as const,
+  taskType: "Développement" as const,
+  tone: "Professionnel" as const,
+  language: "Français" as const,
   includeConstraints: true,
   includeExamples: false,
   includeOutputFormat: true,
@@ -47,7 +53,12 @@ export function PromptGeneratorForm({
   isLoading,
   disabled = false,
   defaultValues,
+  plan = "free",
 }: PromptGeneratorFormProps) {
+  const defaultFormValues: GeneratePromptFormValues = {
+    ...baseFormValues,
+    detailLevel: getDefaultDetailLevel(plan),
+  };
   const {
     register,
     handleSubmit,

@@ -7,41 +7,7 @@ import { Check, Loader2 } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-const plans = [
-  {
-    id: "free" as const,
-    name: "Free",
-    price: "0€",
-    description: "Pour découvrir PromptPilot",
-    features: ["3 prompts gratuits/jour", "30 derniers prompts en historique", "Templates gratuits"],
-    cta: "Commencer gratuitement",
-    href: "/signup",
-    highlighted: false,
-  },
-  {
-    id: "pro" as const,
-    name: "Pro",
-    price: "9€",
-    period: "/mois",
-    description: "Pour les créateurs réguliers",
-    features: ["Prompts illimités", "Historique complet", "Favoris", "Templates premium"],
-    cta: "Passer au Pro",
-    href: "/pricing?plan=pro",
-    highlighted: true,
-  },
-  {
-    id: "creator" as const,
-    name: "Creator",
-    price: "19€",
-    period: "/mois",
-    description: "Pour les power users",
-    features: ["Tout Pro inclus", "Variantes expert", "Tous les templates", "Support prioritaire"],
-    cta: "Passer au Creator",
-    href: "/pricing?plan=creator",
-    highlighted: false,
-  },
-];
+import { PRICING_PLANS } from "@/lib/plans";
 
 interface PricingSectionProps {
   onSelectPlan?: (plan: "pro" | "creator") => void;
@@ -59,12 +25,12 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
           </p>
           <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">Tarifs simples</h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
-            Commence gratuitement. Scale quand tu en as besoin.
+            Commence gratuitement. Passe au Pro pour scaler. Creator pour la variante Expert.
           </p>
         </FadeIn>
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {plans.map((plan, i) => (
+          {PRICING_PLANS.map((plan, i) => (
             <FadeIn key={plan.name} delay={i * 0.1}>
               <motion.div
                 whileHover={{ y: -6 }}
@@ -87,7 +53,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
                     <CardDescription>{plan.description}</CardDescription>
                     <p className="text-4xl font-bold mt-4 tracking-tight">
                       {plan.price}
-                      {"period" in plan && plan.period && (
+                      {plan.period && (
                         <span className="text-base font-normal text-muted-foreground">
                           {plan.period}
                         </span>
@@ -117,7 +83,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
                       <Button
                         className="w-full"
                         variant={plan.highlighted ? "default" : "outline"}
-                        onClick={() => onSelectPlan(plan.id)}
+                        onClick={() => onSelectPlan(plan.id as "pro" | "creator")}
                         disabled={!!checkoutLoading}
                       >
                         {checkoutLoading === plan.id && (

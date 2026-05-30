@@ -37,7 +37,7 @@ function TemplateCard({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card className={cn("glass-card flex flex-col h-full", locked && "opacity-80")}>
+    <Card className={cn("glass-card flex flex-col h-full", locked && "border-white/15")}>
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-base leading-snug">{t.title}</CardTitle>
@@ -49,36 +49,54 @@ function TemplateCard({
         </p>
       </CardHeader>
       <CardContent className="flex flex-col flex-1">
-        <pre
-          className={cn(
-            "text-xs text-muted-foreground whitespace-pre-wrap font-sans leading-relaxed rounded-lg border border-white/10 bg-black/40 p-3 mb-3",
-            expanded ? "max-h-[420px] overflow-y-auto" : "line-clamp-6"
+        <div className="relative mb-3">
+          <pre
+            className={cn(
+              "text-xs text-muted-foreground whitespace-pre-wrap font-sans leading-relaxed rounded-lg border border-white/10 bg-black/40 p-3 transition-all",
+              !locked && expanded && "max-h-[420px] overflow-y-auto",
+              !locked && !expanded && "line-clamp-6",
+              locked && "max-h-[200px] overflow-hidden blur-[6px] select-none pointer-events-none"
+            )}
+            aria-hidden={locked}
+          >
+            {t.content}
+          </pre>
+          {locked && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg bg-gradient-to-b from-black/20 via-black/70 to-black/90 px-4 text-center">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
+                <Lock className="h-4 w-4" />
+              </span>
+              <p className="text-sm font-medium">Prompt Premium</p>
+              <p className="text-xs text-muted-foreground max-w-[220px]">
+                Débloque avec Pro (9€) ou Creator (19€) pour lire, copier et utiliser ce template.
+              </p>
+            </div>
           )}
-        >
-          {t.content}
-        </pre>
-        <button
-          type="button"
-          onClick={() => setExpanded(!expanded)}
-          className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {expanded ? (
-            <>
-              <ChevronUp className="h-3.5 w-3.5" /> Réduire
-            </>
-          ) : (
-            <>
-              <ChevronDown className="h-3.5 w-3.5" /> Voir le prompt complet
-            </>
-          )}
-        </button>
+        </div>
+        {!locked && (
+          <button
+            type="button"
+            onClick={() => setExpanded(!expanded)}
+            className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {expanded ? (
+              <>
+                <ChevronUp className="h-3.5 w-3.5" /> Réduire
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-3.5 w-3.5" /> Voir le prompt complet
+              </>
+            )}
+          </button>
+        )}
 
         <div className="mt-auto flex flex-wrap gap-2">
           {locked ? (
             <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
               <Link href="/pricing?plan=pro">
                 <Lock className="h-3 w-3" />
-                Débloquer avec Pro
+                Débloquer — dès 9€/mois
               </Link>
             </Button>
           ) : (
@@ -118,7 +136,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   async function handleCopy(id: string, content: string, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toast.error("Passez au plan Pro pour accéder à ce template");
+      toast.error("Passez au Pro (9€) pour accéder à ce template");
       return;
     }
     await copy(content, id);
@@ -127,7 +145,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   function handleUse(t: Template, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toast.error("Passez au plan Pro pour utiliser ce template");
+      toast.error("Passez au Pro (9€) pour utiliser ce template");
       return;
     }
     saveTemplatePrefill({

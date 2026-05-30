@@ -3,6 +3,8 @@ import { z } from "zod";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { safeErrorMessage } from "@/lib/api-error";
+import { getOrCreateProfile } from "@/lib/profile";
+import { canUseFavorites } from "@/lib/plans";
 
 const bodySchema = z.object({
   is_favorite: z.boolean(),
@@ -18,6 +20,17 @@ export async function PATCH(
 
     if (!user) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+
+    const profile = await getOrCreateProfile(user.id, user.email);
+    if (!canUseFavorites(profile.plan)) {
+      return NextResponse.json(
+        {
+          error: "Favoris réservés au plan Pro",
+          message: "Passez au Pro (9€/mois) pour marquer vos prompts en favoris.",
+        },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();

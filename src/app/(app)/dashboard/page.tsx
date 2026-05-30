@@ -4,7 +4,7 @@ import { getAuthUser } from "@/lib/auth";
 import { CheckoutSuccessBanner } from "@/components/dashboard/checkout-success-banner";
 import { getOrCreateProfile } from "@/lib/profile";
 import { getTodayUsage } from "@/lib/usage";
-import { hasUnlimitedPrompts, PLAN_LABELS } from "@/lib/plans";
+import { hasUnlimitedPrompts, PLAN_LABELS, getPlanBadgeVariant, hasAdvancedVariants } from "@/lib/plans";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
@@ -54,8 +54,8 @@ export default async function DashboardPage() {
             <CardDescription>Plan actuel</CardDescription>
             <CardTitle className="flex items-center gap-2">
               {PLAN_LABELS[profile.plan]}
-              <Badge variant={profile.plan === "free" ? "free" : "pro"}>
-                {profile.plan === "free" ? "Gratuit" : "Premium"}
+              <Badge variant={getPlanBadgeVariant(profile.plan)}>
+                {profile.plan === "free" ? "Gratuit" : PLAN_LABELS[profile.plan]}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -95,6 +95,19 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {profile.plan === "pro" && !hasAdvancedVariants(profile.plan) && (
+        <Card className="border-white/15 bg-white/[0.02]">
+          <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              Débloquez la variante <strong className="text-foreground">Expert</strong> et le support prioritaire avec Creator.
+            </p>
+            <Button size="sm" variant="outline" asChild>
+              <Link href="/pricing?plan=creator">Creator — 19€/mois</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Link href="/history">

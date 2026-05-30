@@ -174,10 +174,12 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           isLoading={isLoading}
           disabled={atLimit || !openaiReady}
           defaultValues={prefillDefaults}
+          plan={plan}
         />
       ) : (
         <PromptResultCard
           result={result}
+          plan={plan}
           onRegenerate={handleRegenerate}
           onReset={() => {
             setResult(null);
@@ -199,6 +201,14 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           Plan Free · {usage.remaining ?? 0} génération(s) restante(s) aujourd&apos;hui ·{" "}
           <Link href="/pricing" className="text-primary hover:underline">
             Passer au Pro
+          </Link>
+        </p>
+      )}
+      {plan === "pro" && (
+        <p className="text-center text-xs text-muted-foreground">
+          Plan Pro · variante Expert disponible avec{" "}
+          <Link href="/pricing?plan=creator" className="text-primary hover:underline">
+            Creator (19€/mois)
           </Link>
         </p>
       )}

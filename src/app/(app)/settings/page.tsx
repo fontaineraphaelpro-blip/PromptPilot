@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
-import { PLAN_LABELS } from "@/lib/plans";
+import { PLAN_LABELS, getPlanBadgeVariant, getPlanFeaturesSummary } from "@/lib/plans";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,9 +29,12 @@ export default async function SettingsPage() {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Plan actuel</p>
-            <Badge variant={profile.plan === "free" ? "free" : "pro"} className="mt-1">
+            <Badge variant={getPlanBadgeVariant(profile.plan)} className="mt-1">
               {PLAN_LABELS[profile.plan]}
             </Badge>
+            <p className="text-xs text-muted-foreground mt-2">
+              {getPlanFeaturesSummary(profile.plan)}
+            </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Langue préférée</p>
@@ -54,6 +57,11 @@ export default async function SettingsPage() {
           {profile.plan === "free" && (
             <Button asChild>
               <Link href="/pricing">Passer au Pro</Link>
+            </Button>
+          )}
+          {profile.plan === "pro" && (
+            <Button asChild variant="outline">
+              <Link href="/pricing?plan=creator">Passer au Creator</Link>
             </Button>
           )}
         </CardContent>

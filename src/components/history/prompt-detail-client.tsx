@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { PromptResultCard } from "@/components/generate/prompt-result-card";
 import type { PromptRecord } from "@/types";
+import type { Plan } from "@/lib/constants";
 
 interface PromptDetailClientProps {
   prompt: PromptRecord;
+  plan: Plan;
 }
 
-export function PromptDetailClient({ prompt }: PromptDetailClientProps) {
+export function PromptDetailClient({ prompt, plan }: PromptDetailClientProps) {
   const [isFavorite, setIsFavorite] = useState(prompt.is_favorite);
 
   async function toggleFavorite() {
@@ -22,6 +24,7 @@ export function PromptDetailClient({ prompt }: PromptDetailClientProps) {
 
   return (
     <PromptResultCard
+      plan={plan}
       result={{
         id: prompt.id,
         generated_prompt: prompt.generated_prompt,

@@ -44,7 +44,7 @@ export default async function HistoryPage() {
         </p>
       )}
       {prompts.length > 0 ? (
-        <PromptList prompts={prompts} />
+        <PromptList prompts={prompts} plan={profile.plan} />
       ) : (
         <EmptyState
           icon={History}
