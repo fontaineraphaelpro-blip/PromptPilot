@@ -86,14 +86,16 @@ RÈGLES ABSOLUES :
 
 ${getAISpecificInstructions(input.targetAI)}
 
-FORMAT DE RÉPONSE — JSON STRICT uniquement, sans markdown autour :
+FORMAT DE RÉPONSE — JSON STRICT uniquement, sans markdown autour.
+Tu DOIS inclure les 5 clés suivantes, toutes non vides (type string) :
 {
   "generated_prompt": "le prompt principal complet prêt à coller",
-  "short_variant": "version courte et directe",
-  "detailed_variant": "version plus détaillée avec sections",
+  "short_variant": "version courte et directe (5-15 lignes max)",
+  "detailed_variant": "version plus détaillée avec sections et sous-parties",
   "expert_variant": "version expert maximale avec tous les détails",
   "ai_tips": "3-5 conseils spécifiques pour optimiser ce prompt sur ${input.targetAI}"
-}`;
+}
+Ne renomme pas les clés. Ne laisse aucune clé vide.`;
 }
 
 export function buildUserPrompt(input: GeneratePromptInput): string {
