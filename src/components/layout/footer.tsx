@@ -32,8 +32,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/comparatif" className="transition-colors hover:text-foreground">
-                  Comparatifs
+                <Link href="/prompt-du-jour" className="transition-colors hover:text-foreground">
+                  Prompt du jour
+                </Link>
+              </li>
+              <li>
+                <Link href="/comparatif/interactif" className="transition-colors hover:text-foreground">
+                  Comparatif interactif
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/metier/developpeur" className="transition-colors hover:text-foreground">
+                  Guides métier
                 </Link>
               </li>
               <li>
@@ -54,6 +64,11 @@ export function Footer() {
               <li>
                 <Link href="/pricing" className="transition-colors hover:text-foreground">
                   Tarifs
+                </Link>
+              </li>
+              <li>
+                <Link href="/changelog" className="transition-colors hover:text-foreground">
+                  Changelog
                 </Link>
               </li>
               <li>

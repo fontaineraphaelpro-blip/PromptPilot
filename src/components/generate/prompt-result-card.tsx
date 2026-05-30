@@ -14,21 +14,32 @@ import {
   RefreshCw,
   Lightbulb,
   Lock,
+  ShieldCheck,
 } from "lucide-react";
 import type { GeneratePromptResult } from "@/types";
-import type { Plan } from "@/lib/constants";
+import type { Plan, TargetAI } from "@/lib/constants";
 import { hasAdvancedVariants, canUseFavorites } from "@/lib/plans";
+import { computePromptScore } from "@/lib/prompt-score";
+import { PromptScoreDisplay } from "@/components/generate/prompt-score-display";
+import { PromptPreviewPanel } from "@/components/generate/prompt-preview-panel";
+import { PromptExportMenu } from "@/components/generate/prompt-export-menu";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface PromptResultCardProps {
-  result: GeneratePromptResult & { id?: string };
+  result: GeneratePromptResult & {
+    id?: string;
+    original_idea?: string;
+    target_ai?: TargetAI;
+    guarantee_regen_available?: boolean;
+  };
   plan?: Plan;
   isFavorite?: boolean;
   onSave?: () => Promise<void>;
   onToggleFavorite?: () => Promise<void>;
   onRegenerate?: () => void;
+  onGuaranteeRegen?: () => void;
   onReset: () => void;
 }
 
@@ -39,6 +50,7 @@ export function PromptResultCard({
   onSave,
   onToggleFavorite,
   onRegenerate,
+  onGuaranteeRegen,
   onReset,
 }: PromptResultCardProps) {
   const { copy, copied } = useCopy();
@@ -48,12 +60,30 @@ export function PromptResultCard({
   const expertUnlocked = hasAdvancedVariants(plan);
   const favoritesAllowed = canUseFavorites(plan);
 
+  const score =
+    result.prompt_score ??
+    computePromptScore(result.generated_prompt, (result.target_ai as never) ?? "ChatGPT", {
+      userIdea: result.original_idea ?? "",
+      targetAI: (result.target_ai as never) ?? "ChatGPT",
+      taskType: "Autre",
+      detailLevel: "Détaillé",
+      tone: "Professionnel",
+      language: "Français",
+      includeConstraints: true,
+      includeExamples: false,
+      includeOutputFormat: true,
+      includeQualityChecklist: false,
+      includeErrorsToAvoid: false,
+    }).total;
+
   const variants: Record<string, string> = {
     main: result.generated_prompt,
     short: result.short_variant,
     detailed: result.detailed_variant,
     expert: result.expert_variant,
   };
+
+  const activeVariant = activeTab as "main" | "short" | "detailed" | "expert";
 
   async function handleCopy() {
     if (activeTab === "expert" && !expertUnlocked) {
@@ -91,6 +121,20 @@ export function PromptResultCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <PromptScoreDisplay
+          score={score}
+          breakdown={result.score_breakdown}
+          label={
+            score >= 85 ? "Excellent" : score >= 70 ? "Solide" : score >= 50 ? "Correct" : "À améliorer"
+          }
+        />
+
+        <PromptPreviewPanel
+          summary={result.preview_summary}
+          questions={result.preview_questions}
+          targetAI={result.target_ai}
+        />
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex flex-wrap h-auto gap-1">
             <TabsTrigger value="main">Principal</TabsTrigger>
@@ -135,6 +179,11 @@ export function PromptResultCard({
           })}
         </Tabs>
 
+        <PromptExportMenu
+          result={{ ...result, prompt_score: score }}
+          activeVariant={activeVariant}
+        />
+
         {result.ai_tips && (
           <div className="rounded-lg border border-border bg-muted/50 p-4">
             <p className="flex items-center gap-2 text-sm font-medium mb-2">
@@ -172,6 +221,12 @@ export function PromptResultCard({
             <Button variant="outline" onClick={onRegenerate}>
               <RefreshCw className="h-4 w-4" />
               Nouvelle variante
+            </Button>
+          )}
+          {result.guarantee_regen_available && onGuaranteeRegen && (
+            <Button variant="outline" onClick={onGuaranteeRegen}>
+              <ShieldCheck className="h-4 w-4" />
+              Regénérer (gratuit)
             </Button>
           )}
           <Button variant="ghost" onClick={onReset}>

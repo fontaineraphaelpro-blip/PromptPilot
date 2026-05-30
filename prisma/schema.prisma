@@ -48,10 +48,18 @@ model Prompt {
   expertVariant   String   @default("") @map("expert_variant")
   aiTips          String   @default("") @map("ai_tips")
   isFavorite      Boolean  @default(false) @map("is_favorite")
+  tags            String[] @default([])
+  promptScore     Int?     @map("prompt_score")
+  scoreBreakdown  Json?    @map("score_breakdown")
+  previewSummary  String   @default("") @map("preview_summary")
+  previewQuestions String[] @default([]) @map("preview_questions")
+  shareToken      String?  @unique @map("share_token")
+  shareEnabled    Boolean  @default(false) @map("share_enabled")
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@index([userId])
   @@index([createdAt(sort: Desc)])
+  @@index([shareToken])
   @@map("prompts")
 }
 

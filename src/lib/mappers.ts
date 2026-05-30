@@ -1,4 +1,4 @@
-import type { Profile, PromptRecord, Template } from "@/types";
+import type { Profile, PromptRecord, Template, PromptScoreBreakdown } from "@/types";
 import type { Plan, TargetAI } from "@/lib/constants";
 import type { Profile as PrismaProfile, Prompt, Template as PrismaTemplate } from "@prisma/client";
 
@@ -32,6 +32,13 @@ export function mapPrompt(row: Prompt): PromptRecord {
     expert_variant: row.expertVariant,
     ai_tips: row.aiTips,
     is_favorite: row.isFavorite,
+    tags: row.tags ?? [],
+    prompt_score: row.promptScore,
+    score_breakdown: (row.scoreBreakdown as PromptScoreBreakdown | null) ?? null,
+    preview_summary: row.previewSummary ?? "",
+    preview_questions: row.previewQuestions ?? [],
+    share_token: row.shareToken,
+    share_enabled: row.shareEnabled,
     created_at: row.createdAt.toISOString(),
   };
 }

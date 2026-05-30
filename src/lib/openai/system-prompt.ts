@@ -87,13 +87,15 @@ RÈGLES ABSOLUES :
 ${getAISpecificInstructions(input.targetAI)}
 
 FORMAT DE RÉPONSE — JSON STRICT uniquement, sans markdown autour.
-Tu DOIS inclure les 5 clés suivantes, toutes non vides (type string) :
+Tu DOIS inclure ces clés (strings non vides sauf preview_questions = array de 3 strings) :
 {
   "generated_prompt": "le prompt principal complet prêt à coller",
   "short_variant": "version courte et directe (5-15 lignes max)",
   "detailed_variant": "version plus détaillée avec sections et sous-parties",
   "expert_variant": "version expert maximale avec tous les détails",
-  "ai_tips": "3-5 conseils spécifiques pour optimiser ce prompt sur ${input.targetAI}"
+  "ai_tips": "3-5 conseils spécifiques pour optimiser ce prompt sur ${input.targetAI}",
+  "preview_summary": "2-3 phrases : ce que ${input.targetAI} comprendra de ce prompt et quel livrable il produira",
+  "preview_questions": ["question 1 que l'IA poserait si info manquante", "question 2", "question 3"]
 }
 Ne renomme pas les clés. Ne laisse aucune clé vide.`;
 }

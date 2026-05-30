@@ -61,6 +61,19 @@ function normalizeOpenAIResult(raw: Record<string, unknown>): GeneratePromptResu
     "version_expert"
   );
   const ai_tips = pickString(raw, "ai_tips", "aiTips", "tips", "conseils", "conseils_ia");
+  const preview_summary = pickString(
+    raw,
+    "preview_summary",
+    "previewSummary",
+    "preview_interpretation",
+    "interpretation"
+  );
+
+  let preview_questions: string[] = [];
+  const rawQuestions = raw.preview_questions ?? raw.previewQuestions ?? raw.questions;
+  if (Array.isArray(rawQuestions)) {
+    preview_questions = rawQuestions.filter((q): q is string => typeof q === "string").slice(0, 3);
+  }
 
   const main = generated_prompt || detailed_variant || expert_variant || short_variant;
   if (!main) {
@@ -78,6 +91,8 @@ function normalizeOpenAIResult(raw: Record<string, unknown>): GeneratePromptResu
     ai_tips:
       ai_tips ||
       "Affine le prompt selon les retours de l'IA, teste la variante courte pour itérer vite, et ajoute des contraintes explicites si la sortie manque de précision.",
+    preview_summary,
+    preview_questions,
   };
 }
 

@@ -8,9 +8,10 @@ import { SelectField } from "@/components/ui/select-field";
 import { Input } from "@/components/ui/input";
 import { TARGET_AIS, TASK_TYPES } from "@/lib/constants";
 import { useCopy } from "@/hooks/use-copy";
-import { Copy, Star, Trash2, Check, Search } from "lucide-react";
+import { Copy, Star, Trash2, Check, Search, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
+import { saveAdaptPrefill } from "@/lib/conversion/adapt-prefill";
 import type { PromptRecord } from "@/types";
 import type { Plan } from "@/lib/constants";
 import { canUseFavorites } from "@/lib/plans";
@@ -25,18 +26,36 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
   const [search, setSearch] = useState("");
   const [filterAI, setFilterAI] = useState("Tous");
   const [filterTask, setFilterTask] = useState("Tous");
+  const [filterTag, setFilterTag] = useState("Tous");
   const { copy, copied } = useCopy();
   const router = useRouter();
 
+  const allTags = [...new Set(prompts.flatMap((p) => p.tags ?? []))].sort();
+
   const filtered = prompts.filter((p) => {
+    const q = search.toLowerCase();
     const matchSearch =
       !search ||
-      p.original_idea.toLowerCase().includes(search.toLowerCase()) ||
-      p.generated_prompt.toLowerCase().includes(search.toLowerCase());
+      p.original_idea.toLowerCase().includes(q) ||
+      p.generated_prompt.toLowerCase().includes(q) ||
+      (p.preview_summary ?? "").toLowerCase().includes(q) ||
+      (p.tags ?? []).some((t) => t.includes(q));
     const matchAI = filterAI === "Tous" || p.target_ai === filterAI;
     const matchTask = filterTask === "Tous" || p.task_type === filterTask;
-    return matchSearch && matchAI && matchTask;
+    const matchTag = filterTag === "Tous" || (p.tags ?? []).includes(filterTag);
+    return matchSearch && matchAI && matchTask && matchTag;
   });
+
+  function handleAdapt(p: PromptRecord) {
+    saveAdaptPrefill({
+      userIdea: `Adapte et améliore ce prompt pour un nouveau contexte :\n\n${p.original_idea}`,
+      targetAI: p.target_ai,
+      taskType: p.task_type,
+      sourceTitle: p.original_idea.slice(0, 60),
+    });
+    toast.success("Prompt chargé — personnalise et regénère");
+    router.push("/generate");
+  }
 
   const favoritesAllowed = canUseFavorites(plan);
 
@@ -101,6 +120,16 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
           options={["Tous", ...TASK_TYPES]}
           className="sm:w-40"
         />
+        {allTags.length > 0 && (
+          <SelectField
+            label="Tag"
+            id="filterTag"
+            value={filterTag}
+            onChange={setFilterTag}
+            options={["Tous", ...allTags]}
+            className="sm:w-36"
+          />
+        )}
       </div>
 
       {filtered.length === 0 ? (
@@ -119,9 +148,19 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
                 <p className="text-xs text-muted-foreground mt-1">
                   {p.target_ai} · {p.task_type} ·{" "}
                   {new Date(p.created_at).toLocaleDateString("fr-FR")}
+                  {p.prompt_score != null && ` · Score ${p.prompt_score}/100`}
                 </p>
+                {(p.tags ?? []).length > 0 && (
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    {(p.tags ?? []).map((t) => `#${t}`).join(" ")}
+                  </p>
+                )}
               </Link>
               <div className="mt-3 flex flex-wrap gap-2">
+                <Button size="sm" variant="default" onClick={() => handleAdapt(p)}>
+                  <Wand2 className="h-3 w-3" />
+                  Adapter
+                </Button>
                 <Button
                   size="sm"
                   variant="outline"

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth";
 import { generatePromptSchema } from "@/lib/validations/prompt";
 import { generatePromptWithOpenAI } from "@/lib/openai/generate";
@@ -8,14 +9,47 @@ import {
   clampGenerateInputForPlan,
   filterGenerateResultForPlan,
 } from "@/lib/generate-plan-guard";
+import { computePromptScore, qualifiesForScoreGuarantee } from "@/lib/prompt-score";
 import { prisma } from "@/lib/db";
 import { isOpenAIConfigured } from "@/lib/env";
 import { safeErrorMessage } from "@/lib/api-error";
-import type { GeneratePromptInput } from "@/types";
+import type { GeneratePromptInput, GeneratePromptResult } from "@/types";
+
+const generateRequestSchema = generatePromptSchema.extend({
+  guaranteeRegen: z.boolean().optional(),
+  parentPromptId: z.string().uuid().optional(),
+});
+
+function enrichResult(
+  result: GeneratePromptResult,
+  input: GeneratePromptInput
+): GeneratePromptResult {
+  const score = computePromptScore(result.generated_prompt, input.targetAI, input);
+  const preview_summary =
+    result.preview_summary?.trim() ||
+    `${input.targetAI} interprétera ce prompt comme une demande de type « ${input.taskType} » avec un ton ${input.tone.toLowerCase()}, et produira un livrable structuré prêt à utiliser.`;
+  const preview_questions =
+    result.preview_questions && result.preview_questions.length >= 2
+      ? result.preview_questions.slice(0, 3)
+      : [
+          "Quel est le public ou l'utilisateur final exact ?",
+          "As-tu des contraintes de format ou de longueur à préciser ?",
+          "Quel résultat concret considères-tu comme un succès ?",
+        ];
+
+  return {
+    ...result,
+    preview_summary,
+    preview_questions,
+    prompt_score: score.total,
+    score_breakdown: score.breakdown,
+  };
+}
 
 export async function POST(request: Request) {
   let userId: string | null = null;
   let userPlan: "free" | "pro" | "creator" = "free";
+  let usageReserved = false;
 
   try {
     const user = await getAuthUser();
@@ -30,15 +64,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error: "Service indisponible",
-          message:
-            "La génération IA n'est pas configurée. Contactez le support.",
+          message: "La génération IA n'est pas configurée. Contactez le support.",
         },
         { status: 503 }
       );
     }
 
     const body = await request.json();
-    const parsed = generatePromptSchema.safeParse(body);
+    const parsed = generateRequestSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -49,18 +82,45 @@ export async function POST(request: Request) {
 
     const profile = await getOrCreateProfile(user.id, user.email);
     userPlan = profile.plan;
-    const usage = await reservePromptSlot(user.id, profile.plan);
 
-    if (!usage.allowed) {
-      return NextResponse.json(
-        {
-          error: "Limite quotidienne atteinte",
-          message: "Passez au plan Pro pour des prompts illimités.",
-          used: usage.used,
-          limit: usage.limit,
-        },
-        { status: 429 }
-      );
+    let skipUsage = false;
+    if (parsed.data.guaranteeRegen && parsed.data.parentPromptId) {
+      const parent = await prisma.prompt.findFirst({
+        where: { id: parsed.data.parentPromptId, userId: user.id },
+      });
+      if (!parent || !qualifiesForScoreGuarantee(parent.promptScore)) {
+        return NextResponse.json(
+          {
+            error: "Garantie non applicable",
+            message: "La regénération gratuite est réservée aux prompts avec un score inférieur à 70.",
+          },
+          { status: 400 }
+        );
+      }
+      skipUsage = true;
+    }
+
+    let usage = {
+      allowed: true,
+      used: 0,
+      limit: null as number | null,
+      remaining: null as number | null,
+    };
+
+    if (!skipUsage) {
+      usage = await reservePromptSlot(user.id, profile.plan);
+      usageReserved = true;
+      if (!usage.allowed) {
+        return NextResponse.json(
+          {
+            error: "Limite quotidienne atteinte",
+            message: "Passez au plan Pro pour des prompts illimités.",
+            used: usage.used,
+            limit: usage.limit,
+          },
+          { status: 429 }
+        );
+      }
     }
 
     const input: GeneratePromptInput = clampGenerateInputForPlan(profile.plan, {
@@ -77,11 +137,11 @@ export async function POST(request: Request) {
       includeErrorsToAvoid: parsed.data.includeErrorsToAvoid,
     });
 
-    let result;
+    let result: GeneratePromptResult;
     try {
-      result = await generatePromptWithOpenAI(input);
+      result = enrichResult(await generatePromptWithOpenAI(input), input);
     } catch (genError) {
-      await releasePromptSlot(user.id, profile.plan);
+      if (usageReserved) await releasePromptSlot(user.id, profile.plan);
       throw genError;
     }
 
@@ -99,12 +159,25 @@ export async function POST(request: Request) {
         detailedVariant: result.detailed_variant,
         expertVariant: result.expert_variant,
         aiTips: result.ai_tips,
+        promptScore: result.prompt_score,
+        scoreBreakdown: result.score_breakdown
+          ? JSON.parse(JSON.stringify(result.score_breakdown))
+          : undefined,
+        previewSummary: result.preview_summary ?? "",
+        previewQuestions: result.preview_questions ?? [],
       },
     });
 
+    const filtered = filterGenerateResultForPlan(profile.plan, result);
+
     return NextResponse.json({
-      ...filterGenerateResultForPlan(profile.plan, result),
+      ...filtered,
+      prompt_score: result.prompt_score,
+      score_breakdown: result.score_breakdown,
+      preview_summary: result.preview_summary,
+      preview_questions: result.preview_questions,
       id: saved.id,
+      guarantee_regen_available: qualifiesForScoreGuarantee(result.prompt_score),
       usage: {
         used: usage.used,
         limit: usage.limit,
@@ -113,7 +186,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Generate error:", error);
-    if (userId) {
+    if (userId && usageReserved) {
       try {
         await releasePromptSlot(userId, userPlan);
       } catch {

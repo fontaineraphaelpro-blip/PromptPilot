@@ -1,5 +1,6 @@
 import { SEO_ARTICLES } from "./articles/index";
 import { PROMPT_IA_PAGES } from "./prompt-pages";
+import { PROFESSION_GUIDES } from "./profession-guides";
 import type { ContentCategory, SeoArticle } from "./types";
 
 export * from "./types";
@@ -20,6 +21,7 @@ export function getPromptPageBySlug(slug: string) {
 export function getAllPublicPaths(): string[] {
   const blog = SEO_ARTICLES.map((a) => `/blog/${a.slug}`);
   const promptsIa = PROMPT_IA_PAGES.map((p) => `/prompts-ia/${p.slug}`);
+  const metiers = PROFESSION_GUIDES.map((g) => `/guides/metier/${g.slug}`);
   return [
     "",
     "/pricing",
@@ -30,8 +32,12 @@ export function getAllPublicPaths(): string[] {
     "/blog",
     "/guides",
     "/comparatif",
+    "/comparatif/interactif",
     "/prompts-ia",
+    "/prompt-du-jour",
+    "/changelog",
     ...blog,
     ...promptsIa,
+    ...metiers,
   ];
 }

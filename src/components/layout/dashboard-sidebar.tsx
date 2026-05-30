@@ -9,6 +9,7 @@ import {
   History,
   Star,
   FileText,
+  ListOrdered,
   Settings,
   CreditCard,
   LogOut,
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/history", label: "Historique", icon: History },
   { href: "/favorites", label: "Favoris", icon: Star },
   { href: "/templates", label: "Templates", icon: FileText },
+  { href: "/workflows", label: "Workflows", icon: ListOrdered },
   { href: "/settings", label: "Paramètres", icon: Settings },
   { href: "/settings/billing", label: "Facturation", icon: CreditCard },
 ];

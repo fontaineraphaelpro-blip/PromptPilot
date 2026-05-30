@@ -11,6 +11,7 @@ import { canUseFavorites } from "@/lib/plans";
 import { canUseExpertDetailLevel } from "@/lib/generate-plan-guard";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
+import { getAdaptPrefill } from "@/lib/conversion/adapt-prefill";
 import { toast } from "sonner";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,12 +32,24 @@ interface GenerateClientProps {
 
 export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<(GeneratePromptResult & { id?: string }) | null>(null);
+  const [result, setResult] = useState<
+    (GeneratePromptResult & { id?: string; guarantee_regen_available?: boolean }) | null
+  >(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [lastInput, setLastInput] = useState<GeneratePromptFormValues | null>(null);
   const [funnelReady, setFunnelReady] = useState(false);
 
   const prefillDefaults = useMemo(() => {
+    const adapt = getAdaptPrefill();
+    if (adapt) {
+      const ai = (TARGET_AIS as readonly string[]).includes(adapt.targetAI)
+        ? (adapt.targetAI as TargetAI)
+        : "ChatGPT";
+      return {
+        userIdea: adapt.userIdea,
+        targetAI: ai,
+      } satisfies Partial<GeneratePromptFormValues>;
+    }
     const template = getTemplatePrefill();
     if (template) {
       const ai = (TARGET_AIS as readonly string[]).includes(template.targetAI)
@@ -75,7 +88,10 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
     }
   }, []);
 
-  async function handleSubmit(data: GeneratePromptFormValues) {
+  async function handleSubmit(
+    data: GeneratePromptFormValues,
+    opts?: { guaranteeRegen?: boolean; parentPromptId?: string }
+  ) {
     if (!openaiReady) {
       toast.error("Service temporairement indisponible");
       return;
@@ -87,7 +103,11 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
       const res = await fetch("/api/generate-prompt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          guaranteeRegen: opts?.guaranteeRegen,
+          parentPromptId: opts?.parentPromptId,
+        }),
       });
       const json = await res.json();
 
@@ -125,6 +145,15 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
 
   async function handleRegenerate() {
     if (lastInput) await handleSubmit(lastInput);
+  }
+
+  async function handleGuaranteeRegen() {
+    if (!lastInput || !result?.id) return;
+    await handleSubmit(lastInput, {
+      guaranteeRegen: true,
+      parentPromptId: result.id,
+    });
+    toast.success("Regénération gratuite (garantie score < 70)");
   }
 
   async function toggleFavorite() {
@@ -214,11 +243,18 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         />
       ) : (
         <PromptResultCard
-          result={result}
+          result={{
+            ...result,
+            original_idea: lastInput?.userIdea,
+            target_ai: lastInput?.targetAI,
+          }}
           plan={plan}
           isFavorite={isFavorite}
           onToggleFavorite={result.id ? toggleFavorite : undefined}
           onRegenerate={handleRegenerate}
+          onGuaranteeRegen={
+            result.guarantee_regen_available ? handleGuaranteeRegen : undefined
+          }
           onReset={() => {
             setResult(null);
             setLastInput(null);

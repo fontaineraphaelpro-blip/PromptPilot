@@ -69,6 +69,7 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     features: [
       "Tout Pro inclus",
       "Variante Expert débloquée",
+      "Workflows métier (SaaS, LinkedIn, Dev)",
       "Niveau Expert par défaut au générateur",
       "Support prioritaire",
     ],

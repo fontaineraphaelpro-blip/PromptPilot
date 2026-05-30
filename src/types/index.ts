@@ -12,6 +12,13 @@ export interface Profile {
   updated_at: string;
 }
 
+export interface PromptScoreBreakdown {
+  clarity: number;
+  constraints: number;
+  outputFormat: number;
+  aiAdaptation: number;
+}
+
 export interface PromptRecord {
   id: string;
   user_id: string;
@@ -27,6 +34,13 @@ export interface PromptRecord {
   expert_variant: string;
   ai_tips: string;
   is_favorite: boolean;
+  tags: string[];
+  prompt_score: number | null;
+  score_breakdown: PromptScoreBreakdown | null;
+  preview_summary: string;
+  preview_questions: string[];
+  share_token: string | null;
+  share_enabled: boolean;
   created_at: string;
 }
 
@@ -68,4 +82,8 @@ export interface GeneratePromptResult {
   detailed_variant: string;
   expert_variant: string;
   ai_tips: string;
+  preview_summary?: string;
+  preview_questions?: string[];
+  prompt_score?: number;
+  score_breakdown?: PromptScoreBreakdown;
 }
