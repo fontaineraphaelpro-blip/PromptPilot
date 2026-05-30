@@ -1,4 +1,4 @@
-import { SEO_ARTICLES } from "./articles";
+import { SEO_ARTICLES } from "./articles/index";
 import { PROMPT_IA_PAGES } from "./prompt-pages";
 import type { ContentCategory, SeoArticle } from "./types";
 

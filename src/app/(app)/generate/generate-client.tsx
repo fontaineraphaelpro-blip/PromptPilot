@@ -6,8 +6,9 @@ import { PromptGeneratorForm } from "@/components/generate/prompt-generator-form
 import { PromptResultCard } from "@/components/generate/prompt-result-card";
 import type { GeneratePromptFormValues } from "@/lib/validations/prompt";
 import type { GeneratePromptResult } from "@/types";
-import type { Plan, TargetAI } from "@/lib/constants";
+import { TARGET_AIS, type Plan, type TargetAI } from "@/lib/constants";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
+import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,10 +32,23 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
   const [lastInput, setLastInput] = useState<GeneratePromptFormValues | null>(null);
   const [funnelReady, setFunnelReady] = useState(false);
 
-  const funnelDefaults = useMemo(() => {
+  const prefillDefaults = useMemo(() => {
+    const template = getTemplatePrefill();
+    if (template) {
+      const ai = (TARGET_AIS as readonly string[]).includes(template.targetAI)
+        ? (template.targetAI as TargetAI)
+        : "ChatGPT";
+      return {
+        userIdea: template.userIdea,
+        targetAI: ai,
+        detailLevel: "Expert" as const,
+      } satisfies Partial<GeneratePromptFormValues>;
+    }
     const draft = getFunnelDraft();
     if (!draft) return undefined;
-    const ai = draft.targetAi as TargetAI;
+    const ai = (TARGET_AIS as readonly string[]).includes(draft.targetAi)
+      ? (draft.targetAi as TargetAI)
+      : "ChatGPT";
     return {
       userIdea: draft.idea,
       targetAI: ai,
@@ -42,6 +56,14 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
   }, [funnelReady]);
 
   useEffect(() => {
+    const template = getTemplatePrefill();
+    if (template) {
+      setFunnelReady(true);
+      toast.success(`Template « ${template.templateTitle} » chargé — personnalise les [PLACEHOLDER]`, {
+        duration: 6000,
+      });
+      return;
+    }
     const draft = getFunnelDraft();
     if (draft) {
       setFunnelReady(true);
@@ -151,7 +173,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           onSubmit={handleSubmit}
           isLoading={isLoading}
           disabled={atLimit || !openaiReady}
-          defaultValues={funnelDefaults}
+          defaultValues={prefillDefaults}
         />
       ) : (
         <PromptResultCard

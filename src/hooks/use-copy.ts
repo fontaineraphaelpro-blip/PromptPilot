@@ -3,18 +3,20 @@
 import { useCallback, useState } from "react";
 
 export function useCopy() {
-  const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const copy = useCallback(async (text: string) => {
+  const copy = useCallback(async (text: string, id = "default") => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
       return true;
     } catch {
       return false;
     }
   }, []);
 
-  return { copy, copied };
+  const resetCopy = useCallback(() => setCopiedId(null), []);
+
+  return { copy, copied: copiedId !== null, copiedId, resetCopy };
 }
