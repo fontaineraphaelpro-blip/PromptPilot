@@ -4,6 +4,7 @@ import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
 import { prisma } from "@/lib/db";
 import { mapPrompt } from "@/lib/mappers";
+import { filterPromptRecordForPlan } from "@/lib/generate-plan-guard";
 import { PromptDetailClient } from "@/components/history/prompt-detail-client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -25,7 +26,7 @@ export default async function HistoryDetailPage({
 
   if (!row) notFound();
 
-  const prompt = mapPrompt(row);
+  const prompt = filterPromptRecordForPlan(profile.plan, mapPrompt(row));
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">

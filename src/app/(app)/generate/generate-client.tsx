@@ -8,6 +8,7 @@ import type { GeneratePromptFormValues } from "@/lib/validations/prompt";
 import type { GeneratePromptResult } from "@/types";
 import { TARGET_AIS, type Plan, type TargetAI } from "@/lib/constants";
 import { canUseFavorites } from "@/lib/plans";
+import { canUseExpertDetailLevel } from "@/lib/generate-plan-guard";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { toast } from "sonner";
@@ -44,7 +45,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
       return {
         userIdea: template.userIdea,
         targetAI: ai,
-        detailLevel: "Expert" as const,
+        ...(canUseExpertDetailLevel(plan) ? { detailLevel: "Expert" as const } : {}),
       } satisfies Partial<GeneratePromptFormValues>;
     }
     const draft = getFunnelDraft();
@@ -56,7 +57,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
       userIdea: draft.idea,
       targetAI: ai,
     } satisfies Partial<GeneratePromptFormValues>;
-  }, [funnelReady]);
+  }, [funnelReady, plan]);
 
   useEffect(() => {
     const template = getTemplatePrefill();

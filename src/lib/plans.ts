@@ -34,6 +34,7 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     features: [
       "3 prompts gratuits/jour",
       "30 derniers prompts en historique",
+      "Niveaux Rapide et Détaillé",
       "Variantes Principal, Court et Détaillé",
       "Templates gratuits",
     ],
@@ -52,6 +53,7 @@ export const PRICING_PLANS: PricingPlanCard[] = [
       "Historique complet",
       "Favoris",
       "Templates premium",
+      "Options avancées du générateur",
       "Variantes Principal, Court et Détaillé",
     ],
     cta: "Passer au Pro",

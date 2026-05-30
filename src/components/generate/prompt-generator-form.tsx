@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -7,21 +8,26 @@ import {
   type GeneratePromptFormValues,
 } from "@/lib/validations/prompt";
 import {
-  DETAIL_LEVELS,
   LANGUAGES,
   TARGET_AIS,
   TASK_TYPES,
   TONES,
 } from "@/lib/constants";
 import type { Plan } from "@/lib/constants";
-import { hasAdvancedVariants } from "@/lib/plans";
+import {
+  canUseAdvancedGeneratorOptions,
+  canUseExpertDetailLevel,
+  getAllowedDetailLevels,
+} from "@/lib/generate-plan-guard";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectField } from "@/components/ui/select-field";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wand2, Loader2 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Wand2, Loader2, Lock } from "lucide-react";
+import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 
 interface PromptGeneratorFormProps {
   onSubmit: (data: GeneratePromptFormValues) => Promise<void>;
@@ -32,7 +38,7 @@ interface PromptGeneratorFormProps {
 }
 
 function getDefaultDetailLevel(plan: Plan = "free"): GeneratePromptFormValues["detailLevel"] {
-  return hasAdvancedVariants(plan) ? "Expert" : "Détaillé";
+  return canUseExpertDetailLevel(plan) ? "Expert" : "Détaillé";
 }
 
 const baseFormValues = {
@@ -44,8 +50,8 @@ const baseFormValues = {
   includeConstraints: true,
   includeExamples: false,
   includeOutputFormat: true,
-  includeQualityChecklist: true,
-  includeErrorsToAvoid: true,
+  includeQualityChecklist: false,
+  includeErrorsToAvoid: false,
 };
 
 export function PromptGeneratorForm({
@@ -55,10 +61,14 @@ export function PromptGeneratorForm({
   defaultValues,
   plan = "free",
 }: PromptGeneratorFormProps) {
+  const advancedAllowed = canUseAdvancedGeneratorOptions(plan);
+  const allowedDetailLevels = getAllowedDetailLevels(plan);
+
   const defaultFormValues: GeneratePromptFormValues = {
     ...baseFormValues,
     detailLevel: getDefaultDetailLevel(plan),
   };
+
   const {
     register,
     handleSubmit,
@@ -79,7 +89,18 @@ export function PromptGeneratorForm({
     );
     setValue("targetAI", "Cursor");
     setValue("taskType", "Développement");
-    setValue("detailLevel", "Expert");
+    setValue("detailLevel", getDefaultDetailLevel(plan));
+  }
+
+  function handleDetailLevelChange(value: string) {
+    if (value === "Expert" && !canUseExpertDetailLevel(plan)) {
+      toastUpgradeRequired(
+        "Le niveau Expert est réservé au plan Creator (19€/mois).",
+        "creator"
+      );
+      return;
+    }
+    setValue("detailLevel", value as GeneratePromptFormValues["detailLevel"]);
   }
 
   return (
@@ -119,13 +140,21 @@ export function PromptGeneratorForm({
               onChange={(v) => setValue("taskType", v as GeneratePromptFormValues["taskType"])}
               options={TASK_TYPES}
             />
-            <SelectField
-              label="Niveau de détail"
-              id="detailLevel"
-              value={values.detailLevel}
-              onChange={(v) => setValue("detailLevel", v as GeneratePromptFormValues["detailLevel"])}
-              options={DETAIL_LEVELS}
-            />
+            <div className="space-y-1.5">
+              <SelectField
+                label="Niveau de détail"
+                id="detailLevel"
+                value={values.detailLevel}
+                onChange={handleDetailLevelChange}
+                options={[...allowedDetailLevels]}
+              />
+              {!canUseExpertDetailLevel(plan) && (
+                <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                  <Lock className="h-3 w-3" />
+                  Niveau Expert — plan Creator
+                </p>
+              )}
+            </div>
             <SelectField
               label="Ton / style"
               id="tone"
@@ -144,28 +173,55 @@ export function PromptGeneratorForm({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className={!advancedAllowed ? "border-white/15" : undefined}>
         <CardHeader>
-          <CardTitle className="text-base">Options avancées</CardTitle>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-base">Options avancées</CardTitle>
+            {!advancedAllowed && <Badge variant="outline">Pro</Badge>}
+          </div>
+          {!advancedAllowed && (
+            <CardDescription>
+              Exemples, checklist qualité et erreurs à éviter — inclus dans le plan Pro.
+            </CardDescription>
+          )}
         </CardHeader>
-        <CardContent className="grid gap-3 sm:grid-cols-2">
-          {(
-            [
-              ["includeConstraints", "Inclure des contraintes"],
-              ["includeExamples", "Inclure des exemples"],
-              ["includeOutputFormat", "Inclure un format de sortie"],
-              ["includeQualityChecklist", "Inclure une checklist qualité"],
-              ["includeErrorsToAvoid", "Inclure les erreurs à éviter"],
-            ] as const
-          ).map(([key, label]) => (
-            <label key={key} className="flex items-center gap-2 text-sm cursor-pointer">
-              <Checkbox
-                checked={values[key]}
-                onCheckedChange={(c) => setValue(key, c === true)}
-              />
-              {label}
-            </label>
-          ))}
+        <CardContent className="relative">
+          <div
+            className={
+              !advancedAllowed
+                ? "grid gap-3 sm:grid-cols-2 opacity-50 pointer-events-none select-none"
+                : "grid gap-3 sm:grid-cols-2"
+            }
+          >
+            {(
+              [
+                ["includeConstraints", "Inclure des contraintes"],
+                ["includeExamples", "Inclure des exemples"],
+                ["includeOutputFormat", "Inclure un format de sortie"],
+                ["includeQualityChecklist", "Inclure une checklist qualité"],
+                ["includeErrorsToAvoid", "Inclure les erreurs à éviter"],
+              ] as const
+            ).map(([key, label]) => (
+              <label key={key} className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox
+                  checked={values[key]}
+                  onCheckedChange={(c) => setValue(key, c === true)}
+                  disabled={!advancedAllowed}
+                />
+                {label}
+              </label>
+            ))}
+          </div>
+          {!advancedAllowed && (
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-white/10 bg-black/40 p-4">
+              <p className="text-sm text-muted-foreground">
+                Débloque toutes les options avancées avec le plan Pro.
+              </p>
+              <Button size="sm" variant="outline" asChild>
+                <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

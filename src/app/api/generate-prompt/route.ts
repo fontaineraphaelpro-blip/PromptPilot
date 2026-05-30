@@ -4,6 +4,10 @@ import { generatePromptSchema } from "@/lib/validations/prompt";
 import { generatePromptWithOpenAI } from "@/lib/openai/generate";
 import { getOrCreateProfile } from "@/lib/profile";
 import { reservePromptSlot, releasePromptSlot } from "@/lib/usage";
+import {
+  clampGenerateInputForPlan,
+  filterGenerateResultForPlan,
+} from "@/lib/generate-plan-guard";
 import { prisma } from "@/lib/db";
 import { isOpenAIConfigured } from "@/lib/env";
 import { safeErrorMessage } from "@/lib/api-error";
@@ -59,7 +63,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const input: GeneratePromptInput = {
+    const input: GeneratePromptInput = clampGenerateInputForPlan(profile.plan, {
       userIdea: parsed.data.userIdea,
       targetAI: parsed.data.targetAI,
       taskType: parsed.data.taskType,
@@ -71,7 +75,7 @@ export async function POST(request: Request) {
       includeOutputFormat: parsed.data.includeOutputFormat,
       includeQualityChecklist: parsed.data.includeQualityChecklist,
       includeErrorsToAvoid: parsed.data.includeErrorsToAvoid,
-    };
+    });
 
     let result;
     try {
@@ -99,7 +103,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      ...result,
+      ...filterGenerateResultForPlan(profile.plan, result),
       id: saved.id,
       usage: {
         used: usage.used,
