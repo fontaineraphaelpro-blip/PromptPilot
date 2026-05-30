@@ -12,6 +12,8 @@ SaaS qui transforme une idée vague en prompt ultra détaillé, optimisé pour l
 - **Stripe** — Abonnements Pro / Creator
 - **Zod** + React Hook Form — Validation
 
+Guide de mise en production : voir **[DEPLOY.md](./DEPLOY.md)**.
+
 ## Démarrage rapide
 
 ```bash
@@ -43,21 +45,15 @@ Au déploiement, `railway.toml` exécute `prisma db push` + seed automatiquement
 
 ### 2. Authentification (NextAuth)
 
-Génère un secret :
-
 ```bash
 openssl rand -base64 32
 ```
 
-Variables :
-
 ```
-AUTH_SECRET=ton_secret_genere
-AUTH_URL=https://ton-app.up.railway.app   # ou http://localhost:3000 en local
+AUTH_SECRET=...
+AUTH_URL=https://ton-app.up.railway.app
 NEXT_PUBLIC_APP_URL=https://ton-app.up.railway.app
 ```
-
-**Plus besoin de Supabase.**
 
 ### 3. OpenAI
 

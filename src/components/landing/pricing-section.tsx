@@ -1,19 +1,21 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 
 const plans = [
   {
+    id: "free" as const,
     name: "Free",
     price: "0€",
     description: "Pour découvrir PromptPilot",
-    features: ["3 prompts gratuits/jour", "Historique limité", "Quelques templates gratuits"],
+    features: ["3 prompts gratuits/jour", "30 derniers prompts en historique", "Templates gratuits"],
     cta: "Commencer gratuitement",
     href: "/signup",
     highlighted: false,
   },
   {
+    id: "pro" as const,
     name: "Pro",
     price: "9€/mois",
     description: "Pour les créateurs réguliers",
@@ -28,14 +30,15 @@ const plans = [
     highlighted: true,
   },
   {
+    id: "creator" as const,
     name: "Creator",
     price: "19€/mois",
     description: "Pour les power users",
     features: [
       "Tout Pro inclus",
-      "Variantes avancées vidéo/image/app",
-      "Brand voice",
-      "Exports futurs",
+      "Variantes expert détaillées",
+      "Tous les templates",
+      "Support prioritaire",
     ],
     cta: "Passer au Creator",
     href: "/pricing?plan=creator",
@@ -43,7 +46,12 @@ const plans = [
   },
 ];
 
-export function PricingSection() {
+interface PricingSectionProps {
+  onSelectPlan?: (plan: "pro" | "creator") => void;
+  checkoutLoading?: string | null;
+}
+
+export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSectionProps) {
   return (
     <section id="pricing" className="px-4 py-20 sm:px-6 bg-muted/30">
       <div className="mx-auto max-w-6xl">
@@ -73,13 +81,27 @@ export function PricingSection() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button
-                  className="w-full"
-                  variant={plan.highlighted ? "default" : "outline"}
-                  asChild
-                >
-                  <Link href={plan.href}>{plan.cta}</Link>
-                </Button>
+                {plan.id === "free" || !onSelectPlan ? (
+                  <Button
+                    className="w-full"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    asChild
+                  >
+                    <Link href={plan.href}>{plan.cta}</Link>
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    onClick={() => onSelectPlan(plan.id)}
+                    disabled={!!checkoutLoading}
+                  >
+                    {checkoutLoading === plan.id && (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    )}
+                    {plan.cta}
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           ))}

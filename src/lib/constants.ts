@@ -45,6 +45,7 @@ export const LANGUAGES = ["Français", "Anglais"] as const;
 export const PLANS = ["free", "pro", "creator"] as const;
 
 export const FREE_DAILY_LIMIT = 3;
+export const FREE_HISTORY_LIMIT = 30;
 
 export const TEMPLATE_CATEGORIES = [
   "Business",

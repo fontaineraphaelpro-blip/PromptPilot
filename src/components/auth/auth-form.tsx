@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -10,6 +10,7 @@ import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -30,9 +31,11 @@ export function AuthForm({ mode }: AuthFormProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<LoginInput | SignupInput>({
     resolver: zodResolver(schema),
+    defaultValues: isLogin ? undefined : { acceptTerms: false },
   });
 
   async function onSubmit(data: LoginInput | SignupInput) {
@@ -103,17 +106,52 @@ export function AuthForm({ mode }: AuthFormProps) {
             {errors.password && (
               <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
+            {!isLogin && (
+              <p className="text-xs text-muted-foreground">
+                8 caractères minimum, avec une lettre et un chiffre
+              </p>
+            )}
           </div>
           {!isLogin && (
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
-              <Input id="confirmPassword" type="password" {...register("confirmPassword" as keyof SignupInput)} />
-              {"confirmPassword" in errors && errors.confirmPassword && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                <Input id="confirmPassword" type="password" {...register("confirmPassword" as keyof SignupInput)} />
+                {"confirmPassword" in errors && errors.confirmPassword && (
+                  <p className="text-sm text-destructive">
+                    {(errors as { confirmPassword?: { message?: string } }).confirmPassword?.message}
+                  </p>
+                )}
+              </div>
+              <div className="flex items-start gap-2">
+                <Controller
+                  name="acceptTerms"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="acceptTerms"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                />
+                <label htmlFor="acceptTerms" className="text-sm text-muted-foreground leading-tight">
+                  J&apos;accepte les{" "}
+                  <Link href="/terms" className="text-primary hover:underline" target="_blank">
+                    conditions d&apos;utilisation
+                  </Link>{" "}
+                  et la{" "}
+                  <Link href="/privacy" className="text-primary hover:underline" target="_blank">
+                    politique de confidentialité
+                  </Link>
+                </label>
+              </div>
+              {"acceptTerms" in errors && errors.acceptTerms && (
                 <p className="text-sm text-destructive">
-                  {(errors as { confirmPassword?: { message?: string } }).confirmPassword?.message}
+                  {(errors as { acceptTerms?: { message?: string } }).acceptTerms?.message}
                 </p>
               )}
-            </div>
+            </>
           )}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -1,22 +1,24 @@
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { getOrCreateProfile } from "@/lib/profile";
 import { checkUsageLimit } from "@/lib/usage";
 import { isOpenAIConfigured } from "@/lib/env";
-import { GenerateClient } from "./generate-client";
 
-export default async function GeneratePage() {
+export async function GET() {
   const user = await getAuthUser();
-  if (!user) redirect("/login?redirect=/generate");
+  if (!user) {
+    return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+  }
 
   const profile = await getOrCreateProfile(user.id, user.email);
   const usage = await checkUsageLimit(user.id, profile.plan);
 
-  return (
-    <GenerateClient
-      plan={profile.plan}
-      usage={usage}
-      openaiReady={isOpenAIConfigured()}
-    />
-  );
+  return NextResponse.json({
+    email: profile.email,
+    plan: profile.plan,
+    usage,
+    services: {
+      openai: isOpenAIConfigured(),
+    },
+  });
 }

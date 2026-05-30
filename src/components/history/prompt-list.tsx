@@ -45,6 +45,8 @@ export function PromptList({ prompts: initial }: PromptListProps) {
         prev.map((p) => (p.id === id ? { ...p, is_favorite: !current } : p))
       );
       toast.success(current ? "Retiré des favoris" : "Ajouté aux favoris");
+    } else {
+      toast.error("Impossible de mettre à jour le favori");
     }
   }
 

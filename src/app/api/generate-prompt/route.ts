@@ -3,16 +3,34 @@ import { getAuthUser } from "@/lib/auth";
 import { generatePromptSchema } from "@/lib/validations/prompt";
 import { generatePromptWithOpenAI } from "@/lib/openai/generate";
 import { getOrCreateProfile } from "@/lib/profile";
-import { checkUsageLimit, incrementUsage } from "@/lib/usage";
+import { reservePromptSlot, releasePromptSlot } from "@/lib/usage";
 import { prisma } from "@/lib/db";
+import { isOpenAIConfigured } from "@/lib/env";
+import { safeErrorMessage } from "@/lib/api-error";
 import type { GeneratePromptInput } from "@/types";
 
 export async function POST(request: Request) {
+  let userId: string | null = null;
+  let userPlan: "free" | "pro" | "creator" = "free";
+
   try {
     const user = await getAuthUser();
 
     if (!user) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+
+    userId = user.id;
+
+    if (!isOpenAIConfigured()) {
+      return NextResponse.json(
+        {
+          error: "Service indisponible",
+          message:
+            "La génération IA n'est pas configurée. Contactez le support.",
+        },
+        { status: 503 }
+      );
     }
 
     const body = await request.json();
@@ -25,8 +43,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const profile = await getOrCreateProfile(user.id, user.email ?? "");
-    const usage = await checkUsageLimit(user.id, profile.plan);
+    const profile = await getOrCreateProfile(user.id, user.email);
+    userPlan = profile.plan;
+    const usage = await reservePromptSlot(user.id, profile.plan);
 
     if (!usage.allowed) {
       return NextResponse.json(
@@ -54,7 +73,13 @@ export async function POST(request: Request) {
       includeErrorsToAvoid: parsed.data.includeErrorsToAvoid,
     };
 
-    const result = await generatePromptWithOpenAI(input);
+    let result;
+    try {
+      result = await generatePromptWithOpenAI(input);
+    } catch (genError) {
+      await releasePromptSlot(user.id, profile.plan);
+      throw genError;
+    }
 
     const saved = await prisma.prompt.create({
       data: {
@@ -73,21 +98,32 @@ export async function POST(request: Request) {
       },
     });
 
-    await incrementUsage(user.id);
-
     return NextResponse.json({
       ...result,
       id: saved.id,
       usage: {
-        used: usage.used + 1,
+        used: usage.used,
         limit: usage.limit,
-        remaining: usage.limit ? Math.max(0, usage.limit - usage.used - 1) : null,
+        remaining: usage.remaining,
       },
     });
   } catch (error) {
     console.error("Generate error:", error);
-    const message =
-      error instanceof Error ? error.message : "Erreur de génération";
-    return NextResponse.json({ error: message }, { status: 500 });
+    if (userId) {
+      try {
+        await releasePromptSlot(userId, userPlan);
+      } catch {
+        // ignore
+      }
+    }
+    return NextResponse.json(
+      {
+        error: safeErrorMessage(
+          error,
+          "Impossible de générer le prompt. Réessayez dans quelques instants."
+        ),
+      },
+      { status: 500 }
+    );
   }
 }

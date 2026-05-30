@@ -15,17 +15,18 @@ export function Footer() {
           <div>
             <p className="font-medium text-sm mb-3">Produit</p>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/generate" className="hover:text-foreground">Générateur</Link></li>
-              <li><Link href="/templates" className="hover:text-foreground">Templates</Link></li>
+              <li><Link href="/signup" className="hover:text-foreground">Commencer gratuitement</Link></li>
               <li><Link href="/pricing" className="hover:text-foreground">Tarifs</Link></li>
+              <li><Link href="/#how" className="hover:text-foreground">Comment ça marche</Link></li>
             </ul>
           </div>
           <div>
-            <p className="font-medium text-sm mb-3">Compte</p>
+            <p className="font-medium text-sm mb-3">Légal & compte</p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/login" className="hover:text-foreground">Connexion</Link></li>
               <li><Link href="/signup" className="hover:text-foreground">Inscription</Link></li>
-              <li><Link href="/dashboard" className="hover:text-foreground">Dashboard</Link></li>
+              <li><Link href="/terms" className="hover:text-foreground">CGU</Link></li>
+              <li><Link href="/privacy" className="hover:text-foreground">Confidentialité</Link></li>
             </ul>
           </div>
         </div>

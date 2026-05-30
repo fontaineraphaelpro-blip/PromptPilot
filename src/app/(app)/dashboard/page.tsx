@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { getAuthUser } from "@/lib/auth";
+import { CheckoutSuccessBanner } from "@/components/dashboard/checkout-success-banner";
 import { getOrCreateProfile } from "@/lib/profile";
 import { getTodayUsage } from "@/lib/usage";
 import { hasUnlimitedPrompts, PLAN_LABELS } from "@/lib/plans";
@@ -34,6 +36,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
+      <Suspense fallback={null}>
+        <CheckoutSuccessBanner />
+      </Suspense>
       <div>
         <h1 className="text-2xl font-bold sm:text-3xl">
           Bonjour, {firstName} 👋

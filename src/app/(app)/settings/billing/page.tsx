@@ -1,31 +1,18 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
+import { getAuthUser } from "@/lib/auth";
+import { getOrCreateProfile } from "@/lib/profile";
+import { PLAN_LABELS, PLAN_PRICES } from "@/lib/plans";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2, ExternalLink } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
+import { BillingActions } from "./billing-actions";
 
-export default function BillingPage() {
-  const [loading, setLoading] = useState(false);
+export default async function BillingPage() {
+  const user = await getAuthUser();
+  if (!user) return null;
 
-  async function openPortal() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        toast.error(data.error ?? "Aucun abonnement actif");
-      }
-    } catch {
-      toast.error("Erreur réseau");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const profile = await getOrCreateProfile(user.id, user.email);
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -36,25 +23,34 @@ export default function BillingPage() {
         </Link>
       </Button>
       <h1 className="text-2xl font-bold">Facturation</h1>
+
       <Card>
         <CardHeader>
-          <CardTitle>Stripe Customer Portal</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            Plan actuel
+            <Badge variant={profile.plan === "free" ? "free" : "pro"}>
+              {PLAN_LABELS[profile.plan]}
+            </Badge>
+          </CardTitle>
           <CardDescription>
-            Gérez votre abonnement, moyens de paiement et factures via Stripe.
+            {profile.plan === "free"
+              ? "3 prompts gratuits par jour · historique limité"
+              : profile.plan === "pro"
+                ? `${PLAN_PRICES.pro.label} · prompts illimités`
+                : `${PLAN_PRICES.creator.label} · toutes les fonctionnalités`}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Button onClick={openPortal} disabled={loading}>
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <ExternalLink className="h-4 w-4" />
-            )}
-            Ouvrir le portail Stripe
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/pricing">Voir les plans</Link>
-          </Button>
+        <CardContent>
+          {profile.stripe_customer_id ? (
+            <p className="text-sm text-muted-foreground mb-4">
+              Abonnement géré via Stripe. Modifiez votre carte ou annulez depuis le portail.
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground mb-4">
+              Aucun abonnement actif. Passez au Pro ou Creator pour débloquer tout le potentiel.
+            </p>
+          )}
+          <BillingActions hasSubscription={!!profile.stripe_customer_id} />
         </CardContent>
       </Card>
     </div>

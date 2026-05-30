@@ -24,6 +24,7 @@ import { Wand2, Loader2 } from "lucide-react";
 interface PromptGeneratorFormProps {
   onSubmit: (data: GeneratePromptFormValues) => Promise<void>;
   isLoading: boolean;
+  disabled?: boolean;
   defaultValues?: Partial<GeneratePromptFormValues>;
 }
 
@@ -44,6 +45,7 @@ const defaultFormValues: GeneratePromptFormValues = {
 export function PromptGeneratorForm({
   onSubmit,
   isLoading,
+  disabled = false,
   defaultValues,
 }: PromptGeneratorFormProps) {
   const {
@@ -156,7 +158,7 @@ export function PromptGeneratorForm({
         </CardContent>
       </Card>
 
-      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isLoading}>
+      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isLoading || disabled}>
         {isLoading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
