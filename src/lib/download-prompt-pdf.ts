@@ -43,7 +43,7 @@ export async function downloadPromptPdf(options: {
     y += 2;
   };
 
-  writeBlock("PromptExpert", 16, "bold", 2);
+  writeBlock("PromptPilot", 16, "bold", 2);
   if (options.score != null) {
     writeBlock(`Score : ${options.score}/100`, 11);
   }

@@ -138,7 +138,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h3", text: "Prompt Midjourney en français ?" },
   {
     type: "p",
-    text: "Possible mais anglais recommandé descriptifs techniques. PromptExpert peut générer variantes EN optimisées depuis idée FR.",
+    text: "Possible mais anglais recommandé descriptifs techniques. PromptPilot peut générer variantes EN optimisées depuis idée FR.",
   },
   { type: "h3", text: "Comment utiliser Midjourney sans Discord ?" },
   {
@@ -192,7 +192,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Synthèse débutant Midjourney" },
   {
     type: "p",
-    text: "Comment utiliser Midjourney : brief visuel clair, anglais descriptif, --ar correct, itérer variations, upscale sélectif, documenter prompts. Exercice 7 jours bat tutorial passif. Prompt Midjourney exemple commentés ci-dessus = point départ — personnalisez sujet lumière style. PromptExpert génère descriptifs EN optimisés depuis idée FR.",
+    text: "Comment utiliser Midjourney : brief visuel clair, anglais descriptif, --ar correct, itérer variations, upscale sélectif, documenter prompts. Exercice 7 jours bat tutorial passif. Prompt Midjourney exemple commentés ci-dessus = point départ — personnalisez sujet lumière style. PromptPilot génère descriptifs EN optimisés depuis idée FR.",
   },
   { type: "h2", text: "FAQ Midjourney débutant" },
   { type: "h3", text: "Combien de crédits pour apprendre Midjourney ?" },
@@ -218,7 +218,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Ressources apprentissage continu" },
   {
     type: "p",
-    text: "Suivez changelog Midjourney officiel, testez nouveaux params sur prompts gold. Comparez résultats avec guide Midjourney vs DALL·E quand clients demandent « même style partout ». Rejoignez communautés FR partage prompts commentés pas seulement renders. Documentez échecs — prompts ratés enseignent plus que wins. PromptExpert génère base EN depuis brief FR pour accélérer phase test.",
+    text: "Suivez changelog Midjourney officiel, testez nouveaux params sur prompts gold. Comparez résultats avec guide Midjourney vs DALL·E quand clients demandent « même style partout ». Rejoignez communautés FR partage prompts commentés pas seulement renders. Documentez échecs — prompts ratés enseignent plus que wins. PromptPilot génère base EN depuis brief FR pour accélérer phase test.",
   },
   {
     type: "p",
@@ -241,7 +241,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Recherche Google « prompt midjourney exemple » ou « comment utiliser midjourney » : ce guide couvre setup, 10 exemples, params, FAQ — appliquez exercice 7 jours pour ancrer compétence pratique au-delà lecture passive. PromptExpert accélère descriptifs EN depuis brief FR. Comparez midjourney-vs-dalle-prompts quand clients exigent « même rendu partout » — adaptez workflow pas prompt unique. Objectif 30 jours : autonomie intermédiaire. Lancez /imagine avec l'exemple 1 portrait studio — premier succès en quinze minutes avec --ar 4:5 --style raw. Bonne génération.",
+    text: "Recherche Google « prompt midjourney exemple » ou « comment utiliser midjourney » : ce guide couvre setup, 10 exemples, params, FAQ — appliquez exercice 7 jours pour ancrer compétence pratique au-delà lecture passive. PromptPilot accélère descriptifs EN depuis brief FR. Comparez midjourney-vs-dalle-prompts quand clients exigent « même rendu partout » — adaptez workflow pas prompt unique. Objectif 30 jours : autonomie intermédiaire. Lancez /imagine avec l'exemple 1 portrait studio — premier succès en quinze minutes avec --ar 4:5 --style raw. Bonne génération.",
   },
 ];
 

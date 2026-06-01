@@ -1,4 +1,4 @@
-# Checklist production PromptExpert
+# Checklist production PromptPilot
 
 ## Variables Railway obligatoires
 

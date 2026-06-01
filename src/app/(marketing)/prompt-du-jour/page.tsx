@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DailyPromptCta } from "@/components/seo/daily-prompt-cta";
 
 export const metadata = buildPageMetadata({
-  title: "Prompt du jour — Défi quotidien PromptExpert",
+  title: "Prompt du jour — Défi quotidien PromptPilot",
   description:
     "Chaque jour un nouveau défi prompt IA : idée, IA cible et conseil. Génère ton prompt expert gratuitement.",
   path: "/prompt-du-jour",

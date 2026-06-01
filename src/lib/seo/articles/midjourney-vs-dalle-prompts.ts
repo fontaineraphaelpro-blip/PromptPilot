@@ -244,7 +244,7 @@ const blocks: SeoArticle["blocks"] = [
       "Post-traitement retouche systématique livrables pro",
       "Charte prompts équipe versionnée trimestriel",
       "Formation atelier 2h alternance outils même brief",
-      "Hub PromptExpert guides image vidéo exemples R-C-T-C",
+      "Hub PromptPilot guides image vidéo exemples R-C-T-C",
     ],
   },
 ];

@@ -97,7 +97,7 @@ export function DemoProductAnimation() {
           <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
           <span className="ml-2 flex-1 text-[10px] font-mono text-muted-foreground tracking-wide truncate">
-            promptexpert.app — démo live
+            promptpilot.app — démo live
           </span>
           {!reduceMotion && (
             <button

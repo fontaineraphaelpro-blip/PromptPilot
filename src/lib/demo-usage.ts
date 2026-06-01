@@ -8,7 +8,7 @@ function todayParis(): string {
 }
 
 export function hashIp(ip: string): string {
-  return crypto.createHash("sha256").update(`${ip}:promptexpert-demo`).digest("hex");
+  return crypto.createHash("sha256").update(`${ip}:promptpilot-demo`).digest("hex");
 }
 
 /** 1 démo landing / jour / IP */

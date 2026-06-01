@@ -14,7 +14,7 @@ import { articleDixErreurs } from "./10-erreurs-prompt-ia";
 import { articleMarketing } from "./prompts-marketing-copywriting";
 import { articleVideo } from "./prompts-video-sora-runway";
 import { articleExemplesGratuits } from "./exemples-prompts-ia-gratuits";
-import { articlePromptexpertVsManuel } from "./promptexpert-vs-prompts-manuels";
+import { articlePromptpilotVsManuel } from "./promptpilot-vs-prompts-manuels";
 
 export const SEO_ARTICLES: SeoArticle[] = [
   articleQuestCeQuunPrompt,
@@ -32,5 +32,5 @@ export const SEO_ARTICLES: SeoArticle[] = [
   articleMarketing,
   articleVideo,
   articleExemplesGratuits,
-  articlePromptexpertVsManuel,
+  articlePromptpilotVsManuel,
 ];

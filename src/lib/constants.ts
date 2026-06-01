@@ -1,4 +1,4 @@
-export const APP_NAME = "PromptExpert";
+export const APP_NAME = "PromptPilot";
 
 export const TARGET_AIS = [
   "ChatGPT",

@@ -6,7 +6,7 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = buildPageMetadata({
   title: "Comparatifs IA — ChatGPT vs Claude, Midjourney vs DALL·E",
   description:
-    "Comparatifs objectifs des IA et des stratégies de prompts : ChatGPT, Claude, Midjourney, DALL·E, PromptExpert vs manuel.",
+    "Comparatifs objectifs des IA et des stratégies de prompts : ChatGPT, Claude, Midjourney, DALL·E, PromptPilot vs manuel.",
   path: "/comparatif",
   keywords: ["comparatif IA", "ChatGPT vs Claude", "Midjourney vs DALL·E"],
 });

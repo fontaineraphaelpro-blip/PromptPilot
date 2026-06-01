@@ -1,4 +1,4 @@
-#promptexpert-fab {
+#promptpilot-fab {
   position: fixed;
   bottom: 88px;
   right: 20px;
@@ -14,7 +14,7 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#promptexpert-fab:hover {
+#promptpilot-fab:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
 }

@@ -1,4 +1,4 @@
-# Mise en production PromptExpert — Railway
+# Mise en production PromptPilot — Railway
 
 ## Pourquoi la base ne se créait pas ?
 
@@ -20,14 +20,14 @@ Sur Railway, ces causes sont fréquentes :
 3. Attends que le service Postgres soit **Active** (vert).
 
 Tu dois avoir **2 services** dans le projet :
-- `PromptExpert` (ton app web)
+- `PromptPilot` (ton app web)
 - `Postgres` (ou `PostgreSQL`)
 
 ---
 
 ## Étape 2 — Lier DATABASE_URL à l’app web
 
-1. Clique sur le service **PromptExpert** (Next.js), pas sur Postgres.
+1. Clique sur le service **PromptPilot** (Next.js), pas sur Postgres.
 2. Onglet **Variables**.
 3. **+ New Variable** → **Add Reference** (ou « Reference Variable »).
 4. Choisis le service **Postgres** → variable **`DATABASE_URL`**.
@@ -58,7 +58,7 @@ DATABASE_URL = ${{Postgres.DATABASE_URL}}
 
 ## Dépannage — logs que tu vois
 
-### `next start --hostname 0.0.0.0` (sans `[promptexpert]`)
+### `next start --hostname 0.0.0.0` (sans `[promptpilot]`)
 
 Railway lance une **ancienne** commande ou une commande personnalisée.
 
@@ -71,8 +71,8 @@ Railway lance une **ancienne** commande ou une commande personnalisée.
 Logs corrects :
 
 ```
-[promptexpert] Synchronisation du schéma PostgreSQL…
-[promptexpert] Démarrage Next.js…
+[promptpilot] Synchronisation du schéma PostgreSQL…
+[promptpilot] Démarrage Next.js…
 ```
 
 ### `[auth][error] MissingSecret`
@@ -96,8 +96,8 @@ Le service web n’a pas accès à Postgres → étape 2 ci-dessous.
 Dans **Deployments** → dernier deploy → **View logs**, tu dois voir :
 
 ```
-[promptexpert] Synchronisation du schéma PostgreSQL…
-[promptexpert] Démarrage Next.js…
+[promptpilot] Synchronisation du schéma PostgreSQL…
+[promptpilot] Démarrage Next.js…
 ```
 
 Si tu vois :
@@ -135,7 +135,7 @@ En dernier recours : Railway → Postgres → **Reset database** (efface tout), 
 Dans **Postgres** → **Data** → **Connect** → copie `DATABASE_URL`, puis en local :
 
 ```bash
-cd promptexpert
+cd promptpilot
 # Colle DATABASE_URL dans .env.local
 npm run db:setup
 ```

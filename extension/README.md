@@ -1,4 +1,4 @@
-# Extension Chrome PromptExpert
+# Extension Chrome PromptPilot
 
 1. Ouvrir `chrome://extensions`
 2. Activer **Mode développeur**

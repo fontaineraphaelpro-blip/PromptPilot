@@ -49,7 +49,7 @@ export function BeforeAfterSection() {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-green-400/80 mb-2">
-                    Après PromptExpert · Score {ex.score}/100
+                    Après PromptPilot · Score {ex.score}/100
                   </p>
                   <pre className="text-xs whitespace-pre-wrap font-sans text-muted-foreground bg-black/40 rounded-lg p-3 max-h-40 overflow-y-auto">
                     {ex.after}

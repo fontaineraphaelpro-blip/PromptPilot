@@ -43,7 +43,7 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     date: "2026-05-20",
     version: "1.0.0",
-    title: "Lancement PromptExpert",
+    title: "Lancement PromptPilot",
     items: [
       "Générateur multi-IA (12 outils)",
       "Variantes Principal, Court, Détaillé, Expert",

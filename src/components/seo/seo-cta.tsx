@@ -15,7 +15,7 @@ export function SeoCta() {
       </p>
       <Button size="lg" className="mt-6 group" asChild>
         <Link href="/signup">
-          Essayer PromptExpert gratuitement
+          Essayer PromptPilot gratuitement
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </Button>

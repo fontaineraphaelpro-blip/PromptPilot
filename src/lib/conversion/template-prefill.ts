@@ -1,4 +1,4 @@
-export const TEMPLATE_PREFILL_KEY = "promptexpert_template_prefill";
+export const TEMPLATE_PREFILL_KEY = "promptpilot_template_prefill";
 
 export interface TemplatePrefill {
   userIdea: string;

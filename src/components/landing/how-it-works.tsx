@@ -8,7 +8,7 @@ const steps = [
   {
     icon: MessageSquare,
     title: "Décris ton idée",
-    description: "Une phrase suffit. PromptExpert comprend ton intention et ton contexte.",
+    description: "Une phrase suffit. PromptPilot comprend ton intention et ton contexte.",
   },
   {
     icon: Cpu,

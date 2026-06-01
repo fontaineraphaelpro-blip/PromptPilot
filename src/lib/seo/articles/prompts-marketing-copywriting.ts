@@ -37,7 +37,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Exemple prompt : « Tu es copywriter B2B SaaS conversion. Produit : PromptExpert, générateur prompts freemium. Persona : marketer PME 5-20 pers, frustré prompts inconsistants équipe. Objection : pourquoi pas Notion templates ? Rédige landing sections hero + benefits + FAQ 4 Q. Ton pro accessible FR, 900 mots total, CTA essai gratuit, PAS framework hero. »",
+    text: "Exemple prompt : « Tu es copywriter B2B SaaS conversion. Produit : PromptPilot, générateur prompts freemium. Persona : marketer PME 5-20 pers, frustré prompts inconsistants équipe. Objection : pourquoi pas Notion templates ? Rédige landing sections hero + benefits + FAQ 4 Q. Ton pro accessible FR, 900 mots total, CTA essai gratuit, PAS framework hero. »",
   },
   { type: "h2", text: "Email sequences : prompts par email" },
   {
@@ -102,7 +102,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "tip",
-    title: "PromptExpert marketing",
+    title: "PromptPilot marketing",
     text: "Type Marketing + canal cible : prompt R-C-T-C avec persona, objections, formats caractères selon IA choisie.",
   },
   { type: "h2", text: "Questions fréquentes (People Also Ask)" },
@@ -149,7 +149,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Synthèse copywriting IA" },
   {
     type: "p",
-    text: "Prompts marketing performants fusionnent R-C-T-C, persona précis, frameworks copy nommés, contraintes canal, compliance. Un prompt par asset, chaîne pour campagnes. Relecture humaine conversion et legal non négociable. Exemples gratuits section marketing + PromptExpert pour socle rapide.",
+    text: "Prompts marketing performants fusionnent R-C-T-C, persona précis, frameworks copy nommés, contraintes canal, compliance. Un prompt par asset, chaîne pour campagnes. Relecture humaine conversion et legal non négociable. Exemples gratuits section marketing + PromptPilot pour socle rapide.",
   },
   { type: "h2", text: "FAQ prompts marketing" },
   { type: "h3", text: "Prompt landing page qui convertit : secret ?" },
@@ -184,7 +184,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Prompts marketing copywriting performants = process équipe, pas lone genius. Bibliothèque Notion + metrics + PromptExpert socle = stack PME 2026. Lisez comment écrire prompt ChatGPT et 10 erreurs en complément.",
+    text: "Prompts marketing copywriting performants = process équipe, pas lone genius. Bibliothèque Notion + metrics + PromptPilot socle = stack PME 2026. Lisez comment écrire prompt ChatGPT et 10 erreurs en complément.",
   },
   { type: "h2", text: "Exemple campagne complète prompts marketing" },
   {
@@ -194,7 +194,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Conclusion marketing copywriting IA" },
   {
     type: "p",
-    text: "Prompts marketing performants exigent persona, frameworks copy, contraintes canal et relecture humaine — pas prompt one-liner magique. Industrialisez bibliothèque Notion, metrics A/B, PromptExpert socle R-C-T-C. Campagnes multi-prompts chaînées battent monolithes. Hub lié : chatgpt-vs-claude choix modèle copy, 10-erreurs-prompt-ia pièges, comment-faire-un-bon-prompt-ia fondations, comment-ecrire-prompt-chatgpt exécution, exemples-prompts-ia-gratuits templates démarrage rapide campagnes.",
+    text: "Prompts marketing performants exigent persona, frameworks copy, contraintes canal et relecture humaine — pas prompt one-liner magique. Industrialisez bibliothèque Notion, metrics A/B, PromptPilot socle R-C-T-C. Campagnes multi-prompts chaînées battent monolithes. Hub lié : chatgpt-vs-claude choix modèle copy, 10-erreurs-prompt-ia pièges, comment-faire-un-bon-prompt-ia fondations, comment-ecrire-prompt-chatgpt exécution, exemples-prompts-ia-gratuits templates démarrage rapide campagnes.",
   },
   {
     type: "blockquote",
@@ -210,7 +210,7 @@ const blocks: SeoArticle["blocks"] = [
       "Metrics A/B archive winners",
       "Brand voice doc versionné",
       "Relecture humaine claims chiffrés",
-      "PromptExpert socle R-C-T-C rapidité",
+      "PromptPilot socle R-C-T-C rapidité",
       "Retro metrics J+14 alimente bibliothèque winners",
     ],
   },

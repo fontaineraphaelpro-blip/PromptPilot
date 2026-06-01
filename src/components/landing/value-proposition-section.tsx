@@ -23,7 +23,7 @@ export function ValuePropositionSection() {
       <div className="relative mx-auto max-w-6xl">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-            Pourquoi PromptExpert
+            Pourquoi PromptPilot
           </p>
           <h2 className="text-3xl font-bold sm:text-4xl tracking-tight">
             Pas un « meilleur ChatGPT » — un{" "}

@@ -73,7 +73,7 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
       { ...result, generated_prompt: text },
       activeVariant
     );
-    downloadTextFile(md, `promptexpert-${result.id ?? "export"}.md`, "text/markdown");
+    downloadTextFile(md, `promptpilot-${result.id ?? "export"}.md`, "text/markdown");
     toast.success("Markdown téléchargé");
   }
 
@@ -101,7 +101,7 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
     try {
       const { downloadPromptPdf } = await import("@/lib/download-prompt-pdf");
       await downloadPromptPdf({
-        filename: `promptexpert-${result.id ?? "export"}.pdf`,
+        filename: `promptpilot-${result.id ?? "export"}.pdf`,
         promptText: text,
         score: result.prompt_score,
         originalIdea: result.original_idea,

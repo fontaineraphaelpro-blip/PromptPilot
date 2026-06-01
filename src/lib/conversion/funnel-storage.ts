@@ -1,4 +1,4 @@
-export const FUNNEL_STORAGE_KEY = "promptexpert_funnel_draft";
+export const FUNNEL_STORAGE_KEY = "promptpilot_funnel_draft";
 
 export interface FunnelDraft {
   idea: string;

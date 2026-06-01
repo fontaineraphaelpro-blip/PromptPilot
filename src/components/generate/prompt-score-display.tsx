@@ -62,7 +62,7 @@ export function PromptScoreDisplay({
       )}
       {score < 70 && !compact && (
         <p className="mt-3 text-xs text-muted-foreground border-t border-white/10 pt-3">
-          Score &lt; 70 : regénération gratuite disponible (garantie qualité PromptExpert).
+          Score &lt; 70 : regénération gratuite disponible (garantie qualité PromptPilot).
         </p>
       )}
     </div>

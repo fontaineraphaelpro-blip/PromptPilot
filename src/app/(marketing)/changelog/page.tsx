@@ -3,8 +3,8 @@ import { CHANGELOG } from "@/lib/changelog";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildPageMetadata({
-  title: "Changelog — Nouveautés PromptExpert",
-  description: "Historique des mises à jour PromptExpert : nouvelles fonctionnalités, améliorations et correctifs.",
+  title: "Changelog — Nouveautés PromptPilot",
+  description: "Historique des mises à jour PromptPilot : nouvelles fonctionnalités, améliorations et correctifs.",
   path: "/changelog",
 });
 
@@ -13,7 +13,7 @@ export default function ChangelogPage() {
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
       <h1 className="text-3xl font-bold tracking-tight mb-2">Changelog</h1>
       <p className="text-muted-foreground mb-10">
-        PromptExpert évolue en continu — voici les dernières mises à jour.
+        PromptPilot évolue en continu — voici les dernières mises à jour.
       </p>
       <div className="space-y-10">
         {CHANGELOG.map((entry) => (
@@ -32,7 +32,7 @@ export default function ChangelogPage() {
       </div>
       <p className="mt-12 text-sm text-muted-foreground">
         <Link href="/signup" className="text-primary hover:underline">
-          Essayer PromptExpert gratuitement
+          Essayer PromptPilot gratuitement
         </Link>
       </p>
     </div>

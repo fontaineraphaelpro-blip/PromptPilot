@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/blog/promptpilot-vs-prompts-manuels",
-        destination: "/blog/promptexpert-vs-prompts-manuels",
+        source: "/blog/promptexpert-vs-prompts-manuels",
+        destination: "/blog/promptpilot-vs-prompts-manuels",
         permanent: true,
       },
     ];
