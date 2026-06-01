@@ -17,7 +17,7 @@ export default async function WorkflowsPage() {
   const unlocked = hasAdvancedVariants(profile.plan);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto w-full min-w-0 max-w-4xl space-y-8">
       <div>
         <h1 className="text-2xl font-bold">Workflows Creator</h1>
         <p className="text-muted-foreground mt-1">
@@ -26,9 +26,9 @@ export default async function WorkflowsPage() {
       </div>
 
       {!unlocked && (
-        <Card className="border-primary/30 bg-primary/5">
-          <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-sm flex items-center gap-2">
+        <Card className="border-primary/30 bg-primary/5 min-w-0 overflow-hidden">
+          <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 min-w-0">
+            <p className="text-sm flex items-center gap-2 min-w-0 break-words">
               <Lock className="h-4 w-4" />
               Workflows réservés au plan Creator (19€/mois)
             </p>
@@ -41,17 +41,19 @@ export default async function WorkflowsPage() {
 
       <div className="grid gap-6">
         {WORKFLOW_PACKS.map((pack) => (
-          <Card key={pack.id} className="glass-card">
-            <CardHeader>
-              <div className="flex items-start justify-between gap-2">
-                <CardTitle>{pack.title}</CardTitle>
-                <Badge variant="outline">Creator</Badge>
+          <Card key={pack.id} className="glass-card min-w-0 overflow-hidden">
+            <CardHeader className="min-w-0">
+              <div className="flex items-start justify-between gap-2 min-w-0">
+                <CardTitle className="min-w-0 break-words pr-2">{pack.title}</CardTitle>
+                <Badge variant="outline" className="shrink-0">
+                  Creator
+                </Badge>
               </div>
-              <CardDescription>
+              <CardDescription className="break-words">
                 {pack.description} · {pack.duration} · {pack.profession}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="min-w-0">
               <WorkflowPackClient pack={pack} unlocked={unlocked} />
             </CardContent>
           </Card>

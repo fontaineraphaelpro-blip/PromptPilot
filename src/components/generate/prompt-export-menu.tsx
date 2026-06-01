@@ -35,6 +35,7 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
   const { copy, copied } = useCopy();
   const [sharing, setSharing] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const variants = {
     main: result.generated_prompt,
@@ -88,21 +89,32 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
     if (ok) toast.success(`Prompt formaté pour ${targetAI} copié`);
   }
 
-  function exportPdf() {
-    const win = window.open("", "_blank");
-    if (!win) {
-      toast.error("Autorise les pop-ups pour exporter en PDF");
-      return;
+  const variantLabels: Record<typeof activeVariant, string> = {
+    main: "Principal",
+    short: "Court",
+    detailed: "Détaillé",
+    expert: "Expert",
+  };
+
+  async function exportPdf() {
+    setPdfLoading(true);
+    try {
+      const { downloadPromptPdf } = await import("@/lib/download-prompt-pdf");
+      await downloadPromptPdf({
+        filename: `promptexpert-${result.id ?? "export"}.pdf`,
+        promptText: text,
+        score: result.prompt_score,
+        originalIdea: result.original_idea,
+        targetAI: result.target_ai,
+        variantLabel: variantLabels[activeVariant],
+        aiTips: result.ai_tips,
+      });
+      toast.success("PDF téléchargé");
+    } catch {
+      toast.error("Impossible de générer le PDF");
+    } finally {
+      setPdfLoading(false);
     }
-    win.document.write(`
-      <!DOCTYPE html><html><head><title>Prompt PromptExpert</title>
-      <style>body{font-family:system-ui;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.6}
-      h1{font-size:1.25rem}pre{white-space:pre-wrap;background:#f4f4f5;padding:16px;border-radius:8px}</style></head>
-      <body><h1>Prompt PromptExpert</h1>
-      ${result.prompt_score ? `<p><strong>Score:</strong> ${result.prompt_score}/100</p>` : ""}
-      <pre>${text.replace(/</g, "&lt;")}</pre>
-      <script>window.onload=()=>window.print()</script></body></html>`);
-    win.document.close();
   }
 
   return (
@@ -118,9 +130,9 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
       <Button size="sm" variant="outline" onClick={exportNotion}>
         Notion
       </Button>
-      <Button size="sm" variant="outline" onClick={exportPdf}>
+      <Button size="sm" variant="outline" onClick={exportPdf} disabled={pdfLoading}>
         <Download className="h-3 w-3" />
-        PDF
+        {pdfLoading ? "PDF…" : "PDF"}
       </Button>
       {result.id && (
         <Button size="sm" variant="outline" onClick={handleShare} disabled={sharing}>

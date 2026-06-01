@@ -13,17 +13,18 @@ export function DemoVideoSection() {
       <div className="mx-auto max-w-4xl">
         <FadeIn className="text-center mb-8">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
-            En 15 secondes
+            Démo interactive
           </p>
           <h2 className="text-2xl font-bold sm:text-3xl">Idée → score → copier</h2>
           <p className="mt-3 text-muted-foreground text-sm max-w-lg mx-auto">
-            Aperçu du parcours — ou teste une vraie génération gratuite sur le funnel ci-dessus.
+            La démo tourne en boucle automatiquement. Teste ensuite une vraie génération sur le
+            funnel ci-dessus.
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.08}>
+        <div className="mt-2">
           <DemoProductAnimation />
-        </FadeIn>
+        </div>
 
         <FadeIn delay={0.15} className="mt-8 flex flex-col items-center gap-4">
           <Button asChild>

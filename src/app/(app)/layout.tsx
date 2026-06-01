@@ -18,10 +18,10 @@ export default async function AppLayout({
   const profile = await getOrCreateProfile(user.id, user.email);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen min-w-0 overflow-x-hidden">
       <DashboardSidebar plan={profile.plan} />
-      <div className="flex flex-1 flex-col pb-20 lg:pb-0">
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      <div className="flex min-w-0 flex-1 flex-col pb-20 lg:pb-0">
+        <main className="flex-1 min-w-0 overflow-x-hidden p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
       <MobileNav />
     </div>
