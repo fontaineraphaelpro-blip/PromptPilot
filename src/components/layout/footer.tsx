@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
-import { Sparkles } from "lucide-react";
+import { BrandMark } from "@/components/brand/brand-mark";
 import { ScrollLink } from "@/components/navigation/scroll-link";
 import { scrollToHomeTop } from "@/lib/scroll-to-section";
 
@@ -26,9 +26,7 @@ export function Footer() {
                 }
               }}
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
-                <Sparkles className="h-4 w-4" />
-              </span>
+              <BrandMark />
               {APP_NAME}
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-sm leading-relaxed">

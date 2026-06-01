@@ -40,6 +40,14 @@ export const metadata: Metadata = {
     description: "Génère des prompts optimisés pour toutes les IA en quelques secondes.",
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon", sizes: "48x48", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({

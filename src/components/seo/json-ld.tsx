@@ -1,4 +1,5 @@
 import { APP_NAME } from "@/lib/constants";
+import { getBrandLogoUrl } from "@/lib/brand/logo-url";
 import { getAppUrl } from "@/lib/env";
 
 interface ArticleJsonLdProps {
@@ -29,6 +30,10 @@ export function ArticleJsonLd({
       "@type": "Organization",
       name: APP_NAME,
       url: getAppUrl(),
+      logo: {
+        "@type": "ImageObject",
+        url: getBrandLogoUrl(),
+      },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     inLanguage: "fr-FR",

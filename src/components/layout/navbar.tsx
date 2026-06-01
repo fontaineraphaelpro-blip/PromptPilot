@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Button } from "@/components/ui/button";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { BrandMark } from "@/components/brand/brand-mark";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ScrollLink } from "@/components/navigation/scroll-link";
@@ -46,9 +47,7 @@ export function Navbar({ user }: NavbarProps) {
             }
           }}
         >
-          <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-white text-black transition-transform group-hover:scale-105">
-            <Sparkles className="h-4 w-4" />
-          </span>
+          <BrandMark priority />
           <span className="font-semibold tracking-tight text-sm sm:text-base">{APP_NAME}</span>
         </Link>
 

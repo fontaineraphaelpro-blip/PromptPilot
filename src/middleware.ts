@@ -71,6 +71,6 @@ export const config = {
      * Exclure SEO statique (sitemap/robots ne doivent pas passer par auth → évite 500)
      * + assets
      */
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|llms.txt|api/auth|api/health|api/stripe/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|html)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|manifest.webmanifest|sitemap.xml|robots.txt|llms.txt|api/auth|api/health|api/stripe/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|html)$).*)",
   ],
 };

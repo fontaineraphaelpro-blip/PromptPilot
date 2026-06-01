@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BrandMark } from "@/components/brand/brand-mark";
 import {
-  Sparkles,
   LayoutDashboard,
   Wand2,
   History,
@@ -50,9 +50,7 @@ export function DashboardSidebar({ plan }: DashboardSidebarProps) {
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border bg-card lg:flex lg:flex-col">
       <div className="flex h-16 items-center gap-2.5 border-b border-border px-6">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
-          <Sparkles className="h-4 w-4" />
-        </span>
+        <BrandMark />
         <span className="font-semibold tracking-tight">{APP_NAME}</span>
       </div>
       <nav className="flex-1 space-y-1 p-4">
