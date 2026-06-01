@@ -5,6 +5,7 @@ import { AuthSessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 import { getAppUrl } from "@/lib/env";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { SiteAnalytics } from "@/components/analytics/site-analytics";
 
 const geistSans = Geist({
@@ -57,6 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className="min-h-full w-full overflow-x-hidden flex flex-col font-sans">
         <AuthSessionProvider>
           {children}
