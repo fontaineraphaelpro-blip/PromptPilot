@@ -3,8 +3,8 @@
  * Dans GA4 → Flux de données, l’URL du site doit être exactement :
  * https://www.promptpilot.fr (avec https et www).
  */
-export const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-ML5QFPTM8H";
+/** ID fixe fourni par Google — évite un mauvais ID dans les variables Railway. */
+export const GA_MEASUREMENT_ID = "G-ML5QFPTM8H";
 
 export function getGoogleAnalyticsInlineScript(measurementId: string): string {
   return `

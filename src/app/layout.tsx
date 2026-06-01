@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 import { getAppUrl } from "@/lib/env";
-import { GA_MEASUREMENT_ID, getGoogleAnalyticsInlineScript } from "@/lib/analytics/ga";
+import { GoogleAnalyticsHead } from "@/components/analytics/google-analytics-head";
 import { GoogleAnalyticsPageView } from "@/components/analytics/google-analytics-page-view";
 import { SiteAnalytics } from "@/components/analytics/site-analytics";
 
@@ -61,14 +60,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        <GoogleAnalyticsHead />
+      </head>
       <body className="min-h-full w-full overflow-x-hidden flex flex-col font-sans">
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="beforeInteractive"
-        />
-        <Script id="google-analytics" strategy="beforeInteractive">
-          {getGoogleAnalyticsInlineScript(GA_MEASUREMENT_ID)}
-        </Script>
         <Suspense fallback={null}>
           <GoogleAnalyticsPageView />
         </Suspense>
