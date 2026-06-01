@@ -204,8 +204,8 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
             {usage.used}/{usage.limit} prompts aujourd&apos;hui
           </Badge>
         )}
-        {usage.limit === null && (
-          <Badge variant="pro">Prompts illimités</Badge>
+        {usage.limit === null && plan === "creator" && (
+          <Badge variant="creator">Illimité</Badge>
         )}
       </div>
 
@@ -225,7 +225,9 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         <Card className="border-primary/30 bg-primary/5">
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
-              Limite gratuite atteinte pour aujourd&apos;hui. Passez au Pro pour continuer.
+              {plan === "free"
+                ? "Limite gratuite atteinte. Passez au Pro (200/jour) ou Creator (illimité)."
+                : "Limite Pro atteinte (200/jour). Passez au Creator pour continuer."}
             </p>
             <Button size="sm" asChild>
               <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>

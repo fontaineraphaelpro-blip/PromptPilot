@@ -43,6 +43,11 @@ export function getInstantPaymentLinkUrl(
 
 export const CHECKOUT_API_PATH = "/api/stripe/checkout";
 
-export function getCheckoutApiUrl(plan: "pro" | "creator"): string {
-  return `${CHECKOUT_API_PATH}?plan=${plan}`;
+export function getCheckoutApiUrl(
+  plan: "pro" | "creator",
+  interval: "monthly" | "yearly" = "monthly"
+): string {
+  const params = new URLSearchParams({ plan });
+  if (interval === "yearly") params.set("interval", "yearly");
+  return `${CHECKOUT_API_PATH}?${params.toString()}`;
 }

@@ -12,6 +12,8 @@ import {
 import { computePromptScore, qualifiesForScoreGuarantee } from "@/lib/prompt-score";
 import { prisma } from "@/lib/db";
 import { isOpenAIConfigured } from "@/lib/env";
+import { GENERATE_RATE_LIMIT_PER_MIN } from "@/lib/constants";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { safeErrorMessage } from "@/lib/api-error";
 import type { GeneratePromptInput, GeneratePromptResult } from "@/types";
 
@@ -59,6 +61,21 @@ export async function POST(request: Request) {
     }
 
     userId = user.id;
+
+    const burst = checkRateLimit(
+      `generate:${user.id}`,
+      GENERATE_RATE_LIMIT_PER_MIN,
+      60 * 1000
+    );
+    if (!burst.allowed) {
+      return NextResponse.json(
+        {
+          error: "Trop de requêtes",
+          message: `Attendez ${burst.retryAfterSec}s avant de regénérer.`,
+        },
+        { status: 429 }
+      );
+    }
 
     if (!isOpenAIConfigured()) {
       return NextResponse.json(
@@ -111,10 +128,16 @@ export async function POST(request: Request) {
       usage = await reservePromptSlot(user.id, profile.plan);
       usageReserved = true;
       if (!usage.allowed) {
+        const upgradeMessage =
+          profile.plan === "free"
+            ? "Passez au plan Pro (200 prompts/jour) ou Creator (illimité)."
+            : profile.plan === "pro"
+              ? "Limite d'usage équitable atteinte (200/jour). Passez au Creator pour l'illimité."
+              : "Limite quotidienne atteinte.";
         return NextResponse.json(
           {
             error: "Limite quotidienne atteinte",
-            message: "Passez au plan Pro pour des prompts illimités.",
+            message: upgradeMessage,
             used: usage.used,
             limit: usage.limit,
           },

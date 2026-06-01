@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "Combien de prompts gratuits par jour ?",
-    a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Les plans Pro et Creator sont illimités.`,
+    a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Pro : 200/jour. Creator : illimité.`,
   },
   {
     q: "Quelle différence entre Pro (9€) et Creator (19€) ?",

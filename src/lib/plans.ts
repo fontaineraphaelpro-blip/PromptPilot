@@ -1,5 +1,5 @@
 import type { Plan } from "@/lib/constants";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_DAILY_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
 
 export const PLAN_LABELS: Record<Plan, string> = {
   free: "Free",
@@ -49,7 +49,7 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     period: "/mois",
     description: "Le sweet spot — illimité & bibliothèque pro",
     features: [
-      "Prompts illimités — ROI dès la 2ᵉ génération",
+      "200 prompts/jour (usage généreux)",
       "Score /100 + regen garantie si < 70",
       "Preview + export + tags bibliothèque",
       "Templates premium & favoris",
@@ -82,6 +82,7 @@ export const PRICING_PLANS: PricingPlanCard[] = [
 
 export function getDailyLimit(plan: Plan): number | null {
   if (plan === "free") return FREE_DAILY_LIMIT;
+  if (plan === "pro") return PRO_DAILY_FAIR_USE_LIMIT;
   return null;
 }
 
@@ -89,8 +90,9 @@ export function canAccessPremiumTemplates(plan: Plan): boolean {
   return plan === "pro" || plan === "creator";
 }
 
+/** Creator uniquement — Pro a un plafond d'usage équitable (200/jour) */
 export function hasUnlimitedPrompts(plan: Plan): boolean {
-  return plan === "pro" || plan === "creator";
+  return plan === "creator";
 }
 
 export function hasFullHistory(plan: Plan): boolean {
@@ -118,7 +120,7 @@ export function getPlanFeaturesSummary(plan: Plan): string {
     return `${FREE_DAILY_LIMIT} prompts/jour · historique limité · templates gratuits`;
   }
   if (plan === "pro") {
-    return `${PLAN_PRICES.pro.label} · illimité · favoris · templates premium`;
+    return `${PLAN_PRICES.pro.label} · ${PRO_DAILY_FAIR_USE_LIMIT} prompts/jour · favoris · templates premium`;
   }
   return `${PLAN_PRICES.creator.label} · variante Expert · support prioritaire`;
 }

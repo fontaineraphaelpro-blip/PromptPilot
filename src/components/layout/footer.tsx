@@ -101,6 +101,11 @@ export function Footer() {
                   Confidentialité
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="transition-colors hover:text-foreground">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { AuthSessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 import { getAppUrl } from "@/lib/env";
+import { SiteAnalytics } from "@/components/analytics/site-analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,6 +54,7 @@ export default function RootLayout({
           {children}
         </AuthSessionProvider>
         <Toaster position="top-center" theme="dark" richColors />
+        <SiteAnalytics />
       </body>
     </html>
   );

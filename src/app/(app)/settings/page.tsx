@@ -5,7 +5,9 @@ import { PLAN_LABELS, getPlanBadgeVariant, getPlanFeaturesSummary } from "@/lib/
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, Trash2 } from "lucide-react";
+import { CreditCard, Mail } from "lucide-react";
+import { DeleteAccountForm } from "@/components/settings/delete-account-form";
+import { getSupportEmail } from "@/lib/support";
 
 export default async function SettingsPage() {
   const user = await getAuthUser();
@@ -67,18 +69,31 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Support</CardTitle>
+          <CardDescription>Besoin d&apos;aide ?</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" size="sm" asChild>
+            <a href={`mailto:${getSupportEmail()}`}>
+              <Mail className="h-4 w-4" />
+              {getSupportEmail()}
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
       <Card className="border-destructive/20">
         <CardHeader>
           <CardTitle className="text-destructive text-base">Zone danger</CardTitle>
           <CardDescription>
-            Suppression de compte — fonctionnalité à venir (TODO)
+            Supprime définitivement ton compte, tes prompts et annule l&apos;abonnement Stripe
+            (RGPD).
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="destructive" size="sm" disabled>
-            <Trash2 className="h-4 w-4" />
-            Supprimer mon compte
-          </Button>
+          <DeleteAccountForm />
         </CardContent>
       </Card>
     </div>

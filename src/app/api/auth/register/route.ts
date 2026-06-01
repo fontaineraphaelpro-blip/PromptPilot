@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { getInitialPlanForEmail } from "@/lib/constants";
 import { safeErrorMessage } from "@/lib/api-error";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -59,6 +60,8 @@ export async function POST(request: Request) {
         },
       },
     });
+
+    void sendWelcomeEmail(email);
 
     return NextResponse.json({ success: true });
   } catch (error) {

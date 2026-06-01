@@ -13,7 +13,8 @@ type CheckoutSession = {
 export function startCheckout(
   plan: "pro" | "creator",
   session: CheckoutSession | null,
-  onUnauthenticated: () => void
+  onUnauthenticated: () => void,
+  interval: "monthly" | "yearly" = "monthly"
 ): void {
   if (!session?.user?.id) {
     onUnauthenticated();
@@ -26,5 +27,5 @@ export function startCheckout(
     session.user.email
   );
 
-  window.location.assign(instant ?? getCheckoutApiUrl(plan));
+  window.location.assign(instant ?? getCheckoutApiUrl(plan, interval));
 }

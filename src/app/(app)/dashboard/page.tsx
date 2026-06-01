@@ -4,8 +4,14 @@ import { getAuthUser } from "@/lib/auth";
 import { CheckoutSuccessBanner } from "@/components/dashboard/checkout-success-banner";
 import { getOrCreateProfile } from "@/lib/profile";
 import { getTodayUsage } from "@/lib/usage";
-import { hasUnlimitedPrompts, PLAN_LABELS, getPlanBadgeVariant, hasAdvancedVariants } from "@/lib/plans";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import {
+  hasUnlimitedPrompts,
+  PLAN_LABELS,
+  getPlanBadgeVariant,
+  hasAdvancedVariants,
+  getDailyLimit,
+} from "@/lib/plans";
+import { OnboardingBanner } from "@/components/onboarding/onboarding-banner";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +25,7 @@ export default async function DashboardPage() {
   const profile = await getOrCreateProfile(user.id, user.email ?? "");
   const todayUsage = await getTodayUsage(user.id);
   const unlimited = hasUnlimitedPrompts(profile.plan);
+  const dailyLimit = getDailyLimit(profile.plan);
 
   const recentRows = await prisma.prompt.findMany({
     where: { userId: user.id },
@@ -39,6 +46,7 @@ export default async function DashboardPage() {
       <Suspense fallback={null}>
         <CheckoutSuccessBanner />
       </Suspense>
+      <OnboardingBanner />
       <div>
         <h1 className="text-2xl font-bold sm:text-3xl">
           Bonjour, {firstName} 👋
@@ -66,17 +74,19 @@ export default async function DashboardPage() {
             <CardTitle>
               {unlimited ? (
                 <span className="text-foreground">Illimité</span>
-              ) : (
+              ) : dailyLimit !== null ? (
                 <>
-                  {todayUsage} / {FREE_DAILY_LIMIT}
+                  {todayUsage} / {dailyLimit}
                 </>
+              ) : (
+                <span>{todayUsage}</span>
               )}
             </CardTitle>
           </CardHeader>
-          {!unlimited && (
+          {!unlimited && dailyLimit !== null && (
             <CardContent className="pt-0">
               <p className="text-xs text-muted-foreground">
-                {FREE_DAILY_LIMIT - todayUsage} restant(s)
+                {Math.max(0, dailyLimit - todayUsage)} restant(s) aujourd&apos;hui
               </p>
             </CardContent>
           )}

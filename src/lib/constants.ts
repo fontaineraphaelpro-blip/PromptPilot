@@ -45,7 +45,11 @@ export const LANGUAGES = ["Français", "Anglais"] as const;
 export const PLANS = ["free", "pro", "creator"] as const;
 
 export const FREE_DAILY_LIMIT = 2;
+export const PRO_DAILY_FAIR_USE_LIMIT = 200;
 export const FREE_HISTORY_LIMIT = 30;
+
+/** Limite de requêtes /api/generate-prompt par minute (anti-abus) */
+export const GENERATE_RATE_LIMIT_PER_MIN = 20;
 
 export const TEMPLATE_CATEGORIES = [
   "Business",

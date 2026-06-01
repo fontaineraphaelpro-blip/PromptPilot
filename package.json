@@ -21,7 +21,8 @@
     "start:next": "next start --hostname 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
     "ship": "powershell -ExecutionPolicy Bypass -File ./scripts/ship.ps1",
-    "hooks": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-git-hooks.ps1"
+    "hooks": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-git-hooks.ps1",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -62,6 +63,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
+    "@playwright/test": "^1.52.0",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"

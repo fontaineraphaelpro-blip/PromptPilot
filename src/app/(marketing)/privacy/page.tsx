@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 import { APP_NAME } from "@/lib/constants";
+import { getSupportEmail } from "@/lib/support";
 
 export const metadata: Metadata = {
   title: `Politique de confidentialité — ${APP_NAME}`,
@@ -33,8 +34,11 @@ export default function PrivacyPage() {
       </ul>
       <h2 className="text-lg font-semibold text-foreground pt-4">Vos droits</h2>
       <p>
-        Accès, rectification, suppression et portabilité : contactez-nous à l&apos;adresse support.
-        Vous pouvez supprimer votre compte depuis les paramètres (fonction à venir) ou par email.
+        Accès, rectification, suppression et portabilité : contactez-nous à{" "}
+        <a href={`mailto:${getSupportEmail()}`} className="text-primary hover:underline">
+          {getSupportEmail()}
+        </a>
+        . Vous pouvez supprimer votre compte depuis Paramètres &gt; Zone danger.
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Conservation</h2>
       <p>

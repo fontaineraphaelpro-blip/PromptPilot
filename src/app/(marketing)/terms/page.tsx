@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 import { APP_NAME } from "@/lib/constants";
+import { getSupportEmail } from "@/lib/support";
+import { PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: `Conditions d'utilisation — ${APP_NAME}`,
@@ -20,9 +22,10 @@ export default function TermsPage() {
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Plans et paiements</h2>
       <p>
-        Le plan Free inclut une limite quotidienne de générations. Les abonnements Pro et Creator
-        sont facturés mensuellement via Stripe. Vous pouvez annuler à tout moment depuis le portail
-        de facturation.
+        Le plan Free inclut une limite quotidienne de générations. Le plan Pro inclut un usage
+        généreux de {PRO_DAILY_FAIR_USE_LIMIT} générations par jour. Le plan Creator est illimité
+        sous réserve d&apos;un usage raisonnable. Les abonnements sont facturés via Stripe
+        (mensuel ou annuel si proposé). Annulation à tout moment depuis le portail de facturation.
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Usage acceptable</h2>
       <p>
@@ -42,8 +45,11 @@ export default function TermsPage() {
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Contact</h2>
       <p>
-        Pour toute question : contact@{APP_NAME.toLowerCase()}.app (à remplacer par votre email
-        support).
+        Pour toute question :{" "}
+        <a href={`mailto:${getSupportEmail()}`} className="text-primary hover:underline">
+          {getSupportEmail()}
+        </a>{" "}
+        ou la page <a href="/contact" className="text-primary hover:underline">Contact</a>.
       </p>
     </LegalPage>
   );

@@ -4,28 +4,32 @@ import { useEffect, useState } from "react";
 import { Flame, Users, Zap } from "lucide-react";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
 
-function getLiveCount(): number {
-  const hour = new Date().getHours();
-  const day = new Date().getDate();
-  return Math.floor(42 + hour * 5 + (day % 7) * 3);
-}
-
 export function FomoStrip() {
-  const [live, setLive] = useState(0);
+  const [hourlyLabel, setHourlyLabel] = useState<string | null>(null);
 
   useEffect(() => {
-    setLive(getLiveCount());
-    const id = setInterval(() => setLive(getLiveCount()), 45000);
-    return () => clearInterval(id);
+    fetch("/api/stats/public")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.hourly_label) setHourlyLabel(d.hourly_label);
+      })
+      .catch(() => {});
   }, []);
 
   return (
     <div className="border-b border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 py-2 text-xs sm:text-sm">
-        <span className="inline-flex items-center gap-1.5 text-amber-200/90">
-          <Flame className="h-3.5 w-3.5 shrink-0" />
-          <strong className="text-amber-100">{live}</strong> prompts générés dans la dernière heure
-        </span>
+        {hourlyLabel ? (
+          <span className="inline-flex items-center gap-1.5 text-amber-200/90">
+            <Flame className="h-3.5 w-3.5 shrink-0" />
+            {hourlyLabel}
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 text-amber-200/90">
+            <Flame className="h-3.5 w-3.5 shrink-0" />
+            Prompts experts en moins de 30 secondes
+          </span>
+        )}
         <span className="hidden sm:inline text-border">|</span>
         <span className="inline-flex items-center gap-1.5 text-muted-foreground">
           <Users className="h-3.5 w-3.5 shrink-0" />

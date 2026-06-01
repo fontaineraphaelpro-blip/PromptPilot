@@ -25,12 +25,34 @@ export function getStripe(): Stripe {
   return stripeInstance;
 }
 
-function getRawPlanEnv(plan: "pro" | "creator"): string {
+function getRawPlanEnv(plan: "pro" | "creator", interval: "monthly" | "yearly" = "monthly"): string {
+  if (interval === "yearly") {
+    const yearly =
+      plan === "pro"
+        ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID_YEARLY?.trim()
+        : process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
+    if (yearly) return yearly;
+  }
   return getPublicPlanCheckoutEnv(plan);
 }
 
-export function getPlanCheckoutRef(plan: "pro" | "creator"): StripePlanRef {
-  const value = getRawPlanEnv(plan);
+export function hasYearlyPricing(plan: "pro" | "creator"): boolean {
+  const yearly =
+    plan === "pro"
+      ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID_YEARLY?.trim()
+      : process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
+  return Boolean(yearly);
+}
+
+export function hasAnyYearlyPricing(): boolean {
+  return hasYearlyPricing("pro") || hasYearlyPricing("creator");
+}
+
+export function getPlanCheckoutRef(
+  plan: "pro" | "creator",
+  interval: "monthly" | "yearly" = "monthly"
+): StripePlanRef {
+  const value = getRawPlanEnv(plan, interval);
   if (!value) {
     throw new Error(`Variable Stripe manquante pour le plan ${plan}`);
   }

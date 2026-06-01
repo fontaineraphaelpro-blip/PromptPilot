@@ -1,6 +1,5 @@
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import type { Plan } from "@/lib/constants";
-import { hasUnlimitedPrompts } from "@/lib/plans";
+import { getDailyLimit, hasUnlimitedPrompts } from "@/lib/plans";
 import { prisma } from "@/lib/db";
 
 function todayDateString(): string {
@@ -24,7 +23,9 @@ export async function reservePromptSlot(
   userId: string,
   plan: Plan
 ): Promise<{ allowed: boolean; used: number; limit: number | null; remaining: number | null }> {
-  if (hasUnlimitedPrompts(plan)) {
+  const limit = getDailyLimit(plan);
+
+  if (limit === null) {
     const today = todayDateString();
     await prisma.dailyUsage.upsert({
       where: { userId_date: { userId, date: today } },
@@ -35,7 +36,6 @@ export async function reservePromptSlot(
   }
 
   const today = todayDateString();
-  const limit = FREE_DAILY_LIMIT;
 
   return prisma.$transaction(async (tx) => {
     const row = await tx.dailyUsage.findUnique({
@@ -70,6 +70,9 @@ export async function reservePromptSlot(
 export async function releasePromptSlot(userId: string, plan: Plan): Promise<void> {
   if (hasUnlimitedPrompts(plan)) return;
 
+  const limit = getDailyLimit(plan);
+  if (limit === null) return;
+
   const today = todayDateString();
   const row = await prisma.dailyUsage.findUnique({
     where: { userId_date: { userId, date: today } },
@@ -86,12 +89,13 @@ export async function checkUsageLimit(
   userId: string,
   plan: Plan
 ): Promise<{ allowed: boolean; used: number; limit: number | null; remaining: number | null }> {
-  if (hasUnlimitedPrompts(plan)) {
+  const limit = getDailyLimit(plan);
+
+  if (limit === null) {
     return { allowed: true, used: 0, limit: null, remaining: null };
   }
 
   const used = await getTodayUsage(userId);
-  const limit = FREE_DAILY_LIMIT;
   const remaining = Math.max(0, limit - used);
 
   return {

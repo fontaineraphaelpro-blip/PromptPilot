@@ -20,7 +20,11 @@ function pricingErrorRedirect() {
   );
 }
 
-async function handleCheckout(plan: "pro" | "creator") {
+function parseInterval(value: string | null): "monthly" | "yearly" {
+  return value === "yearly" ? "yearly" : "monthly";
+}
+
+async function handleCheckout(plan: "pro" | "creator", interval: "monthly" | "yearly") {
   const user = await getAuthUser();
 
   if (!user) {
@@ -28,7 +32,7 @@ async function handleCheckout(plan: "pro" | "creator") {
   }
 
   try {
-    const url = await createCheckoutUrl(user, plan);
+    const url = await createCheckoutUrl(user, plan, interval);
     return NextResponse.redirect(url);
   } catch (error) {
     console.error("Checkout error:", error);
@@ -40,17 +44,19 @@ async function handleCheckout(plan: "pro" | "creator") {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const plan = searchParams.get("plan");
+  const interval = parseInterval(searchParams.get("interval"));
 
   if (!isValidPlan(plan)) {
     return pricingErrorRedirect();
   }
 
-  return handleCheckout(plan);
+  return handleCheckout(plan, interval);
 }
 
 export async function POST(request: Request) {
   try {
-    const { plan } = await request.json();
+    const body = await request.json();
+    const plan = body?.plan;
 
     if (!isValidPlan(plan)) {
       return NextResponse.json({ error: "Plan invalide" }, { status: 400 });
@@ -62,7 +68,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
     }
 
-    const url = await createCheckoutUrl(user, plan);
+    const interval = parseInterval(
+      typeof body?.interval === "string" ? body.interval : null
+    );
+    const url = await createCheckoutUrl(user, plan, interval);
     return NextResponse.json({ url });
   } catch (error) {
     console.error("Checkout error:", error);

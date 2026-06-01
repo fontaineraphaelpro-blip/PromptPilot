@@ -29,6 +29,8 @@ export function getAllPublicPaths(): string[] {
     "/signup",
     "/terms",
     "/privacy",
+    "/contact",
+    "/forgot-password",
     "/blog",
     "/guides",
     "/comparatif",

@@ -9,9 +9,10 @@ import {
 
 export async function createCheckoutUrl(
   user: AuthUser,
-  plan: "pro" | "creator"
+  plan: "pro" | "creator",
+  interval: "monthly" | "yearly" = "monthly"
 ): Promise<string> {
-  const checkoutRef = getPlanCheckoutRef(plan);
+  const checkoutRef = getPlanCheckoutRef(plan, interval);
 
   if (checkoutRef.type === "payment_link") {
     return buildPaymentLinkUrl(
