@@ -8,7 +8,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Ce guide pas à pas s'appuie sur le framework R-C-T-C et des centaines de retours utilisateurs PromptPilot. Vous y trouverez une méthode en 5 étapes, des modèles copiables, des erreurs à éviter, et une FAQ style People Also Ask pour aller plus loin.",
+    text: "Ce guide pas à pas s'appuie sur le framework R-C-T-C et des centaines de retours utilisateurs PromptExpert. Vous y trouverez une méthode en 5 étapes, des modèles copiables, des erreurs à éviter, et une FAQ style People Also Ask pour aller plus loin.",
   },
   { type: "h2", text: "Pourquoi vos prompts ChatGPT échouent (souvent)" },
   {
@@ -172,7 +172,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Aller plus loin" },
   {
     type: "p",
-    text: "Maîtrisez le framework R-C-T-C, puis lisez Comment utiliser ChatGPT efficacement et ChatGPT ne comprend pas : comment formuler. PromptPilot génère des prompts ChatGPT structurés à partir d'une phrase.",
+    text: "Maîtrisez le framework R-C-T-C, puis lisez Comment utiliser ChatGPT efficacement et ChatGPT ne comprend pas : comment formuler. PromptExpert génère des prompts ChatGPT structurés à partir d'une phrase.",
   },
   { type: "h2", text: "Cas métier : prompts ChatGPT détaillés" },
   { type: "h3", text: "Customer Success — playbook churn" },
@@ -202,7 +202,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Synthèse : maîtriser l'écriture de prompts ChatGPT" },
   {
     type: "p",
-    text: "Écrire un bon prompt ChatGPT en 2026 repose sur une discipline repeatable : rôle explicite, contexte métier dense, tâche unique mesurable, contraintes format et langue, itération systématique. Les modèles évoluent ; cette structure reste stable. Investissez une heure par semaine à documenter vos prompts gagnants — capital composé sur des mois. Combinez ce guide avec comment utiliser ChatGPT efficacement pour l'organisation, et exemples prompts gratuits comme base bibliothèque. PromptPilot accélère les étapes 1-4 si vous partez d'une idée brute. Partagez vos templates équipe pour aligner qualité.",
+    text: "Écrire un bon prompt ChatGPT en 2026 repose sur une discipline repeatable : rôle explicite, contexte métier dense, tâche unique mesurable, contraintes format et langue, itération systématique. Les modèles évoluent ; cette structure reste stable. Investissez une heure par semaine à documenter vos prompts gagnants — capital composé sur des mois. Combinez ce guide avec comment utiliser ChatGPT efficacement pour l'organisation, et exemples prompts gratuits comme base bibliothèque. PromptExpert accélère les étapes 1-4 si vous partez d'une idée brute. Partagez vos templates équipe pour aligner qualité.",
   },
 ];
 

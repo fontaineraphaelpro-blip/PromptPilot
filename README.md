@@ -1,4 +1,4 @@
-# PromptPilot
+# PromptExpert
 
 SaaS qui transforme une idée vague en prompt ultra détaillé, optimisé pour l'IA choisie (ChatGPT, Claude, Cursor, Midjourney, Sora, etc.).
 
@@ -17,7 +17,7 @@ Guide de mise en production : voir **[DEPLOY.md](./DEPLOY.md)**.
 ## Démarrage rapide
 
 ```bash
-cd promptpilot
+cd promptexpert
 npm install
 cp .env.example .env.local
 # Remplir .env.local (voir ci-dessous)
@@ -116,4 +116,4 @@ Si tu avais des comptes Supabase : les utilisateurs doivent **se réinscrire** (
 
 ## Licence
 
-PromptPilot © 2026
+PromptExpert © 2026

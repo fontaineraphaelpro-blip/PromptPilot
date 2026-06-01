@@ -1,14 +1,14 @@
 (function () {
   const APP_ORIGIN =
-    document.documentElement.dataset.promptpilotOrigin || "https://promptpilot-production-a994.up.railway.app";
+    document.documentElement.dataset.promptexpertOrigin || "https://promptpilot-production-a994.up.railway.app";
 
-  if (document.getElementById("promptpilot-fab")) return;
+  if (document.getElementById("promptexpert-fab")) return;
 
   const fab = document.createElement("button");
-  fab.id = "promptpilot-fab";
+  fab.id = "promptexpert-fab";
   fab.type = "button";
-  fab.title = "Optimiser avec PromptPilot";
-  fab.textContent = "✦ PromptPilot";
+  fab.title = "Optimiser avec PromptExpert";
+  fab.textContent = "✦ PromptExpert";
   fab.addEventListener("click", () => {
     const draft = getDraftFromPage();
     const url = new URL("/improve", APP_ORIGIN);

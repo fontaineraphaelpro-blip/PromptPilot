@@ -101,7 +101,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "tip",
-    title: "PromptPilot + Cursor",
+    title: "PromptExpert + Cursor",
     text: "Indiquez Cursor, type Développement, niveau Expert : prompt avec stack, étapes, garde-fous et @file placeholders prêts à coller dans Composer.",
   },
   { type: "h2", text: "Workflow recommandé feature complète" },
@@ -223,7 +223,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Ressources liées : structure R-C-T-C, 10 erreurs prompt IA, comment écrire prompt ChatGPT pour specs amont, PromptPilot variantes expert Cursor. Maîtrise prompts Cursor = productivité dev mesurable dès première semaine pratique disciplinée et review systématique.",
+    text: "Ressources liées : structure R-C-T-C, 10 erreurs prompt IA, comment écrire prompt ChatGPT pour specs amont, PromptExpert variantes expert Cursor. Maîtrise prompts Cursor = productivité dev mesurable dès première semaine pratique disciplinée et review systématique.",
   },
 ];
 
@@ -248,7 +248,7 @@ export const articlePromptsCursor: SeoArticle = {
     "structure-prompt-expert-framework",
     "10-erreurs-prompt-ia",
     "quest-ce-que-le-prompt-engineering",
-    "promptpilot-vs-prompts-manuels",
+    "promptexpert-vs-prompts-manuels",
   ],
   blocks,
 };

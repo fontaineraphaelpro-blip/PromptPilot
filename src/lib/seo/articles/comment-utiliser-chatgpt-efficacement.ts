@@ -31,7 +31,7 @@ const blocks: SeoArticle["blocks"] = [
   {
     type: "ul",
     items: [
-      "Projet « Landing PromptPilot Q2 » : brief, wireframe texte, copy sections, FAQ, meta SEO",
+      "Projet « Landing PromptExpert Q2 » : brief, wireframe texte, copy sections, FAQ, meta SEO",
       "Projet « Onboarding dev Next.js » : architecture, prompts Cursor, revue PR",
       "Projet « Newsletter clients » : calendrier éditorial, brouillons, objets A/B",
       "Ne jamais mélanger support client, code prod et brainstorming perso",
@@ -45,10 +45,10 @@ const blocks: SeoArticle["blocks"] = [
   {
     type: "ol",
     items: [
-      "Cadrage — Prompt R-C-T-C ou idée → PromptPilot pour le socle. Objectif : alignement sur le livrable.",
+      "Cadrage — Prompt R-C-T-C ou idée → PromptExpert pour le socle. Objectif : alignement sur le livrable.",
       "Production — Première génération. Traitez comme brouillon v1, pas livrable final.",
       "Affinage — 2 à 4 prompts de suivi ciblés (longueur, ton, structure, corrections factuelles).",
-      "Archivage — Copiez la version validée + le prompt final dans votre bibliothèque (Notion, doc, PromptPilot historique).",
+      "Archivage — Copiez la version validée + le prompt final dans votre bibliothèque (Notion, doc, PromptExpert historique).",
     ],
   },
   {
@@ -116,7 +116,7 @@ const blocks: SeoArticle["blocks"] = [
       "Itération minimum 2 tours avant abandon",
       "Relecture humaine sur faits, chiffres, noms propres",
       "Séparation brouillon créatif vs livrable client",
-      "PromptPilot ou template R-C-T-C pour le socle, main pour les 10 % spécifiques",
+      "PromptExpert ou template R-C-T-C pour le socle, main pour les 10 % spécifiques",
     ],
   },
   { type: "h2", text: "Cas d'usage par métier" },
@@ -253,7 +253,7 @@ export const articleUtiliserChatgptEfficacement: SeoArticle = {
     "chatgpt-mauvaise-reponse-comment-formuler",
     "10-erreurs-prompt-ia",
     "exemples-prompts-ia-gratuits",
-    "promptpilot-vs-prompts-manuels",
+    "promptexpert-vs-prompts-manuels",
   ],
   blocks,
 };

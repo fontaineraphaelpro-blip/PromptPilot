@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = buildPageMetadata({
   title: "Galerie de prompts partagés par la communauté",
   description:
-    "Découvrez des prompts IA experts partagés par les utilisateurs PromptPilot — ChatGPT, Claude, Cursor et plus.",
+    "Découvrez des prompts IA experts partagés par les utilisateurs PromptExpert — ChatGPT, Claude, Cursor et plus.",
   path: "/galerie",
 });
 
@@ -36,7 +36,7 @@ export default async function GaleriePage() {
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold sm:text-4xl tracking-tight">Galerie de prompts</h1>
         <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-          Prompts partagés par la communauté PromptPilot. Inspirez-vous ou partagez les vôtres depuis
+          Prompts partagés par la communauté PromptExpert. Inspirez-vous ou partagez les vôtres depuis
           l&apos;historique.
         </p>
       </div>

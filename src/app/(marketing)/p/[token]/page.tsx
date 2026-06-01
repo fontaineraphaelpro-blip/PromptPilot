@@ -12,8 +12,8 @@ export async function generateMetadata({
   params: Promise<{ token: string }>;
 }) {
   return buildPageMetadata({
-    title: "Prompt partagé — PromptPilot",
-    description: "Prompt expert partagé via PromptPilot — lecture seule.",
+    title: "Prompt partagé — PromptExpert",
+    description: "Prompt expert partagé via PromptExpert — lecture seule.",
     path: `/p/${(await params).token}`,
   });
 }
@@ -36,7 +36,7 @@ export default async function SharedPromptPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
       <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
-        Prompt partagé · PromptPilot
+        Prompt partagé · PromptExpert
       </p>
       <h1 className="text-xl font-bold line-clamp-3 mb-2">{prompt.original_idea}</h1>
       <p className="text-sm text-muted-foreground mb-6">
@@ -68,7 +68,7 @@ export default async function SharedPromptPage({
           <Link href="/signup">Créer mon prompt expert</Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link href="/">Découvrir PromptPilot</Link>
+          <Link href="/">Découvrir PromptExpert</Link>
         </Button>
       </div>
     </div>

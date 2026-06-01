@@ -3,9 +3,9 @@ import { ComparatifInteractifClient } from "@/components/seo/comparatif-interact
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildPageMetadata({
-  title: "Comparatif interactif — Ton prompt vs PromptPilot",
+  title: "Comparatif interactif — Ton prompt vs PromptExpert",
   description:
-    "Compare le score qualité de ton prompt manuel vs un prompt structuré PromptPilot. Clarté, contraintes, format, adaptation IA.",
+    "Compare le score qualité de ton prompt manuel vs un prompt structuré PromptExpert. Clarté, contraintes, format, adaptation IA.",
   path: "/comparatif/interactif",
 });
 
@@ -21,7 +21,7 @@ export default function ComparatifInteractifPage() {
         Comparatif interactif
       </h1>
       <p className="text-muted-foreground mb-10 max-w-2xl">
-        Colle ton prompt habituel et compare-le au format expert PromptPilot — score /100 en
+        Colle ton prompt habituel et compare-le au format expert PromptExpert — score /100 en
         direct sur 4 critères.
       </p>
       <ComparatifInteractifClient />

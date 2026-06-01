@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata: Metadata = buildPageMetadata({
   title: "Prompts par IA — ChatGPT, Claude, Cursor, Midjourney, Sora",
   description:
-    "Pages dédiées pour générer des prompts optimisés par outil IA : exemples, conseils et générateur PromptPilot.",
+    "Pages dédiées pour générer des prompts optimisés par outil IA : exemples, conseils et générateur PromptExpert.",
   path: "/prompts-ia",
   keywords: ["prompts IA", "prompt par outil", "générateur prompt"],
 });

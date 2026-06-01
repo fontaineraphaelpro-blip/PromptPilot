@@ -72,7 +72,7 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
       { ...result, generated_prompt: text },
       activeVariant
     );
-    downloadTextFile(md, `promptpilot-${result.id ?? "export"}.md`, "text/markdown");
+    downloadTextFile(md, `promptexpert-${result.id ?? "export"}.md`, "text/markdown");
     toast.success("Markdown téléchargé");
   }
 
@@ -95,10 +95,10 @@ export function PromptExportMenu({ result, activeVariant = "main" }: PromptExpor
       return;
     }
     win.document.write(`
-      <!DOCTYPE html><html><head><title>Prompt PromptPilot</title>
+      <!DOCTYPE html><html><head><title>Prompt PromptExpert</title>
       <style>body{font-family:system-ui;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.6}
       h1{font-size:1.25rem}pre{white-space:pre-wrap;background:#f4f4f5;padding:16px;border-radius:8px}</style></head>
-      <body><h1>Prompt PromptPilot</h1>
+      <body><h1>Prompt PromptExpert</h1>
       ${result.prompt_score ? `<p><strong>Score:</strong> ${result.prompt_score}/100</p>` : ""}
       <pre>${text.replace(/</g, "&lt;")}</pre>
       <script>window.onload=()=>window.print()</script></body></html>`);

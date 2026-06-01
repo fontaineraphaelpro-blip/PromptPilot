@@ -4,7 +4,7 @@ import { estimateReadingTime } from "./utils";
 const blocks: SeoArticle["blocks"] = [
   {
     type: "p",
-    text: "Vous cherchez une structure de prompt expert, un template reproductible, un framework qui tienne la route sur ChatGPT, Claude, Cursor et Midjourney ? Le R-C-T-C — Rôle, Contexte, Tâche, Contraintes — est le standard interne chez PromptPilot depuis 2025. Il transforme une idée brute (« je veux un post LinkedIn ») en instruction exploitable en moins de 30 secondes, sans partir d'une page blanche.",
+    text: "Vous cherchez une structure de prompt expert, un template reproductible, un framework qui tienne la route sur ChatGPT, Claude, Cursor et Midjourney ? Le R-C-T-C — Rôle, Contexte, Tâche, Contraintes — est le standard interne chez PromptExpert depuis 2025. Il transforme une idée brute (« je veux un post LinkedIn ») en instruction exploitable en moins de 30 secondes, sans partir d'une page blanche.",
   },
   {
     type: "p",
@@ -141,12 +141,12 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Exemple R-C-T-C complet (ChatGPT marketing)" },
   {
     type: "p",
-    text: "Rôle : Tu es copywriter B2B SaaS spécialisé conversion landing page. Contexte : PromptPilot, générateur prompts IA freemium, cible fondateurs PME et marketers, différenciation = framework R-C-T-C + multi-IA. Tâche : Rédige la section hero + 3 blocs bénéfices. Contraintes : français, 400 mots total, hook question, chiffres uniquement si placeholder [X], pas de jargon IA creux, CTA « Essayer gratuitement ».",
+    text: "Rôle : Tu es copywriter B2B SaaS spécialisé conversion landing page. Contexte : PromptExpert, générateur prompts IA freemium, cible fondateurs PME et marketers, différenciation = framework R-C-T-C + multi-IA. Tâche : Rédige la section hero + 3 blocs bénéfices. Contraintes : français, 400 mots total, hook question, chiffres uniquement si placeholder [X], pas de jargon IA creux, CTA « Essayer gratuitement ».",
   },
   {
     type: "tip",
-    title: "Variantes R-C-T-C avec PromptPilot",
-    text: "Décrivez votre idée en une phrase : PromptPilot génère automatiquement les quatre blocs plus des variantes court (chat rapide), détaillé (projet sérieux) et expert (code, image, vidéo).",
+    title: "Variantes R-C-T-C avec PromptExpert",
+    text: "Décrivez votre idée en une phrase : PromptExpert génère automatiquement les quatre blocs plus des variantes court (chat rapide), détaillé (projet sérieux) et expert (code, image, vidéo).",
   },
   { type: "h2", text: "R-C-T-C adapté par type d'IA" },
   {
@@ -263,7 +263,7 @@ export const articleStructureRctc: SeoArticle = {
     "quest-ce-que-le-prompt-engineering",
     "comment-ecrire-prompt-chatgpt",
     "comment-faire-un-bon-prompt-ia",
-    "promptpilot-vs-prompts-manuels",
+    "promptexpert-vs-prompts-manuels",
   ],
   blocks,
 };

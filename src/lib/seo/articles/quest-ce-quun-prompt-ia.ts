@@ -60,7 +60,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h3", text: "Un prompt est-il gratuit ?" },
   {
     type: "p",
-    text: "Écrire un prompt est gratuit. L'exécution peut coûter selon l'outil (abonnement ChatGPT, crédits Midjourney, API OpenAI). Des générateurs comme PromptPilot structurent vos prompts gratuitement (quota journalier) avant de les coller dans l'IA de votre choix.",
+    text: "Écrire un prompt est gratuit. L'exécution peut coûter selon l'outil (abonnement ChatGPT, crédits Midjourney, API OpenAI). Des générateurs comme PromptExpert structurent vos prompts gratuitement (quota journalier) avant de les coller dans l'IA de votre choix.",
   },
   { type: "h3", text: "Quelle longueur pour un prompt ?" },
   {
@@ -75,7 +75,7 @@ const blocks: SeoArticle["blocks"] = [
   {
     type: "tip",
     title: "Gagner du temps",
-    text: "Décrivez votre idée en une phrase sur PromptPilot : l'outil génère un prompt expert adapté à ChatGPT, Cursor, Midjourney, etc., avec variantes court / détaillé / expert.",
+    text: "Décrivez votre idée en une phrase sur PromptExpert : l'outil génère un prompt expert adapté à ChatGPT, Cursor, Midjourney, etc., avec variantes court / détaillé / expert.",
   },
   { type: "h2", text: "Prochaine étape" },
   {

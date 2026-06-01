@@ -1,6 +1,6 @@
 # Variables Railway — à faire une seule fois
 
-Le build réussit, mais le **conteneur s’arrête** tant que ces variables ne sont pas sur le **service web** (PromptPilot), pas sur Postgres.
+Le build réussit, mais le **conteneur s’arrête** tant que ces variables ne sont pas sur le **service web** (PromptExpert), pas sur Postgres.
 
 ## Étape A — PostgreSQL
 
@@ -10,7 +10,7 @@ Le build réussit, mais le **conteneur s’arrête** tant que ces variables ne s
 
 ## Étape B — Lier DATABASE_URL
 
-1. Clique sur le service **PromptPilot** (ton app Next.js).
+1. Clique sur le service **PromptExpert** (ton app Next.js).
 2. Onglet **Variables**.
 3. **+ New Variable** → **Add Variable Reference** (ou « Reference »).
 4. Service source : **PostgreSQL** (ou le nom de ta base).
@@ -35,7 +35,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 ## Étape D — URLs publiques
 
-1. Service web → **Settings** → copie l’URL publique (ex. `https://promptpilot-production-xxxx.up.railway.app`).
+1. Service web → **Settings** → copie l’URL publique (ex. `https://promptexpert-production-xxxx.up.railway.app`).
 2. Ajoute ces variables (remplace par **ton** URL) :
 
 | Nom | Valeur |
@@ -51,8 +51,8 @@ Si tu mets seulement `xxx.up.railway.app` sans `https://`, le code corrige au ru
 2. Logs attendus :
 
 ```
-[promptpilot] Synchronisation du schéma PostgreSQL…
-[promptpilot] Démarrage Next.js…
+[promptexpert] Synchronisation du schéma PostgreSQL…
+[promptexpert] Démarrage Next.js…
 ```
 
 3. Test : `https://TON-URL/api/health` → `{"status":"ok","database":"ok"}`

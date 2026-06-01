@@ -15,7 +15,7 @@ export default function BlogPage() {
   return (
     <ContentHub
       eyebrow="Blog"
-      title="Blog PromptPilot"
+      title="Blog PromptExpert"
       description="Guides pratiques, comparatifs d'IA et articles pour maîtriser le prompt engineering — contenu rédigé pour une vraie valeur métier."
       articles={SEO_ARTICLES}
       basePath="/blog"

@@ -1,4 +1,4 @@
-const ADAPT_KEY = "promptpilot_adapt_prefill";
+const ADAPT_KEY = "promptexpert_adapt_prefill";
 
 export interface AdaptPrefill {
   userIdea: string;

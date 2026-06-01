@@ -70,7 +70,7 @@ export function ComparatifInteractifClient() {
           <PromptScoreDisplay score={manualScore.total} breakdown={manualScore.breakdown} compact />
         </div>
         <div className="space-y-3">
-          <p className="text-sm font-medium">Prompt structuré PromptPilot</p>
+          <p className="text-sm font-medium">Prompt structuré PromptExpert</p>
           <Textarea
             value={expert}
             onChange={(e) => setExpert(e.target.value)}

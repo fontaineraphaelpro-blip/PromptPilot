@@ -26,7 +26,7 @@ export function toMarkdownExport(
     expert: result.expert_variant,
   };
   const lines = [
-    "# Prompt PromptPilot",
+    "# Prompt PromptExpert",
     "",
     result.original_idea ? `**Idée:** ${result.original_idea}` : "",
     result.target_ai ? `**IA:** ${result.target_ai}` : "",

@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/promptpilot-vs-prompts-manuels",
+        destination: "/blog/promptexpert-vs-prompts-manuels",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

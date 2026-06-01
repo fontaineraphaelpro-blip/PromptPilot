@@ -8,7 +8,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Avertissement : un exemple gratuit n'est pas universel. Remplacez les [PLACEHOLDERS] par votre contexte réel. PromptPilot génère des variantes personnalisées gratuites (quota journalier) si vous préférez partir de votre idée plutôt que d'un template générique.",
+    text: "Avertissement : un exemple gratuit n'est pas universel. Remplacez les [PLACEHOLDERS] par votre contexte réel. PromptExpert génère des variantes personnalisées gratuites (quota journalier) si vous préférez partir de votre idée plutôt que d'un template générique.",
   },
   { type: "h2", text: "Comment utiliser ces exemples intelligemment" },
   {
@@ -97,7 +97,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "tip",
-    title: "PromptPilot gratuit",
+    title: "PromptExpert gratuit",
     text: "Décrivez idée en 1 phrase → prompt structuré R-C-T-C + variantes court/détaillé/expert pour ChatGPT, Cursor, Midjourney. Quota free daily.",
   },
   { type: "h2", text: "Organiser sa bibliothèque gratuite" },
@@ -114,7 +114,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h3", text: "Où trouver prompts IA gratuits fiables ?" },
   {
     type: "p",
-    text: "Guides éditoriaux (ce hub PromptPilot), docs officielles OpenAI/Anthropic, communautés avec exemples commentés — méfiance prompts viraux sans contexte.",
+    text: "Guides éditoriaux (ce hub PromptExpert), docs officielles OpenAI/Anthropic, communautés avec exemples commentés — méfiance prompts viraux sans contexte.",
   },
   { type: "h3", text: "Prompt ChatGPT gratuit vs Plus : même exemples ?" },
   {
@@ -137,15 +137,15 @@ const blocks: SeoArticle["blocks"] = [
     type: "p",
     text: "20 idées campagne [produit] canal [X]. Contraintes : budget low, délai 2 semaines, persona [Y]. Tableau idée / effort / impact estimé.",
   },
-  { type: "h2", text: "Personnaliser avec PromptPilot" },
+  { type: "h2", text: "Personnaliser avec PromptExpert" },
   {
     type: "p",
-    text: "Collez un exemple ci-dessus dans PromptPilot comme inspiration, ou décrivez votre cas en français — l'outil regénère R-C-T-C complet avec placeholders remplis selon votre phrase. Gain : structure expert sans partir de zero.",
+    text: "Collez un exemple ci-dessus dans PromptExpert comme inspiration, ou décrivez votre cas en français — l'outil regénère R-C-T-C complet avec placeholders remplis selon votre phrase. Gain : structure expert sans partir de zero.",
   },
   { type: "h2", text: "Aller plus loin" },
   {
     type: "p",
-    text: "Comment écrire prompt ChatGPT (méthode), structure R-C-T-C, 10 erreurs à éviter, PromptPilot vs manuel pour scale.",
+    text: "Comment écrire prompt ChatGPT (méthode), structure R-C-T-C, 10 erreurs à éviter, PromptExpert vs manuel pour scale.",
   },
   { type: "h2", text: "Pack téléchargeable mental : 5 prompts essentiels" },
   {
@@ -181,7 +181,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Synthèse exemples prompts gratuits" },
   {
     type: "p",
-    text: "Exemple prompt IA gratuit = point départ structure, pas livrable final. Adaptez placeholders, ajoutez anti-hallucination, itérez, archivez versions gold. PromptPilot personnalise depuis votre phrase. Explorez hub : comment écrire prompt ChatGPT, R-C-T-C, 10 erreurs, PromptPilot vs manuel.",
+    text: "Exemple prompt IA gratuit = point départ structure, pas livrable final. Adaptez placeholders, ajoutez anti-hallucination, itérez, archivez versions gold. PromptExpert personnalise depuis votre phrase. Explorez hub : comment écrire prompt ChatGPT, R-C-T-C, 10 erreurs, PromptExpert vs manuel.",
   },
   { type: "h2", text: "FAQ exemples prompts" },
   { type: "h3", text: "Où copier prompt ChatGPT gratuit sans risque ?" },
@@ -197,12 +197,12 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Construire votre pack prompts maison" },
   {
     type: "p",
-    text: "Partez exemples gratuits ci-dessus, remplacez placeholders par données réelles une fois, validez output, taggez GOLD. Dupliquez par vertical si agence multi-secteurs. Revoyez trimestriellement quand modèles changent. PromptPilot accélère création nouveaux packs depuis idées phrases — export vers Notion bibliothèque.",
+    text: "Partez exemples gratuits ci-dessus, remplacez placeholders par données réelles une fois, validez output, taggez GOLD. Dupliquez par vertical si agence multi-secteurs. Revoyez trimestriellement quand modèles changent. PromptExpert accélère création nouveaux packs depuis idées phrases — export vers Notion bibliothèque.",
   },
   { type: "h2", text: "Licence et réutilisation prompts" },
   {
     type: "p",
-    text: "Exemples éditoriaux PromptPilot : réutilisation libre adaptation commerciale. Prompts communauté tiers : vérifiez licence. Vos prompts gold internes = IP process — protégez comme tout playbook métier. Ne publiez pas prompts contenant data client sans anonymisation.",
+    text: "Exemples éditoriaux PromptExpert : réutilisation libre adaptation commerciale. Prompts communauté tiers : vérifiez licence. Vos prompts gold internes = IP process — protégez comme tout playbook métier. Ne publiez pas prompts contenant data client sans anonymisation.",
   },
   {
     type: "p",
@@ -216,17 +216,17 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Exemple prompt IA gratuit + prompt ChatGPT gratuit exemple = porte entrée hub PromptPilot. Process cinq phases gratuit→pro bibliothèque. Liens : R-C-T-C, comment écrire prompt ChatGPT, PromptPilot vs manuel.",
+    text: "Exemple prompt IA gratuit + prompt ChatGPT gratuit exemple = porte entrée hub PromptExpert. Process cinq phases gratuit→pro bibliothèque. Liens : R-C-T-C, comment écrire prompt ChatGPT, PromptExpert vs manuel.",
   },
   { type: "h2", text: "Tableau exemples par niveau" },
   {
     type: "p",
-    text: "Débutant : exemples 1-5 texte ChatGPT copier-coller adapter. Intermédiaire : 6-9 code image avec @files ou --ar. Avancé : chaîner exemples 10-12 campagne multi-prompts. Expert : exemples comme base R-C-T-C PromptPilot regénération multi-IA. Progression 30 jours : un niveau par semaine + archive GOLD. Exemple prompt ia gratuit n'est pas finish line — c'est first step bibliothèque pro.",
+    text: "Débutant : exemples 1-5 texte ChatGPT copier-coller adapter. Intermédiaire : 6-9 code image avec @files ou --ar. Avancé : chaîner exemples 10-12 campagne multi-prompts. Expert : exemples comme base R-C-T-C PromptExpert regénération multi-IA. Progression 30 jours : un niveau par semaine + archive GOLD. Exemple prompt ia gratuit n'est pas finish line — c'est first step bibliothèque pro.",
   },
   { type: "h2", text: "Conclusion exemples prompts gratuits" },
   {
     type: "p",
-    text: "Exemple prompt IA gratuit = structure reproductible — adaptez placeholders, itérez, archivez GOLD, scalez avec PromptPilot. Pack 12 exemples couvre texte code image vidéo PME. Hub complet : quest-ce-quun-prompt-ia bases, structure R-C-T-C, comment-ecrire-prompt-chatgpt, comment-utiliser-chatgpt-efficacement, promptpilot-vs-prompts-manuels workflow hybride recommandé équipes 2026.",
+    text: "Exemple prompt IA gratuit = structure reproductible — adaptez placeholders, itérez, archivez GOLD, scalez avec PromptExpert. Pack 12 exemples couvre texte code image vidéo PME. Hub complet : quest-ce-quun-prompt-ia bases, structure R-C-T-C, comment-ecrire-prompt-chatgpt, comment-utiliser-chatgpt-efficacement, promptexpert-vs-prompts-manuels workflow hybride recommandé équipes 2026.",
   },
   {
     type: "blockquote",
@@ -241,9 +241,9 @@ const blocks: SeoArticle["blocks"] = [
       "Itérer deux tours minimum",
       "Tagger GOLD si validé",
       "Organiser bibliothèque Notion",
-      "PromptPilot personnaliser depuis phrase",
+      "PromptExpert personnaliser depuis phrase",
       "Revoir trimestriel modèles IA",
-      "Hub R-C-T-C comment écrire prompt ChatGPT PromptPilot vs manuel",
+      "Hub R-C-T-C comment écrire prompt ChatGPT PromptExpert vs manuel",
     ],
   },
 ];
@@ -268,7 +268,7 @@ export const articleExemplesGratuits: SeoArticle = {
     "comment-ecrire-prompt-chatgpt",
     "comment-faire-un-bon-prompt-ia",
     "prompt-midjourney-debutant-guide",
-    "promptpilot-vs-prompts-manuels",
+    "promptexpert-vs-prompts-manuels",
     "quest-ce-quun-prompt-ia",
   ],
   blocks,

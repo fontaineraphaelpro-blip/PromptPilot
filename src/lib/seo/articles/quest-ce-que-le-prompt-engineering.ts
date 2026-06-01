@@ -64,7 +64,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Ces quatre piliers forment le framework R-C-T-C détaillé dans notre guide dédié. PromptPilot les applique automatiquement quand vous décrivez votre idée en une phrase — vous obtenez un socle expert à affiner.",
+    text: "Ces quatre piliers forment le framework R-C-T-C détaillé dans notre guide dédié. PromptExpert les applique automatiquement quand vous décrivez votre idée en une phrase — vous obtenez un socle expert à affiner.",
   },
   { type: "h2", text: "Compétences d'un prompt engineer en 2026" },
   {
@@ -175,7 +175,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "tip",
-    title: "Astuce PromptPilot",
+    title: "Astuce PromptExpert",
     text: "Décrivez votre idée en une phrase ; l'outil assemble automatiquement rôle, contexte, contraintes et variantes court / détaillé / expert adaptées à l'IA cible (ChatGPT, Cursor, Midjourney…).",
   },
   { type: "h2", text: "Questions fréquentes (People Also Ask)" },
@@ -224,7 +224,7 @@ const blocks: SeoArticle["blocks"] = [
       "Guide R-C-T-C pour le template reproductible",
       "Article 10 erreurs pour éviter les pièges courants",
       "Exemples prompts gratuits comme base de bibliothèque",
-      "PromptPilot pour accélérer le socle pendant l'apprentissage",
+      "PromptExpert pour accélérer le socle pendant l'apprentissage",
     ],
   },
 ];

@@ -159,7 +159,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Prochaine étape" },
   {
     type: "p",
-    text: "Repartez sur bases solides : comment écrire un prompt ChatGPT et framework R-C-T-C. Pour éviter rechute : 10 erreurs de prompt IA. PromptPilot structure vos prompts pour réduire dès le départ les mauvaises interprétations.",
+    text: "Repartez sur bases solides : comment écrire un prompt ChatGPT et framework R-C-T-C. Pour éviter rechute : 10 erreurs de prompt IA. PromptExpert structure vos prompts pour réduire dès le départ les mauvaises interprétations.",
   },
   { type: "h2", text: "Matrice symptôme → reformulation" },
   {
@@ -206,7 +206,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Documentez vos reformulations gagnantes dans un doc « fixes ChatGPT » partagé équipe : symptôme client, prompt raté anonymisé, prompt corrigé, modèle utilisé. En un mois vous avez playbook interne supérieur à articles génériques. Couplez avec PromptPilot pour générer socle R-C-T-C puis appliquez fixes métier manuellement.",
+    text: "Documentez vos reformulations gagnantes dans un doc « fixes ChatGPT » partagé équipe : symptôme client, prompt raté anonymisé, prompt corrigé, modèle utilisé. En un mois vous avez playbook interne supérieur à articles génériques. Couplez avec PromptExpert pour générer socle R-C-T-C puis appliquez fixes métier manuellement.",
   },
 ];
 

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "PromptPilot — Optimiser mes prompts",
+  "name": "PromptExpert — Optimiser mes prompts",
   "version": "1.0.0",
-  "description": "Ouvre PromptPilot pour restructurer et scorer ton prompt depuis ChatGPT ou Claude.",
+  "description": "Ouvre PromptExpert pour restructurer et scorer ton prompt depuis ChatGPT ou Claude.",
   "action": {
-    "default_title": "Optimiser avec PromptPilot",
+    "default_title": "Optimiser avec PromptExpert",
     "default_popup": "popup.html"
   },
   "permissions": ["activeTab", "scripting"],

@@ -20,7 +20,7 @@ export async function GET() {
     const weeklyLabel =
       weekly > 0
         ? `${weekly.toLocaleString("fr-FR")} prompts générés cette semaine`
-        : "Rejoignez les premiers utilisateurs PromptPilot";
+        : "Rejoignez les premiers utilisateurs PromptExpert";
 
     return NextResponse.json({
       total_prompts: total,
@@ -37,7 +37,7 @@ export async function GET() {
       total_prompts: 0,
       weekly_prompts: 0,
       hourly_prompts: 0,
-      label: "PromptPilot — studio de prompts IA",
+      label: "PromptExpert — studio de prompts IA",
       hourly_label: null,
     });
   }

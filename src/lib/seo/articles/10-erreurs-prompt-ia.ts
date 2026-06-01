@@ -4,7 +4,7 @@ import { estimateReadingTime } from "./utils";
 const blocks: SeoArticle["blocks"] = [
   {
     type: "p",
-    text: "La plupart des « échecs IA » ne viennent pas d'un modèle faible — ils viennent d'instructions incomplètes, contradictoires ou mal calibrées pour l'outil. En support produit et formation PromptPilot, nous voyons les mêmes dix erreurs de prompt revenir chaque semaine, de ChatGPT débutant à équipe dev sur Cursor. Ce article développe chaque piège avec explication, symptôme, correctif et exemple avant/après.",
+    text: "La plupart des « échecs IA » ne viennent pas d'un modèle faible — ils viennent d'instructions incomplètes, contradictoires ou mal calibrées pour l'outil. En support produit et formation PromptExpert, nous voyons les mêmes dix erreurs de prompt revenir chaque semaine, de ChatGPT débutant à équipe dev sur Cursor. Ce article développe chaque piège avec explication, symptôme, correctif et exemple avant/après.",
   },
   {
     type: "p",
@@ -58,7 +58,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Erreur 10 : Copier un prompt viral sans adaptation" },
   {
     type: "p",
-    text: "Symptôme : résultat impressionnant en démo Twitter, plat pour votre niche B2B comptabilité. Cause : prompt calibré autre domaine, autre modèle, autre année. Correctif : garder structure (R-C-T-C), remplacer 100% contexte métier. PromptPilot génère adaptation depuis VOTRE phrase.",
+    text: "Symptôme : résultat impressionnant en démo Twitter, plat pour votre niche B2B comptabilité. Cause : prompt calibré autre domaine, autre modèle, autre année. Correctif : garder structure (R-C-T-C), remplacer 100% contexte métier. PromptExpert génère adaptation depuis VOTRE phrase.",
   },
   {
     type: "tip",
@@ -102,7 +102,7 @@ const blocks: SeoArticle["blocks"] = [
       "Jour 1 — Audit 5 derniers prompts ratés, taguer erreur #1-#10",
       "Jour 2 — Template R-C-T-C dans Notion",
       "Jour 3 — Réécrire 3 prompts historiques avec checklist",
-      "Jour 4 — Tester PromptPilot ou Custom GPT socle",
+      "Jour 4 — Tester PromptExpert ou Custom GPT socle",
       "Jour 5 — Itération obligatoire 3 tours minimum",
       "Jour 6 — Documenter 2 prompts gold par métier",
       "Jour 7 — Partager équipe + feedback peer review prompts",
@@ -111,7 +111,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Prochaine étape" },
   {
     type: "p",
-    text: "Framework R-C-T-C, comment écrire prompt ChatGPT, PromptPilot vs manuel pour industrialiser sans perdre contrôle.",
+    text: "Framework R-C-T-C, comment écrire prompt ChatGPT, PromptExpert vs manuel pour industrialiser sans perdre contrôle.",
   },
   { type: "h2", text: "Erreurs par profil utilisateur" },
   { type: "h3", text: "Débutant" },
@@ -158,7 +158,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Mesurer amélioration post-correction" },
   {
     type: "p",
-    text: "Avant/après metrics : iterations to approved output, time spent, stakeholder satisfaction. Track 30 jours après adoption checklist — teams voient typiquement -40% iterations et -25% time-to-deliver. Partagez wins leadership pour budget outils prompt (PromptPilot, formation). Erreurs prompt sont systémiques fixables — pas talent individuel.",
+    text: "Avant/après metrics : iterations to approved output, time spent, stakeholder satisfaction. Track 30 jours après adoption checklist — teams voient typiquement -40% iterations et -25% time-to-deliver. Partagez wins leadership pour budget outils prompt (PromptExpert, formation). Erreurs prompt sont systémiques fixables — pas talent individuel.",
   },
   {
     type: "p",
@@ -172,7 +172,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Les dix erreurs prompt IA ne sont pas une liste shame — c'est checklist pro. Meta-correction après échec accélère courbe apprentissage. Liens : chatgpt mauvaise réponse, R-C-T-C, PromptPilot socle auto.",
+    text: "Les dix erreurs prompt IA ne sont pas une liste shame — c'est checklist pro. Meta-correction après échec accélère courbe apprentissage. Liens : chatgpt mauvaise réponse, R-C-T-C, PromptExpert socle auto.",
   },
   { type: "h2", text: "Atelier équipe : corriger les 10 erreurs" },
   {
@@ -182,7 +182,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Conclusion : maîtriser les erreurs prompt" },
   {
     type: "p",
-    text: "Les dix erreurs de prompt IA ne condamnent pas l'outil — elles signalent un brief incomplet. Corrigez avec R-C-T-C, checklist audit, ateliers équipe et meta-prompts correction. En 30 jours discipline, équipes PME divisent par deux allers-retours frustrants ChatGPT Claude Cursor. Continuez hub PromptPilot : quest-ce que prompt engineering, comment utiliser chatgpt efficacement, prompts cursor guide développeur, chatgpt mauvaise réponse reformulation live.",
+    text: "Les dix erreurs de prompt IA ne condamnent pas l'outil — elles signalent un brief incomplet. Corrigez avec R-C-T-C, checklist audit, ateliers équipe et meta-prompts correction. En 30 jours discipline, équipes PME divisent par deux allers-retours frustrants ChatGPT Claude Cursor. Continuez hub PromptExpert : quest-ce que prompt engineering, comment utiliser chatgpt efficacement, prompts cursor guide développeur, chatgpt mauvaise réponse reformulation live.",
   },
   {
     type: "blockquote",

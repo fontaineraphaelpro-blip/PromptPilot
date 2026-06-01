@@ -99,7 +99,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h3", text: "Existe-t-il un générateur de prompts ?" },
   {
     type: "p",
-    text: "Oui. PromptPilot transforme une idée en prompt structuré avec variantes, adapté à l'IA cible — utile si vous débutez ou si vous voulez standardiser une équipe.",
+    text: "Oui. PromptExpert transforme une idée en prompt structuré avec variantes, adapté à l'IA cible — utile si vous débutez ou si vous voulez standardiser une équipe.",
   },
   {
     type: "tip",

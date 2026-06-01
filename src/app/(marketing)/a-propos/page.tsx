@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = buildPageMetadata({
   title: `Qu'est-ce que ${APP_NAME} ? — Studio de prompts IA`,
   description:
-    "PromptPilot transforme une idée en prompt expert pour ChatGPT, Claude, Cursor, Midjourney. Score /100, preview, 4 variantes.",
+    "PromptExpert transforme une idée en prompt expert pour ChatGPT, Claude, Cursor, Midjourney. Score /100, preview, 4 variantes.",
   path: "/a-propos",
 });
 

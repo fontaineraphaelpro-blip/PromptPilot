@@ -88,8 +88,8 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "tip",
-    title: "PromptPilot multi-IA",
-    text: "Sélectionnez ChatGPT ou Claude à la génération : PromptPilot adapte structure et contraintes au modèle cible automatiquement.",
+    title: "PromptExpert multi-IA",
+    text: "Sélectionnez ChatGPT ou Claude à la génération : PromptExpert adapte structure et contraintes au modèle cible automatiquement.",
   },
   { type: "h2", text: "Questions fréquentes (People Also Ask)" },
   { type: "h3", text: "ChatGPT ou Claude pour rédaction française ?" },
@@ -151,7 +151,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h2", text: "Synthèse comparatif ChatGPT Claude" },
   {
     type: "p",
-    text: "ChatGPT et Claude récompensent des styles prompt différents — calibrez plutôt que copier. Testez sur vos cas réels, documentez winner par workflow, révisez trimestriellement car modèles évoluent. Prompt engineering transversal : clarté intention reste constante ; ajustements tactiques varient. Hub PromptPilot : comment écrire prompt ChatGPT + exemples gratuits pour démarrer.",
+    text: "ChatGPT et Claude récompensent des styles prompt différents — calibrez plutôt que copier. Testez sur vos cas réels, documentez winner par workflow, révisez trimestriellement car modèles évoluent. Prompt engineering transversal : clarté intention reste constante ; ajustements tactiques varient. Hub PromptExpert : comment écrire prompt ChatGPT + exemples gratuits pour démarrer.",
   },
   { type: "h2", text: "FAQ ChatGPT vs Claude prompts" },
   { type: "h3", text: "Même prompt system message : compatible ?" },
@@ -185,7 +185,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Hub PromptPilot relie guides ChatGPT, Claude, Cursor avec R-C-T-C commun — votre stack multi-modèle reste cohérente sans réécrire playbooks from scratch chaque trimestre.",
+    text: "Hub PromptExpert relie guides ChatGPT, Claude, Cursor avec R-C-T-C commun — votre stack multi-modèle reste cohérente sans réécrire playbooks from scratch chaque trimestre.",
   },
   { type: "h2", text: "Checklist migration prompt inter-modèles" },
   {
@@ -215,7 +215,7 @@ const blocks: SeoArticle["blocks"] = [
   },
   {
     type: "p",
-    text: "Aucun scénario universel — votre matrice interne bat ce comparatif générique en trois mois usage disciplined. Exportez matrice onboarding nouveaux collaborateurs. PromptPilot génère variantes calibrées modèle sélectionné depuis même idée française — accélère tests A/B prompts sans réécrire R-C-T-C twice.",
+    text: "Aucun scénario universel — votre matrice interne bat ce comparatif générique en trois mois usage disciplined. Exportez matrice onboarding nouveaux collaborateurs. PromptExpert génère variantes calibrées modèle sélectionné depuis même idée française — accélère tests A/B prompts sans réécrire R-C-T-C twice.",
   },
 ];
 

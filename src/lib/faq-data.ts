@@ -14,8 +14,8 @@ export const LANDING_FAQS = [
     a: "Pro : score /100, preview, templates premium, favoris — idéal si tu génères souvent. Creator : variante Expert, workflows métier et illimité.",
   },
   {
-    q: "En quoi PromptPilot est différent de ChatGPT ?",
-    a: "ChatGPT répond à ta question. PromptPilot produit le prompt structuré à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes.",
+    q: "En quoi PromptExpert est différent de ChatGPT ?",
+    a: "ChatGPT répond à ta question. PromptExpert produit le prompt structuré à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes.",
   },
   {
     q: "Garantie qualité si le score est bas ?",

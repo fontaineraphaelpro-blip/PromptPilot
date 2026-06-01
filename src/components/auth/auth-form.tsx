@@ -90,7 +90,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <CardTitle>{isLogin ? "Connexion" : "Inscription"}</CardTitle>
         <CardDescription>
           {isLogin
-            ? "Accédez à votre espace PromptPilot"
+            ? "Accédez à votre espace PromptExpert"
             : getFunnelDraft()
               ? "Dernière étape : débloque ton prompt complet en 30 secondes"
               : `Créez votre compte gratuit — ${FREE_DAILY_LIMIT} prompts/jour`}
