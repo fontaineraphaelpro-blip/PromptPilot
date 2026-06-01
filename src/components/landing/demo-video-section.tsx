@@ -24,12 +24,14 @@ export function DemoVideoSection() {
       <div className="mx-auto max-w-4xl">
         <FadeIn className="text-center mb-8">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
-            Démo interactive
+            Aperçu produit
           </p>
-          <h2 className="text-2xl font-bold sm:text-3xl">Idée → score → copier</h2>
-          <p className="mt-3 text-muted-foreground text-sm max-w-lg mx-auto">
-            Animation en boucle (environ 14 s). Descends jusqu&apos;ici si tu ne la vois pas bouger
-            — elle démarre quand la section est visible.
+          <h2 className="text-2xl font-bold sm:text-3xl tracking-tight">
+            Ton idée devient un prompt <span className="gradient-text">scoré /100</span> en direct
+          </h2>
+          <p className="mt-3 text-muted-foreground text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Exactement ce que tu vivras dans l&apos;app : tu écris, tu choisis ton IA, le brief se
+            construit, le score monte — tu copies et tu colles dans ChatGPT ou Cursor.
           </p>
         </FadeIn>
 
