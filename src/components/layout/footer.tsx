@@ -1,18 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Sparkles } from "lucide-react";
 import { ScrollLink } from "@/components/navigation/scroll-link";
+import { scrollToHomeTop } from "@/lib/scroll-to-section";
 
 export function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer className="border-t border-border/60 bg-black mt-auto">
       <div className={MARKETING_CONTAINER + " py-16"}>
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2.5 font-semibold text-lg">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2.5 font-semibold text-lg"
+              onClick={(e) => {
+                if (pathname === "/") {
+                  e.preventDefault();
+                  scrollToHomeTop("smooth");
+                }
+              }}
+            >
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
                 <Sparkles className="h-4 w-4" />
               </span>

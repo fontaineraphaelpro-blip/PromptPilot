@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ScrollLink } from "@/components/navigation/scroll-link";
 import type { HomeSectionId } from "@/lib/scroll-to-section";
+import { scrollToHomeTop } from "@/lib/scroll-to-section";
 
 const NAV_SECTION_LINKS: { label: string; section: HomeSectionId }[] = [
   { label: "Avant / Après", section: "examples" },
@@ -22,6 +24,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ user }: NavbarProps) {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -35,7 +38,13 @@ export function Navbar({ user }: NavbarProps) {
         <Link
           href="/"
           className="flex items-center gap-2 sm:gap-2.5 group shrink-0"
-          onClick={() => setMobileOpen(false)}
+          onClick={(e) => {
+            setMobileOpen(false);
+            if (pathname === "/") {
+              e.preventDefault();
+              scrollToHomeTop("smooth");
+            }
+          }}
         >
           <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-white text-black transition-transform group-hover:scale-105">
             <Sparkles className="h-4 w-4" />

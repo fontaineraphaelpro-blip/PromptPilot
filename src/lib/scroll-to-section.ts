@@ -35,6 +35,11 @@ export function scrollToSection(
   return true;
 }
 
+/** Haut de la homepage (hero). */
+export function scrollToHomeTop(behavior: ScrollBehavior = "instant"): void {
+  window.scrollTo({ top: 0, left: 0, behavior });
+}
+
 /** Retire #section de la barre d’adresse sans recharger. */
 export function stripHashFromUrl(): void {
   const { pathname, search } = window.location;
