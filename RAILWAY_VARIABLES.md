@@ -40,8 +40,10 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 | Nom | Valeur |
 |-----|--------|
-| `AUTH_URL` | `https://promptpilot-production-a994.up.railway.app` (avec **https://**) |
-| `NEXT_PUBLIC_APP_URL` | même URL avec **https://** |
+| `AUTH_URL` | `https://www.promptpilot.fr` (domaine custom — avec **https://**) |
+| `NEXT_PUBLIC_APP_URL` | **même URL** — utilisée par le sitemap, robots.txt, OG, Stripe |
+
+**Search Console :** la propriété doit être `https://www.promptpilot.fr/` et le sitemap soumis : `https://www.promptpilot.fr/sitemap.xml`. Si ces variables pointent encore vers `*.railway.app`, Google signalera des erreurs d’URL.
 
 Si tu mets seulement `xxx.up.railway.app` sans `https://`, le code corrige au runtime — mais préfère toujours le préfixe complet.
 

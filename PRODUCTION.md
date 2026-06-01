@@ -7,7 +7,15 @@
 | `DATABASE_URL` | PostgreSQL (référence Railway) |
 | `AUTH_SECRET` | `openssl rand -base64 32` |
 | `AUTH_URL` | URL publique de l'app |
-| `NEXT_PUBLIC_APP_URL` | Même URL |
+| `NEXT_PUBLIC_APP_URL` | **https://www.promptpilot.fr** (domaine affiché aux utilisateurs) |
+| `AUTH_URL` | Idem |
+
+## Google Search Console
+
+1. Propriété : `https://www.promptpilot.fr/`
+2. Sitemap : `https://www.promptpilot.fr/sitemap.xml`
+3. Vérifier `https://www.promptpilot.fr/robots.txt` → ligne `Sitemap:` doit pointer vers **www.promptpilot.fr**, pas Railway
+4. Après changement d’URL sur Railway → **redéployer** (sitemap généré au runtime)
 | `OPENAI_API_KEY` | Clé OpenAI + budget/plafond activé |
 
 ## Upgrade Pro (app)

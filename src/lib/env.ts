@@ -47,6 +47,12 @@ export function isStripeConfigured(): boolean {
   );
 }
 
+/** URL publique canonique du site (SEO, sitemap, Stripe, emails). */
 export function getAppUrl(): string {
-  return normalizeAppUrl(process.env.NEXT_PUBLIC_APP_URL);
+  return normalizeAppUrl(
+    process.env.NEXT_PUBLIC_APP_URL ??
+      process.env.AUTH_URL ??
+      process.env.VERCEL_URL ??
+      null
+  );
 }
