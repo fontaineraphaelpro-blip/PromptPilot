@@ -1,4 +1,8 @@
-/** ID de mesure GA4 (public, visible dans le HTML). */
+/**
+ * ID de mesure GA4 (public).
+ * Dans GA4 → Flux de données, l’URL du site doit être exactement :
+ * https://www.promptpilot.fr (avec https et www).
+ */
 export const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-ML5QFPTM8H";
 
