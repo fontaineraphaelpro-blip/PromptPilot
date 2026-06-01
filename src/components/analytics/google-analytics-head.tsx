@@ -1,21 +1,21 @@
-import { GA_MEASUREMENT_ID, getGoogleAnalyticsInlineScript } from "@/lib/analytics/ga";
-
 /**
- * Balises Google officielles dans <head>.
- * Ne pas utiliser next/script (beforeInteractive) : en prod Next ne met qu’un preload,
- * pas le script gtag.js → l’assistant Google affiche « non détectée ».
+ * Snippet Google officiel (gtag.js) — identique à celui fourni par GA4 :
+ *
+ * <script async src="https://www.googletagmanager.com/gtag/js?id=G-ML5QFPTM8H"></script>
+ * <script> window.dataLayer ... gtag('config', 'G-ML5QFPTM8H'); </script>
  */
 export function GoogleAnalyticsHead() {
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-      />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-ML5QFPTM8H" />
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
       <script
         dangerouslySetInnerHTML={{
-          __html: getGoogleAnalyticsInlineScript(GA_MEASUREMENT_ID),
+          __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ML5QFPTM8H');`,
         }}
       />
     </>
