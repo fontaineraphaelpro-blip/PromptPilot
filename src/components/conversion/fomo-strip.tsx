@@ -17,7 +17,7 @@ export function FomoStrip() {
   }, []);
 
   return (
-    <div className="border-b border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10">
+    <div className="hidden md:block border-b border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10">
       <div className="mx-auto flex w-full max-w-[90rem] flex-col sm:flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-4 sm:px-6 lg:px-10 py-2 text-xs sm:text-sm text-center sm:text-left">
         {hourlyLabel ? (
           <span className="inline-flex items-center justify-center gap-1.5 text-amber-200/90">
