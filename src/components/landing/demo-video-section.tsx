@@ -1,9 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
-import { DemoProductAnimation } from "@/components/landing/demo-product-animation";
+
+const DemoProductAnimation = dynamic(
+  () =>
+    import("@/components/landing/demo-product-animation").then((m) => m.DemoProductAnimation),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="mx-auto max-w-2xl w-full rounded-2xl border border-white/12 bg-black/80 min-h-[320px] animate-pulse" />
+    ),
+  }
+);
 
 const VIDEO_URL = process.env.NEXT_PUBLIC_DEMO_VIDEO_URL;
 
@@ -17,14 +28,12 @@ export function DemoVideoSection() {
           </p>
           <h2 className="text-2xl font-bold sm:text-3xl">Idée → score → copier</h2>
           <p className="mt-3 text-muted-foreground text-sm max-w-lg mx-auto">
-            La démo tourne en boucle automatiquement. Teste ensuite une vraie génération sur le
-            funnel ci-dessus.
+            Animation en boucle (environ 14 s). Descends jusqu&apos;ici si tu ne la vois pas bouger
+            — elle démarre quand la section est visible.
           </p>
         </FadeIn>
 
-        <div className="mt-2">
-          <DemoProductAnimation />
-        </div>
+        <DemoProductAnimation />
 
         <FadeIn delay={0.15} className="mt-8 flex flex-col items-center gap-4">
           <Button asChild>
