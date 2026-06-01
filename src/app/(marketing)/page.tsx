@@ -28,8 +28,8 @@ export default function HomePage() {
       <ValuePropositionSection />
       <AIMarquee />
 
-      <section className="px-4 py-24 sm:px-6 border-t border-border/40">
-        <div className="mx-auto max-w-6xl">
+      <section className="py-24 border-t border-border/40 w-full">
+        <div className="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
           <FadeIn className="text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
               Use cases

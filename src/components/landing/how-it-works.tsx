@@ -25,7 +25,7 @@ const steps = [
 export function HowItWorks() {
   return (
     <section id="how" className="relative px-4 py-28 sm:px-6">
-      <div className="mx-auto max-w-6xl">
+      <div className="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
             Workflow

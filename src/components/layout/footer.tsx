@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { APP_NAME } from "@/lib/constants";
+import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
     <footer className="border-t border-border/60 bg-black mt-auto">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div className={MARKETING_CONTAINER + " py-16"}>
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2.5 font-semibold text-lg">

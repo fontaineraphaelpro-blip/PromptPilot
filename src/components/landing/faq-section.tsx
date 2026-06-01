@@ -12,7 +12,7 @@ export function FaqSection() {
 
   return (
     <section className="px-4 py-28 sm:px-6 border-t border-border/40">
-      <div className="mx-auto max-w-3xl">
+      <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
             FAQ

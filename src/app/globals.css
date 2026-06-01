@@ -44,9 +44,11 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 body {
+  width: 100%;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -57,17 +59,34 @@ body {
   color: #fff;
 }
 
-/* Grille IA */
+/* Grille IA — hero (local) */
 .bg-grid {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 95% 75% at 50% 0%, black 25%, transparent 92%);
+}
+
+/* Grille pleine page (marketing) */
+.bg-grid-wide {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 150% 120% at 50% 0%, black 35%, transparent 100%);
 }
 
 .bg-gradient-radial-top {
   background: radial-gradient(ellipse 80% 50% at 50% -30%, rgba(255, 255, 255, 0.12), transparent 60%);
+}
+
+.bg-gradient-radial-wide {
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -20%,
+    rgba(255, 255, 255, 0.1),
+    transparent 55%
+  );
 }
 
 /* Texte accent monochrome */
@@ -140,6 +159,23 @@ body {
   top: 30%;
   right: -5%;
   animation-delay: -4s;
+}
+
+.orb-wide {
+  width: min(50vw, 560px);
+  height: min(50vw, 560px);
+  opacity: 0.28;
+}
+
+.orb-wide-1 {
+  top: -5%;
+  left: 5%;
+}
+
+.orb-wide-2 {
+  top: 25%;
+  right: 0;
+  animation-delay: -6s;
 }
 
 @keyframes float-orb {

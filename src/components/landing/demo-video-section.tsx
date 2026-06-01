@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
+import { MARKETING_CONTAINER } from "@/lib/layout-width";
+import { cn } from "@/lib/utils";
 
 const DemoProductAnimation = dynamic(
   () =>
@@ -20,8 +22,8 @@ const VIDEO_URL = process.env.NEXT_PUBLIC_DEMO_VIDEO_URL;
 
 export function DemoVideoSection() {
   return (
-    <section className="px-4 py-16 sm:px-6 border-t border-border/40" id="demo">
-      <div className="mx-auto max-w-4xl">
+    <section className="py-16 sm:py-20 border-t border-border/40 w-full" id="demo">
+      <div className={cn(MARKETING_CONTAINER)}>
         <FadeIn className="text-center mb-8">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
             Aperçu produit

@@ -84,7 +84,7 @@ export function FunnelWizard() {
   return (
     <section id="funnel" className="relative px-4 py-16 sm:px-6 sm:py-20 scroll-mt-24">
       <div className="absolute inset-0 bg-gradient-radial-top opacity-40 pointer-events-none" />
-      <div className="relative mx-auto max-w-3xl">
+      <div className="relative w-full max-w-3xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
             Parcours guidé — 30 secondes

@@ -150,7 +150,7 @@ export function DemoProductAnimation() {
   }
 
   return (
-    <div ref={rootRef} className="mx-auto max-w-4xl w-full">
+    <div ref={rootRef} className="w-full max-w-5xl mx-auto">
       <div className="demo-mock-glow relative rounded-2xl border border-white/15 bg-[#050505] overflow-hidden">
         {/* Shimmer sweep */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden z-20">

@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Flame } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { MARKETING_CONTAINER } from "@/lib/layout-width";
 
 export function FinalCtaSection() {
   return (
-    <section className="px-4 py-24 sm:px-6">
-      <FadeIn>
+    <section className="py-24 w-full">
+      <FadeIn className={MARKETING_CONTAINER}>
         <div className="mx-auto max-w-4xl rounded-3xl border border-white/20 bg-gradient-to-b from-white/10 to-transparent p-10 sm:p-14 text-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-amber-200/90 mb-6">

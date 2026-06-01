@@ -20,7 +20,7 @@ export function ValuePropositionSection() {
       className="relative px-4 py-24 sm:px-6 border-t border-border/60"
     >
       <div className="absolute inset-0 bg-gradient-radial-top opacity-40 pointer-events-none" />
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
             Pourquoi PromptPilot
