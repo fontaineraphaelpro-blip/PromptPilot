@@ -6,10 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { isSalesMode } from "@/lib/sales-mode";
+import { PLAN_PRICES } from "@/lib/plans";
 
 const DISMISS_KEY = "pp_exit_dismissed";
 
 export function ExitIntentModal() {
+  const sales = isSalesMode();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -70,11 +73,26 @@ export function ExitIntentModal() {
               Offre Free — places limitées par jour
             </p>
             <div className="mt-6 flex flex-col gap-3">
-              <Button size="lg" className="w-full" asChild>
-                <Link href="/#funnel" onClick={dismiss}>
-                  Continuer mon prompt
-                </Link>
-              </Button>
+              {sales ? (
+                <>
+                  <Button size="lg" className="w-full" asChild>
+                    <Link href="/pricing?plan=pro" onClick={dismiss}>
+                      Passer au Pro — {PLAN_PRICES.pro.label}
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" className="w-full" asChild>
+                    <Link href="/#funnel" onClick={dismiss}>
+                      Essayer gratuit ({FREE_DAILY_LIMIT}/jour)
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <Button size="lg" className="w-full" asChild>
+                  <Link href="/#funnel" onClick={dismiss}>
+                    Continuer mon prompt
+                  </Link>
+                </Button>
+              )}
               <Button variant="ghost" size="sm" className="w-full" onClick={dismiss}>
                 Non merci
               </Button>

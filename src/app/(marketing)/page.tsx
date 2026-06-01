@@ -4,7 +4,7 @@ import { SocialProof } from "@/components/conversion/social-proof";
 import { FinalCtaSection } from "@/components/conversion/final-cta-section";
 import { AIMarquee } from "@/components/landing/ai-marquee";
 import { HowItWorks } from "@/components/landing/how-it-works";
-import { PricingSection } from "@/components/landing/pricing-section";
+import { HomePricingSection } from "@/components/landing/home-pricing-section";
 import { FaqSection } from "@/components/landing/faq-section";
 import { TASK_TYPES } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,9 +23,13 @@ export default function HomePage() {
       <div className="flex justify-center px-4 -mt-8 mb-4">
         <SocialProofCounter />
       </div>
+      {/* Preuve → produit → action : convaincre avant de demander l'inscription */}
+      <BeforeAfterSection />
+      <DemoVideoSection />
       <FunnelWizard />
       <SocialProof />
       <ValuePropositionSection />
+      <HowItWorks />
       <AIMarquee />
 
       <section className="py-24 border-t border-border/40 w-full">
@@ -50,10 +54,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <HowItWorks />
-      <BeforeAfterSection />
-      <DemoVideoSection />
-      <PricingSection />
+      <HomePricingSection />
       <FaqSection />
       <FinalCtaSection />
     </>

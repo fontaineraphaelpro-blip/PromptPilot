@@ -1,39 +1,22 @@
 "use client";
 
-import { useEffect, useCallback, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hasAnyYearlyPricing } from "@/lib/stripe";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { startCheckout } from "@/lib/start-checkout";
+import { usePlanCheckout } from "@/hooks/use-plan-checkout";
 
 export function PricingPageClient() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const autoCheckoutDone = useRef(false);
   const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
   const showYearlyToggle = hasAnyYearlyPricing();
-
-  const handleCheckout = useCallback(
-    (plan: "pro" | "creator") => {
-      if (status === "loading") return;
-
-      startCheckout(
-        plan,
-        session,
-        () => {
-          toast.info("Connectez-vous pour vous abonner");
-          router.push(`/login?redirect=/pricing&plan=${plan}`);
-        },
-        billingInterval
-      );
-    },
-    [session, status, router, billingInterval]
-  );
+  const { handleCheckout, sessionLoading } = usePlanCheckout(billingInterval);
 
   useEffect(() => {
     const plan = searchParams.get("plan");
@@ -86,7 +69,7 @@ export function PricingPageClient() {
       )}
       <PricingSection
         onSelectPlan={handleCheckout}
-        checkoutLoading={status === "loading" ? "session" : null}
+        checkoutLoading={sessionLoading ? "session" : null}
       />
       <div className="mx-auto max-w-2xl px-4 mt-8">
         <Card>
@@ -96,14 +79,14 @@ export function PricingPageClient() {
           <CardContent className="flex flex-wrap gap-3">
             <Button
               onClick={() => handleCheckout("pro")}
-              disabled={status === "loading"}
+              disabled={sessionLoading}
             >
               Pro — 9€/mois
             </Button>
             <Button
               variant="outline"
               onClick={() => handleCheckout("creator")}
-              disabled={status === "loading"}
+              disabled={sessionLoading}
             >
               Creator — 19€/mois
             </Button>

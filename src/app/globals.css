@@ -268,3 +268,20 @@ body {
 .demo-live-dot {
   animation: demo-live-pulse 1.2s ease-in-out infinite;
 }
+
+.demo-prompt-scroll,
+.before-after-prompt-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.demo-prompt-scroll::-webkit-scrollbar,
+.before-after-prompt-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.demo-prompt-scroll::-webkit-scrollbar-thumb,
+.before-after-prompt-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}

@@ -13,7 +13,7 @@ const DemoProductAnimation = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="mx-auto max-w-2xl w-full rounded-2xl border border-white/12 bg-black/80 min-h-[320px] animate-pulse" />
+      <div className="mx-auto max-w-5xl w-full rounded-2xl border border-white/12 bg-black/80 min-h-[440px] animate-pulse" />
     ),
   }
 );
@@ -29,11 +29,12 @@ export function DemoVideoSection() {
             Aperçu produit
           </p>
           <h2 className="text-2xl font-bold sm:text-3xl tracking-tight">
-            Ton idée devient un prompt <span className="gradient-text">scoré /100</span> en direct
+            Une phrase → brief <span className="gradient-text">1 000+ mots</span> scoré /100
           </h2>
-          <p className="mt-3 text-muted-foreground text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Exactement ce que tu vivras dans l&apos;app : tu écris, tu choisis ton IA, le brief se
-            construit, le score monte — tu copies et tu colles dans ChatGPT ou Cursor.
+          <p className="mt-3 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            Simulation fidèle à l&apos;app : mode <strong className="text-foreground">Expert · Détaillé</strong>
+            , sections ##, contraintes, critères d&apos;acceptation — le même livrable que tu copies
+            dans ChatGPT ou Cursor.
           </p>
         </FadeIn>
 

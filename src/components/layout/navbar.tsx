@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { isSalesMode } from "@/lib/sales-mode";
+import { PLAN_PRICES } from "@/lib/plans";
 
 const NAV_LINKS = [
   { label: "Comment ça marche", href: "/#how" },
@@ -23,6 +25,7 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const sales = isSalesMode();
 
   return (
     <motion.header
@@ -63,6 +66,15 @@ export function Navbar({ user }: NavbarProps) {
               </Button>
               <Button size="sm" asChild>
                 <Link href="/generate">Nouveau prompt</Link>
+              </Button>
+            </>
+          ) : sales ? (
+            <>
+              <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
+                <Link href="/#funnel">Essai gratuit</Link>
+              </Button>
+              <Button size="sm" className="text-xs sm:text-sm px-3 sm:px-4" asChild>
+                <Link href="/pricing?plan=pro">Pro — {PLAN_PRICES.pro.amount}€</Link>
               </Button>
             </>
           ) : (

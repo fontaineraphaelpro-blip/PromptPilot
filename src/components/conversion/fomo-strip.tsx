@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Flame, Users, Zap } from "lucide-react";
+import Link from "next/link";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { isSalesMode } from "@/lib/sales-mode";
+import { PLAN_PRICES } from "@/lib/plans";
 
 export function FomoStrip() {
+  const sales = isSalesMode();
   const [hourlyLabel, setHourlyLabel] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,10 +40,20 @@ export function FomoStrip() {
           Quota gratuit : <strong className="text-foreground">{FREE_DAILY_LIMIT} prompts/jour</strong>
         </span>
         <span className="hidden md:inline text-border">|</span>
-        <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-          <Zap className="h-3.5 w-3.5 shrink-0 text-foreground" />
-          Inscription en <strong className="text-foreground">30 sec</strong> — sans carte
-        </span>
+        {sales ? (
+          <Link
+            href="/pricing?plan=pro"
+            className="inline-flex items-center gap-1.5 font-medium text-foreground hover:underline"
+          >
+            <Zap className="h-3.5 w-3.5 shrink-0" />
+            Pro {PLAN_PRICES.pro.label} — checkout immédiat
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+            <Zap className="h-3.5 w-3.5 shrink-0 text-foreground" />
+            Inscription en <strong className="text-foreground">30 sec</strong> — sans carte
+          </span>
+        )}
       </div>
     </div>
   );

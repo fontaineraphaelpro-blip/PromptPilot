@@ -11,6 +11,8 @@ import { PRICING_PLANS } from "@/lib/plans";
 import { ROI_HEADLINE } from "@/lib/product-value";
 import { PlanComparisonTable } from "@/components/landing/plan-comparison-table";
 import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
+import { PaymentTrustRow } from "@/components/conversion/payment-trust-row";
+import { isSalesMode } from "@/lib/sales-mode";
 
 interface PricingSectionProps {
   onSelectPlan?: (plan: "pro" | "creator") => void;
@@ -26,9 +28,13 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
             Pricing
           </p>
-          <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">Tarifs simples</h2>
+          <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">
+            {isSalesMode() ? "Passe au Pro en 1 clic" : "Tarifs simples"}
+          </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
-            {ROI_HEADLINE}
+            {isSalesMode()
+              ? "Essaie gratuitement, upgrade quand tu veux — checkout Stripe, annulation instantanée."
+              : ROI_HEADLINE}
           </p>
           <div className="mt-6 flex justify-center">
             <GuaranteeBadge />
@@ -106,6 +112,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
         </div>
 
         <PlanComparisonTable onSelectPlan={onSelectPlan} />
+        <PaymentTrustRow />
       </div>
     </section>
   );

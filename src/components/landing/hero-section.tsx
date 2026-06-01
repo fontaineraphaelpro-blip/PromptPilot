@@ -8,8 +8,12 @@ import { FadeInHero } from "@/components/motion/fade-in";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { isSalesMode } from "@/lib/sales-mode";
+import { PLAN_PRICES } from "@/lib/plans";
 
 export function HeroSection() {
+  const sales = isSalesMode();
+
   return (
     <section className="relative w-full min-h-[min(90vh,900px)] flex items-center overflow-hidden pb-20 pt-16 sm:pb-24 sm:pt-20">
       <GridBackground />
@@ -50,18 +54,46 @@ export function HeroSection() {
 
         <FadeInHero delay={0.35}>
           <div className="mt-10 sm:mt-12 flex flex-col items-stretch sm:items-center justify-center gap-3 sm:flex-row sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
-            <Button size="lg" className="group w-full sm:w-auto sm:min-w-[240px]" asChild>
-              <Link href="/#funnel">
-                Commencer — c&apos;est gratuit
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto sm:min-w-[180px] border-white/20" asChild>
-              <Link href="/#examples">Voir avant / après</Link>
-            </Button>
+            {sales ? (
+              <>
+                <Button size="lg" className="group w-full sm:w-auto sm:min-w-[240px]" asChild>
+                  <Link href="/pricing?plan=pro">
+                    Pro — {PLAN_PRICES.pro.label}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto sm:min-w-[200px] border-white/20"
+                  asChild
+                >
+                  <Link href="/#funnel">Essayer gratuitement</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="lg" className="group w-full sm:w-auto sm:min-w-[240px]" asChild>
+                  <Link href="/#funnel">
+                    Commencer — c&apos;est gratuit
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto sm:min-w-[180px] border-white/20"
+                  asChild
+                >
+                  <Link href="/#examples">Voir avant / après</Link>
+                </Button>
+              </>
+            )}
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            ↓ Parcours guidé en 3 étapes — sans carte bancaire
+            {sales
+              ? "Essai gratuit sans carte · upgrade Pro en 1 clic · annulation Stripe"
+              : "↓ Parcours guidé en 3 étapes — sans carte bancaire"}
           </p>
         </FadeInHero>
 

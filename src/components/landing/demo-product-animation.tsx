@@ -8,25 +8,26 @@ import {
   Wand2,
   Zap,
   ArrowRight,
+  FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  LANDING_SAAS_DEMO,
+  getDemoGeneratingLines,
+  countWords,
+} from "@/lib/marketing/expert-prompt-showcases";
 
-const IDEA =
-  "Landing page SaaS B2B qui convertit les visiteurs en essai gratuit";
-const PROMPT_LINES = [
-  "RÔLE: Copywriter SaaS B2B senior, expert conversion.",
-  "CONTEXTE: Produit = générateur de prompts IA, cible PME marketing.",
-  "TÂCHE: Rédiger hero + 3 sections + CTA essai 14j.",
-  "FORMAT: Markdown, titres H2, bullets, ton pro mais humain.",
-  "CONTRAINTES: Pas de jargon vide, preuves chiffrées, FR.",
-];
+const IDEA = LANDING_SAAS_DEMO.idea;
+const EXPERT_PROMPT = LANDING_SAAS_DEMO.afterDetailed;
+const EXPERT_WORDS = LANDING_SAAS_DEMO.afterWordCount;
+const GENERATING_LINES = getDemoGeneratingLines();
 
 type Phase = "input" | "generating" | "result";
 
 const PHASE_MS: Record<Phase, number> = {
-  input: 2600,
-  generating: 2400,
-  result: 4200,
+  input: 2800,
+  generating: 3200,
+  result: 6500,
 };
 
 const PHASES: Phase[] = ["input", "generating", "result"];
@@ -37,6 +38,8 @@ const SCORE_BREAKDOWN = [
   { label: "Format", value: 24 },
   { label: "Adaptation IA", value: 23 },
 ];
+
+type VariantTab = "principal" | "expert";
 
 export function DemoProductAnimation() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -51,6 +54,7 @@ export function DemoProductAnimation() {
   const [copied, setCopied] = useState(false);
   const [flashScore, setFlashScore] = useState(false);
   const [playing, setPlaying] = useState(true);
+  const [variant, setVariant] = useState<VariantTab>("expert");
 
   useEffect(() => setMounted(true), []);
 
@@ -91,17 +95,17 @@ export function DemoProductAnimation() {
     setGenProgress(0);
     setVisibleLines(0);
     const prog = window.setInterval(() => {
-      setGenProgress((p) => Math.min(100, p + 4));
-    }, 45);
+      setGenProgress((p) => Math.min(100, p + 3));
+    }, 50);
     const lines = window.setInterval(() => {
       setVisibleLines((n) => {
-        if (n >= PROMPT_LINES.length) {
+        if (n >= GENERATING_LINES.length) {
           window.clearInterval(lines);
           return n;
         }
         return n + 1;
       });
-    }, 380);
+    }, 220);
     return () => {
       window.clearInterval(prog);
       window.clearInterval(lines);
@@ -114,24 +118,22 @@ export function DemoProductAnimation() {
     setBreakdownFill(0);
     setCopied(false);
     setFlashScore(false);
+    setVariant("expert");
 
     const scoreT = window.setInterval(() => {
       setScore((s) => {
-        const next = Math.min(94, s + 6);
-        if (next >= 94) {
+        const next = Math.min(LANDING_SAAS_DEMO.afterScore, s + 5);
+        if (next >= LANDING_SAAS_DEMO.afterScore) {
           window.clearInterval(scoreT);
           setFlashScore(true);
           window.setTimeout(() => setFlashScore(false), 600);
         }
         return next;
       });
-    }, 35);
+    }, 32);
 
-    const barT = window.setTimeout(() => {
-      setBreakdownFill(100);
-    }, 400);
-
-    const copyT = window.setTimeout(() => setCopied(true), 2200);
+    const barT = window.setTimeout(() => setBreakdownFill(100), 400);
+    const copyT = window.setTimeout(() => setCopied(true), 2800);
 
     return () => {
       window.clearInterval(scoreT);
@@ -142,17 +144,20 @@ export function DemoProductAnimation() {
 
   const circumference = 2 * Math.PI * 46;
   const scoreOffset = circumference - (score / 100) * circumference;
+  const principalExcerpt =
+    EXPERT_PROMPT.split(/\n(?=## )/).slice(0, 3).join("\n\n") +
+    "\n\n[… +7 sections : structure landing, contraintes, format, critères d'acceptation, questions]";
+  const displayPrompt = variant === "expert" ? EXPERT_PROMPT : principalExcerpt;
 
   if (!mounted) {
     return (
-      <div className="mx-auto max-w-4xl w-full rounded-2xl border border-white/10 bg-black/90 min-h-[380px] animate-pulse" />
+      <div className="mx-auto max-w-4xl w-full rounded-2xl border border-white/10 bg-black/90 min-h-[420px] animate-pulse" />
     );
   }
 
   return (
     <div ref={rootRef} className="w-full max-w-5xl mx-auto">
       <div className="demo-mock-glow relative rounded-2xl border border-white/15 bg-[#050505] overflow-hidden">
-        {/* Shimmer sweep */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden z-20">
           <div
             className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent"
@@ -160,7 +165,6 @@ export function DemoProductAnimation() {
           />
         </div>
 
-        {/* App chrome */}
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 bg-black/60">
           <div className="flex items-center gap-2 min-w-0">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black shrink-0">
@@ -168,13 +172,18 @@ export function DemoProductAnimation() {
             </span>
             <div className="min-w-0">
               <p className="text-sm font-semibold truncate">PromptPilot</p>
-              <p className="text-[10px] text-muted-foreground">Générateur · Cursor</p>
+              <p className="text-[10px] text-muted-foreground truncate">
+                ChatGPT · Niveau <span className="text-white font-medium">Expert · Détaillé</span>
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-violet-500/40 bg-violet-500/10 px-2 py-0.5 text-[10px] font-medium text-violet-300">
+              Brief ~{EXPERT_WORDS.toLocaleString("fr-FR")} mots
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 demo-live-dot" />
-              Simulation live
+              Sortie réelle app
             </span>
             <button
               type="button"
@@ -186,8 +195,7 @@ export function DemoProductAnimation() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 min-h-[340px] sm:min-h-[380px]">
-          {/* Panneau gauche — saisie */}
+        <div className="grid lg:grid-cols-2 min-h-[380px] sm:min-h-[440px]">
           <div
             className={cn(
               "p-4 sm:p-5 border-b lg:border-b-0 lg:border-r border-white/10 transition-opacity duration-300",
@@ -195,11 +203,11 @@ export function DemoProductAnimation() {
             )}
           >
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
-              1 · Ton idée
+              1 · Ton idée ({LANDING_SAAS_DEMO.beforeWordCount} mots)
             </p>
             <div
               className={cn(
-                "rounded-xl border p-3 min-h-[100px] transition-colors duration-300",
+                "rounded-xl border p-3 min-h-[88px] transition-colors duration-300",
                 phase === "input" ? "border-white/25 bg-white/[0.04]" : "border-white/10 bg-black/40"
               )}
             >
@@ -220,7 +228,7 @@ export function DemoProductAnimation() {
                   key={ai}
                   className={cn(
                     "rounded-lg px-2.5 py-1.5 text-[11px] font-medium border transition-all duration-200",
-                    ai === "Cursor"
+                    ai === "ChatGPT"
                       ? "border-white/50 bg-white text-black scale-105 shadow-lg shadow-white/10"
                       : "border-white/10 text-muted-foreground"
                   )}
@@ -242,54 +250,57 @@ export function DemoProductAnimation() {
               {phase === "generating" ? (
                 <>
                   <Sparkles className="h-3.5 w-3.5 animate-spin" />
-                  Génération…
+                  Génération Expert…
                 </>
               ) : (
                 <>
                   <Wand2 className="h-3.5 w-3.5" />
-                  Générer le prompt
+                  Générer le brief
                   <ArrowRight className="h-3.5 w-3.5" />
                 </>
               )}
             </div>
           </div>
 
-          {/* Panneau droit — sortie */}
-          <div className="relative p-4 sm:p-5 bg-gradient-to-br from-white/[0.03] to-transparent overflow-hidden">
+          <div className="relative p-4 sm:p-5 bg-gradient-to-br from-white/[0.03] to-transparent overflow-hidden flex flex-col">
             {phase === "input" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40">
                 <Zap className="h-10 w-10 text-muted-foreground mb-3" />
-                <p className="text-sm text-muted-foreground">
-                  Le prompt expert apparaît ici en quelques secondes
+                <p className="text-sm text-muted-foreground max-w-xs">
+                  Ici s&apos;affiche le brief complet (~{EXPERT_WORDS} mots) — sections, contraintes,
+                  critères d&apos;acceptation
                 </p>
               </div>
             )}
 
             {phase === "generating" && (
-              <div className="space-y-4 opacity-100 transition-opacity duration-300">
-                <div className="flex items-center gap-2">
+              <div className="space-y-3 opacity-100 transition-opacity duration-300 flex-1 min-h-0 flex flex-col">
+                <div className="flex items-center gap-2 shrink-0">
                   <Sparkles className="h-4 w-4 text-white animate-pulse" />
-                  <p className="text-sm font-medium">Structuration R-C-T-C…</p>
+                  <p className="text-sm font-medium">Structuration R-C-T-C · mode Détaillé</p>
                   <span className="ml-auto text-xs tabular-nums text-muted-foreground">
                     {genProgress}%
                   </span>
                 </div>
-                <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-2 rounded-full bg-white/10 overflow-hidden shrink-0">
                   <div
-                    className="h-full bg-gradient-to-r from-white/80 to-white rounded-full transition-[width] duration-75"
+                    className="h-full bg-gradient-to-r from-violet-400/80 to-white rounded-full transition-[width] duration-75"
                     style={{ width: `${genProgress}%` }}
                   />
                 </div>
-                <div className="space-y-2 rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[11px] leading-relaxed">
-                  {PROMPT_LINES.slice(0, visibleLines).map((line, i) => (
+                <div className="flex-1 min-h-0 rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[10px] sm:text-[11px] leading-relaxed overflow-y-auto max-h-[280px]">
+                  {GENERATING_LINES.slice(0, visibleLines).map((line, i) => (
                     <p
                       key={i}
-                      className="text-foreground/80"
+                      className={cn(
+                        "text-foreground/85 mb-1",
+                        line.startsWith("##") && "text-violet-300/95 font-semibold mt-2"
+                      )}
                     >
                       {line}
                     </p>
                   ))}
-                  {visibleLines < PROMPT_LINES.length && (
+                  {visibleLines < GENERATING_LINES.length && (
                     <span className="inline-block w-1.5 h-3 bg-white/60 animate-pulse" />
                   )}
                 </div>
@@ -297,16 +308,16 @@ export function DemoProductAnimation() {
             )}
 
             {phase === "result" && (
-              <div className="space-y-4">
+              <div className="space-y-3 flex-1 min-h-0 flex flex-col">
                 <div
                   className={cn(
-                    "flex items-center gap-4 rounded-xl border p-3 transition-all duration-300",
+                    "flex items-center gap-3 rounded-xl border p-2.5 sm:p-3 transition-all duration-300 shrink-0",
                     flashScore
-                      ? "border-emerald-400/50 bg-emerald-500/10 scale-[1.02]"
+                      ? "border-emerald-400/50 bg-emerald-500/10 scale-[1.01]"
                       : "border-white/15 bg-white/[0.04]"
                   )}
                 >
-                  <div className="relative h-16 w-16 shrink-0">
+                  <div className="relative h-14 w-14 shrink-0">
                     <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
                       <circle
                         cx="50"
@@ -329,21 +340,23 @@ export function DemoProductAnimation() {
                         className="transition-[stroke-dashoffset] duration-100"
                       />
                     </svg>
-                    <span className="absolute inset-0 flex items-center justify-center text-lg font-bold tabular-nums">
+                    <span className="absolute inset-0 flex items-center justify-center text-base font-bold tabular-nums">
                       {score}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] uppercase text-muted-foreground">Prompt Score</p>
-                    <p className="text-xl font-bold text-emerald-400">
+                    <p className="text-lg font-bold text-emerald-400 leading-tight">
                       {score}
                       <span className="text-sm font-normal text-muted-foreground">/100</span>
+                      <span className="ml-2 text-[10px] font-medium text-violet-300">
+                        +{LANDING_SAAS_DEMO.afterScore - LANDING_SAAS_DEMO.beforeScore} vs idée brute
+                      </span>
                     </p>
-                    <p className="text-xs text-emerald-400/90 font-medium">Excellent · prêt à coller</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-1.5">
+                <div className="grid grid-cols-2 gap-1.5 shrink-0">
                   {SCORE_BREAKDOWN.map((row, i) => (
                     <div key={row.label} className="rounded-lg bg-black/40 px-2 py-1.5">
                       <div className="flex justify-between text-[9px] text-muted-foreground mb-1">
@@ -365,16 +378,46 @@ export function DemoProductAnimation() {
                   ))}
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-black/50 p-3 max-h-[88px] overflow-hidden">
-                  <p className="text-[10px] text-muted-foreground mb-1.5 font-mono">
-                    Variante principale
-                  </p>
-                  <p className="text-[11px] font-mono text-foreground/75 line-clamp-3 leading-relaxed">
-                    {PROMPT_LINES.join(" ")}
-                  </p>
+                <div className="flex gap-1 shrink-0">
+                  {(
+                    [
+                      { id: "principal" as const, label: "Principal" },
+                      { id: "expert" as const, label: "Expert · Détaillé" },
+                    ] as const
+                  ).map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setVariant(tab.id)}
+                      className={cn(
+                        "rounded-lg px-2.5 py-1 text-[10px] font-semibold border transition-colors",
+                        variant === tab.id
+                          ? "bg-white text-black border-white"
+                          : "border-white/15 text-muted-foreground hover:border-white/30"
+                      )}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex-1 min-h-[200px] rounded-xl border border-emerald-500/25 bg-black/60 overflow-hidden flex flex-col">
+                  <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-2 bg-emerald-950/30 shrink-0">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-300">
+                      <FileText className="h-3 w-3" />
+                      {variant === "expert" ? "Variante Expert" : "Variante principale"}
+                    </span>
+                    <span className="text-[10px] tabular-nums text-muted-foreground">
+                      {countWords(displayPrompt).toLocaleString("fr-FR")} mots affichés
+                      {variant === "expert" && ` · ${EXPERT_WORDS.toLocaleString("fr-FR")} total`}
+                    </span>
+                  </div>
+                  <pre className="flex-1 overflow-y-auto p-3 text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 demo-prompt-scroll">
+                    {displayPrompt}
+                  </pre>
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap shrink-0">
                   <span
                     className={cn(
                       "inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-bold text-black transition-transform",
@@ -382,12 +425,12 @@ export function DemoProductAnimation() {
                     )}
                   >
                     <Copy className="h-3.5 w-3.5" />
-                    Copier le prompt
+                    Copier le brief complet
                   </span>
                   {copied && (
                     <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-400">
                       <Check className="h-3.5 w-3.5" />
-                      Copié dans le presse-papiers
+                      Prêt pour ChatGPT
                     </span>
                   )}
                 </div>
@@ -396,19 +439,19 @@ export function DemoProductAnimation() {
           </div>
         </div>
 
-        {/* Barre de statut */}
         <div className="flex items-center justify-between gap-2 border-t border-white/10 px-4 py-2 bg-black/50 text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 min-w-0 truncate">
             {phase === "generating" && (
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
             )}
-            {phase === "result" && <Check className="h-3 w-3 text-emerald-400" />}
-            {phase === "input" && "En attente de génération"}
-            {phase === "generating" && "OpenAI · prompt structuré en cours"}
-            {phase === "result" && "4 variantes disponibles · Expert débloqué au Creator"}
+            {phase === "result" && <Check className="h-3 w-3 text-emerald-400 shrink-0" />}
+            {phase === "input" && "Idée → brief structuré (comme dans l'app)"}
+            {phase === "generating" && "OpenAI gpt-4o · sections ## + critères d'acceptation"}
+            {phase === "result" &&
+              `4 variantes · ${EXPERT_WORDS} mots en Expert · score ${LANDING_SAAS_DEMO.afterScore}/100`}
           </span>
-          <span className="tabular-nums font-mono text-white/50">
-            {phase === "input" ? "00:02" : phase === "generating" ? "00:08" : "00:12"}
+          <span className="tabular-nums font-mono text-white/50 shrink-0">
+            {phase === "input" ? "00:03" : phase === "generating" ? "00:11" : "00:18"}
           </span>
         </div>
       </div>
