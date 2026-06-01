@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
+import { FREE_DAILY_LIMIT } from "@/lib/constants";
 
 const DISMISS_KEY = "pp_exit_dismissed";
 
@@ -62,7 +63,7 @@ export function ExitIntentModal() {
             </h2>
             <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
               Ne repars pas avec une idée floue. Crée ton compte gratuit et débloque un prompt
-              expert structuré — <strong className="text-foreground">3 générations offertes aujourd&apos;hui</strong>.
+              expert structuré — <strong className="text-foreground">{FREE_DAILY_LIMIT} générations offertes aujourd&apos;hui</strong>.
             </p>
             <p className="mt-4 inline-flex items-center gap-2 text-xs text-amber-200/90">
               <Clock className="h-3.5 w-3.5" />

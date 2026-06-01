@@ -44,7 +44,7 @@ export const LANGUAGES = ["Français", "Anglais"] as const;
 
 export const PLANS = ["free", "pro", "creator"] as const;
 
-export const FREE_DAILY_LIMIT = 3;
+export const FREE_DAILY_LIMIT = 2;
 export const FREE_HISTORY_LIMIT = 30;
 
 export const TEMPLATE_CATEGORIES = [
@@ -65,6 +65,13 @@ export type DetailLevel = (typeof DETAIL_LEVELS)[number];
 export type Tone = (typeof TONES)[number];
 export type Language = (typeof LANGUAGES)[number];
 export type Plan = (typeof PLANS)[number];
+
+const UNLIMITED_ACCESS_EMAILS = new Set(["jeanretaz@gmail.com"]);
+
+export function getInitialPlanForEmail(email: string): Plan {
+  if (UNLIMITED_ACCESS_EMAILS.has(email.toLowerCase().trim())) return "creator";
+  return "free";
+}
 
 export const AI_CATEGORIES = {
   text: ["ChatGPT", "Claude", "Gemini"] as const,

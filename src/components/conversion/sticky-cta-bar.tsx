@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FREE_DAILY_LIMIT } from "@/lib/constants";
 
 export function StickyCtaBar() {
   const [visible, setVisible] = useState(false);
@@ -31,7 +32,7 @@ export function StickyCtaBar() {
           <div className="mx-auto flex max-w-4xl items-center gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium truncate">
-                Ton prompt expert t&apos;attend — 3 gratuits aujourd&apos;hui
+                Ton prompt expert t&apos;attend — {FREE_DAILY_LIMIT} gratuits aujourd&apos;hui
               </p>
               <p className="text-xs text-muted-foreground hidden sm:block">
                 Étape 1 sur 3 : décris ton idée en 10 secondes ↓

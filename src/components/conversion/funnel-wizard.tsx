@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { TARGET_AIS } from "@/lib/constants";
+import { FREE_DAILY_LIMIT, TARGET_AIS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -278,10 +278,10 @@ export function FunnelWizard() {
                     <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black via-black/90 to-transparent pb-6 pt-16">
                       <Lock className="h-8 w-8 text-white/80 mb-3" />
                       <p className="text-sm font-semibold text-center px-4">
-                        + variantes Expert, contraintes & checklist qualité
+                        + score /100, preview IA, 4 variantes & brief Expert
                       </p>
                       <p className="text-xs text-muted-foreground mt-1 text-center px-4">
-                        Inscription gratuite — 3 prompts aujourd&apos;hui
+                        Inscription gratuite — {FREE_DAILY_LIMIT} prompts/jour · upgrade illimité dès 9€
                       </p>
                     </div>
                   )}

@@ -41,8 +41,8 @@ export function HeroSection() {
 
         <FadeInHero delay={0.2}>
           <p className="mx-auto mt-8 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
-            Décris ce que tu veux créer. Choisis ton outil. Reçois un prompt expert structuré,
-            prêt à coller en quelques secondes.
+            Décris ton idée. Reçois un brief expert scoré, avec preview et 4 variantes —
+            adapté à ChatGPT, Claude, Midjourney, Cursor… en moins de 30 secondes.
           </p>
         </FadeInHero>
 
@@ -67,8 +67,8 @@ export function HeroSection() {
           <div className="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto text-center">
             {[
               { value: "12+", label: "IA supportées" },
-              { value: "3", label: "Variantes / prompt" },
-              { value: "<30s", label: "Génération" },
+              { value: "100", label: "Score qualité max" },
+              { value: "4", label: "Variantes / prompt" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-2xl sm:text-3xl font-bold">{stat.value}</p>

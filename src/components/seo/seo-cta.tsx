@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { FREE_DAILY_LIMIT } from "@/lib/constants";
 
 export function SeoCta() {
   return (
@@ -10,7 +11,7 @@ export function SeoCta() {
       </h2>
       <p className="mt-3 text-muted-foreground max-w-lg mx-auto">
         Décris ton idée, choisis ton IA, reçois un prompt structuré avec variantes —
-        gratuit, 3 générations par jour.
+        gratuit, {FREE_DAILY_LIMIT} générations par jour.
       </p>
       <Button size="lg" className="mt-6 group" asChild>
         <Link href="/signup">

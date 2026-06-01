@@ -1,4 +1,4 @@
-import type { Plan } from "@/lib/constants";
+import { getInitialPlanForEmail, type Plan } from "@/lib/constants";
 import type { Profile } from "@/types";
 import { prisma } from "@/lib/db";
 import { mapProfile } from "@/lib/mappers";
@@ -21,7 +21,7 @@ export async function getOrCreateProfile(
     data: {
       userId,
       email,
-      plan: "free",
+      plan: getInitialPlanForEmail(email),
     },
   });
 

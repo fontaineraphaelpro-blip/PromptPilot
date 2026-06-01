@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { signupSchema } from "@/lib/validations/auth";
 import { prisma } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { getInitialPlanForEmail } from "@/lib/constants";
 import { safeErrorMessage } from "@/lib/api-error";
 
 export async function POST(request: Request) {
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
         profile: {
           create: {
             email,
-            plan: "free",
+            plan: getInitialPlanForEmail(email),
           },
         },
       },

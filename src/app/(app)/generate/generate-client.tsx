@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Sparkles } from "lucide-react";
+import { UpgradeValuePanel } from "@/components/conversion/upgrade-value-panel";
 
 interface GenerateClientProps {
   plan: Plan;
@@ -242,25 +243,31 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           plan={plan}
         />
       ) : (
-        <PromptResultCard
-          result={{
-            ...result,
-            original_idea: lastInput?.userIdea,
-            target_ai: lastInput?.targetAI,
-          }}
-          plan={plan}
-          isFavorite={isFavorite}
-          onToggleFavorite={result.id ? toggleFavorite : undefined}
-          onRegenerate={handleRegenerate}
-          onGuaranteeRegen={
-            result.guarantee_regen_available ? handleGuaranteeRegen : undefined
-          }
-          onReset={() => {
-            setResult(null);
-            setLastInput(null);
-            setIsFavorite(false);
-          }}
-        />
+        <>
+          <PromptResultCard
+            result={{
+              ...result,
+              original_idea: lastInput?.userIdea,
+              target_ai: lastInput?.targetAI,
+            }}
+            plan={plan}
+            isFavorite={isFavorite}
+            onToggleFavorite={result.id ? toggleFavorite : undefined}
+            onRegenerate={handleRegenerate}
+            onGuaranteeRegen={
+              result.guarantee_regen_available ? handleGuaranteeRegen : undefined
+            }
+            onReset={() => {
+              setResult(null);
+              setLastInput(null);
+              setIsFavorite(false);
+            }}
+          />
+          <UpgradeValuePanel
+            plan={plan}
+            promptScore={result.prompt_score ?? undefined}
+          />
+        </>
       )}
 
       {isLoading && (

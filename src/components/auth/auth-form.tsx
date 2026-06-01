@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import { toast } from "sonner";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 
@@ -92,7 +93,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             ? "Accédez à votre espace PromptPilot"
             : getFunnelDraft()
               ? "Dernière étape : débloque ton prompt complet en 30 secondes"
-              : "Créez votre compte gratuit — 3 prompts/jour"}
+              : `Créez votre compte gratuit — ${FREE_DAILY_LIMIT} prompts/jour`}
         </CardDescription>
       </CardHeader>
       <CardContent>

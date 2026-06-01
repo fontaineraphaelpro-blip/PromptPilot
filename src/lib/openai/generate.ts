@@ -1,11 +1,36 @@
 import OpenAI from "openai";
+import type { DetailLevel } from "@/lib/constants";
 import type { GeneratePromptInput, GeneratePromptResult } from "@/types";
 import { buildSystemPrompt, buildUserPrompt } from "./system-prompt";
+
+const RETRY_USER_SUFFIX = `
+
+IMPORTANT — réponds avec un JSON COMPLET, toutes clés non vides :
+generated_prompt, short_variant, detailed_variant, expert_variant, ai_tips, preview_summary, preview_questions (tableau de 3 strings).
+Respecte les minimums de longueur du niveau ${"{detailLevel}"}. Pas de placeholders.`;
 
 function getOpenAIClient() {
   return new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
+}
+
+function getModelForDetailLevel(level: DetailLevel): string {
+  if (level === "Expert" || level === "Détaillé") {
+    return process.env.OPENAI_MODEL_QUALITY?.trim() || "gpt-4o";
+  }
+  return process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
+}
+
+function getMaxTokensForDetailLevel(level: DetailLevel): number {
+  switch (level) {
+    case "Expert":
+      return 8192;
+    case "Détaillé":
+      return 6144;
+    default:
+      return 4096;
+  }
 }
 
 function extractJsonContent(content: string): string {
@@ -32,8 +57,18 @@ function pickString(raw: Record<string, unknown>, ...keys: string[]): string {
 
 function buildShortFallback(text: string): string {
   const lines = text.split("\n").filter(Boolean);
-  if (lines.length <= 3) return text.slice(0, 600);
-  return lines.slice(0, 4).join("\n").slice(0, 600);
+  if (lines.length <= 8) return text.slice(0, 900);
+  return lines.slice(0, 12).join("\n").slice(0, 900);
+}
+
+const MIN_MAIN_LENGTH: Record<DetailLevel, number> = {
+  Rapide: 180,
+  Détaillé: 400,
+  Expert: 650,
+};
+
+function isPromptTooShallow(main: string, level: DetailLevel): boolean {
+  return main.length < MIN_MAIN_LENGTH[level];
 }
 
 function normalizeOpenAIResult(raw: Record<string, unknown>): GeneratePromptResult {
@@ -101,20 +136,19 @@ async function requestCompletion(
   input: GeneratePromptInput,
   retry = false
 ): Promise<string> {
+  const model = getModelForDetailLevel(input.detailLevel);
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    temperature: retry ? 0.4 : 0.7,
-    max_tokens: 4096,
+    model,
+    temperature: retry ? 0.35 : 0.55,
+    max_tokens: getMaxTokensForDetailLevel(input.detailLevel),
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: buildSystemPrompt(input) },
       {
         role: "user",
         content: retry
-          ? `${buildUserPrompt(input)}
-
-IMPORTANT : réponds avec un JSON complet contenant exactement ces 5 clés string non vides :
-generated_prompt, short_variant, detailed_variant, expert_variant, ai_tips`
+          ? buildUserPrompt(input) +
+            RETRY_USER_SUFFIX.replace("{detailLevel}", input.detailLevel)
           : buildUserPrompt(input),
       },
     ],
@@ -142,7 +176,16 @@ export async function generatePromptWithOpenAI(
       const content = await requestCompletion(openai, input, attempt > 0);
       const jsonText = extractJsonContent(content);
       const parsed = JSON.parse(jsonText) as Record<string, unknown>;
-      return normalizeOpenAIResult(parsed);
+      const result = normalizeOpenAIResult(parsed);
+
+      if (attempt === 0 && isPromptTooShallow(result.generated_prompt, input.detailLevel)) {
+        console.warn(
+          `OpenAI prompt trop court (${result.generated_prompt.length} chars, niveau ${input.detailLevel}), retry…`
+        );
+        continue;
+      }
+
+      return result;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
       if (attempt === 0) {

@@ -30,13 +30,13 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     id: "free",
     name: "Free",
     price: "0€",
-    description: "Pour découvrir PromptPilot",
+    description: "Goûte la qualité — quota limité",
     features: [
-      "3 prompts gratuits/jour",
+      `${FREE_DAILY_LIMIT} prompts/jour · score /100 + preview`,
+      "Variantes Principal, Court, Détaillé",
+      "Adaptation 12+ IA (ChatGPT, Claude, Cursor…)",
       "30 derniers prompts en historique",
-      "Niveaux Rapide et Détaillé",
-      "Variantes Principal, Court et Détaillé",
-      "Templates gratuits",
+      "Aperçu Expert (suite floutée)",
     ],
     cta: "Commencer gratuitement",
     href: "/signup",
@@ -47,14 +47,14 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     name: "Pro",
     price: "9€",
     period: "/mois",
-    description: "Pour les créateurs réguliers",
+    description: "Le sweet spot — illimité & bibliothèque pro",
     features: [
-      "Prompts illimités",
-      "Historique complet",
-      "Favoris",
-      "Templates premium",
-      "Options avancées du générateur",
-      "Variantes Principal, Court et Détaillé",
+      "Prompts illimités — ROI dès la 2ᵉ génération",
+      "Score /100 + regen garantie si < 70",
+      "Preview + export + tags bibliothèque",
+      "Templates premium & favoris",
+      "Options avancées (exemples, checklist…)",
+      "Historique complet sans limite",
     ],
     cta: "Passer au Pro",
     href: "/pricing?plan=pro",
@@ -65,12 +65,13 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     name: "Creator",
     price: "19€",
     period: "/mois",
-    description: "Pour les power users et équipes",
+    description: "Brief production & workflows — pour les pros",
     features: [
       "Tout Pro inclus",
-      "Variante Expert débloquée",
-      "Workflows métier (SaaS, LinkedIn, Dev)",
+      "Variante Expert complète (2000+ mots)",
       "Niveau Expert par défaut au générateur",
+      "Workflows métier (SaaS, LinkedIn, Dev)",
+      "Brief consultant : edge cases + critères d'acceptation",
       "Support prioritaire",
     ],
     cta: "Passer au Creator",
@@ -114,7 +115,7 @@ export function getPlanBadgeVariant(
 
 export function getPlanFeaturesSummary(plan: Plan): string {
   if (plan === "free") {
-    return "3 prompts/jour · historique limité · templates gratuits";
+    return `${FREE_DAILY_LIMIT} prompts/jour · historique limité · templates gratuits`;
   }
   if (plan === "pro") {
     return `${PLAN_PRICES.pro.label} · illimité · favoris · templates premium`;

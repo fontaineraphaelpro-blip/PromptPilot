@@ -22,7 +22,7 @@ const EXAMPLES = [
 
 export function BeforeAfterSection() {
   return (
-    <section className="relative px-4 py-24 sm:px-6 border-t border-border/60">
+    <section id="examples" className="relative px-4 py-24 sm:px-6 border-t border-border/60">
       <div className="mx-auto max-w-5xl">
         <FadeIn className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">

@@ -25,13 +25,13 @@ export function FinalCtaSection() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center relative">
             <Button size="lg" className="group min-w-[240px]" asChild>
-              <Link href="/#funnel">
-                Lancer le parcours guidé
+              <Link href="/pricing?plan=pro">
+                Passer au Pro — 9€/mois
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="min-w-[200px]" asChild>
-              <Link href="/signup">Créer un compte</Link>
+              <Link href="/#funnel">Essayer gratuitement</Link>
             </Button>
           </div>
         </div>

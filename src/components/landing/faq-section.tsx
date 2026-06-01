@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { cn } from "@/lib/utils";
+import { FREE_DAILY_LIMIT } from "@/lib/constants";
 
 const faqs = [
   {
@@ -13,11 +14,15 @@ const faqs = [
   },
   {
     q: "Combien de prompts gratuits par jour ?",
-    a: "Le plan Free inclut 3 générations par jour. Les plans Pro et Creator sont illimités.",
+    a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Les plans Pro et Creator sont illimités.`,
   },
   {
     q: "Quelle différence entre Pro (9€) et Creator (19€) ?",
-    a: "Pro : prompts illimités, historique complet, favoris et templates premium (variantes Principal, Court, Détaillé). Creator : tout Pro + variante Expert débloquée, niveau Expert par défaut au générateur et support prioritaire.",
+    a: "Pro : illimité, score /100, preview, templates premium, favoris, tags et options avancées — idéal si tu génères souvent. Creator : tout Pro + la variante Expert complète (brief production), niveau Expert par défaut et workflows métier (SaaS, LinkedIn, Dev). Choisis Creator si tu veux le prompt le plus long et actionnable à chaque fois.",
+  },
+  {
+    q: "En quoi PromptPilot est différent de ChatGPT ?",
+    a: "ChatGPT répond à ta question. PromptPilot produit le prompt structuré à coller dans l'outil de ton choix : adapté à 12+ IA, scoré /100, avec preview et 4 variantes. Tu achètes du prompt engineering, pas une conversation.",
   },
   {
     q: "Mes prompts sont-ils sauvegardés ?",

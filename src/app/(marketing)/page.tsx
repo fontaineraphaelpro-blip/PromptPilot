@@ -10,6 +10,7 @@ import { TASK_TYPES } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
 import { FadeIn } from "@/components/motion/fade-in";
 import { BeforeAfterSection } from "@/components/landing/before-after-section";
+import { ValuePropositionSection } from "@/components/landing/value-proposition-section";
 import { SocialProofCounter } from "@/components/conversion/social-proof-counter";
 export default function HomePage() {
   return (
@@ -20,6 +21,7 @@ export default function HomePage() {
       </div>
       <FunnelWizard />
       <SocialProof />
+      <ValuePropositionSection />
       <AIMarquee />
 
       <section className="px-4 py-24 sm:px-6 border-t border-border/40">

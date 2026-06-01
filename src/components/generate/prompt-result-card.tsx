@@ -164,9 +164,10 @@ export function PromptResultCard({
                       <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10">
                         <Lock className="h-4 w-4" />
                       </span>
-                      <p className="text-sm font-medium">Variante Expert</p>
-                      <p className="text-xs text-muted-foreground max-w-[260px]">
-                        Version avancée pour workflows pro. Disponible avec le plan Creator (19€/mois).
+                      <p className="text-sm font-medium">Variante Expert — déjà générée</p>
+                      <p className="text-xs text-muted-foreground max-w-[280px]">
+                        Tu vois un extrait. Le brief complet (~2 000 mots) inclut edge cases,
+                        critères d&apos;acceptation et annexes — inclus dans Creator.
                       </p>
                       <Button size="sm" asChild>
                         <Link href="/pricing?plan=creator">Passer au Creator</Link>

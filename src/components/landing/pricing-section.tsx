@@ -8,6 +8,8 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { PRICING_PLANS } from "@/lib/plans";
+import { ROI_HEADLINE } from "@/lib/product-value";
+import { PlanComparisonTable } from "@/components/landing/plan-comparison-table";
 
 interface PricingSectionProps {
   onSelectPlan?: (plan: "pro" | "creator") => void;
@@ -24,8 +26,8 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
             Pricing
           </p>
           <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">Tarifs simples</h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
-            Commence gratuitement. Passe au Pro pour scaler. Creator pour la variante Expert.
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
+            {ROI_HEADLINE}
           </p>
         </FadeIn>
 
@@ -86,7 +88,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
                         onClick={() => onSelectPlan(plan.id as "pro" | "creator")}
                         disabled={!!checkoutLoading}
                       >
-                        {checkoutLoading === plan.id && (
+                        {!!checkoutLoading && (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         )}
                         {plan.cta}
@@ -98,6 +100,8 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
             </FadeIn>
           ))}
         </div>
+
+        <PlanComparisonTable onSelectPlan={onSelectPlan} />
       </div>
     </section>
   );

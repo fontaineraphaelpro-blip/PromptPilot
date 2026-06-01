@@ -1,5 +1,16 @@
 import Stripe from "stripe";
 import type { Plan } from "@/lib/constants";
+import {
+  getPublicPlanCheckoutEnv,
+  isStripePaymentLink,
+  isStripePriceId,
+} from "@/lib/stripe-checkout-url";
+
+export {
+  buildPaymentLinkUrl,
+  isStripePaymentLink,
+  isStripePriceId,
+} from "@/lib/stripe-checkout-url";
 
 let stripeInstance: Stripe | null = null;
 
@@ -15,19 +26,7 @@ export function getStripe(): Stripe {
 }
 
 function getRawPlanEnv(plan: "pro" | "creator"): string {
-  const value =
-    plan === "pro"
-      ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID
-      : process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID;
-  return value?.trim() ?? "";
-}
-
-export function isStripePriceId(value: string): boolean {
-  return /^price_[a-zA-Z0-9]+$/i.test(value.trim());
-}
-
-export function isStripePaymentLink(value: string): boolean {
-  return /^https:\/\/(buy|billing)\.stripe\.com\//i.test(value.trim());
+  return getPublicPlanCheckoutEnv(plan);
 }
 
 export function getPlanCheckoutRef(plan: "pro" | "creator"): StripePlanRef {
@@ -75,20 +74,6 @@ export function planFromPriceId(priceId: string): Plan {
   if (getKnownPriceIds("pro").includes(priceId)) return "pro";
   if (getKnownPriceIds("creator").includes(priceId)) return "creator";
   return "free";
-}
-
-export function buildPaymentLinkUrl(
-  paymentLink: string,
-  userId: string,
-  plan: "pro" | "creator",
-  email?: string | null
-): string {
-  const url = new URL(paymentLink);
-  url.searchParams.set("client_reference_id", `${userId}:${plan}`);
-  if (email) {
-    url.searchParams.set("prefilled_email", email);
-  }
-  return url.toString();
 }
 
 export function parseClientReferenceId(

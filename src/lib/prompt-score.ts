@@ -51,14 +51,20 @@ export function computePromptScore(
   const category = getAICategory(targetAI);
 
   let clarity = scoreMarkers(text, CLARITY_MARKERS, 25);
-  if (text.length >= 120) clarity = Math.min(25, clarity + 3);
+  if (text.length >= 400) clarity = Math.min(25, clarity + 6);
+  else if (text.length >= 200) clarity = Math.min(25, clarity + 3);
+  if (/^##\s/m.test(text) || /^#\s/m.test(text)) clarity = Math.min(25, clarity + 2);
   if (/^\s*$/.test(text)) clarity = 0;
 
   let constraints = scoreMarkers(text, CONSTRAINT_MARKERS, 25);
   if (input.includeConstraints) constraints = Math.min(25, constraints + 5);
+  if ((text.match(/contrainte|limite|ne pas|obligatoire/gi) ?? []).length >= 4) {
+    constraints = Math.min(25, constraints + 3);
+  }
 
   let outputFormat = scoreMarkers(text, OUTPUT_MARKERS, 25);
   if (input.includeOutputFormat) outputFormat = Math.min(25, outputFormat + 5);
+  if (/^##\s/m.test(text)) outputFormat = Math.min(25, outputFormat + 3);
 
   let aiAdaptation = scoreMarkers(text, AI_MARKERS[category] ?? [], 20);
   if (new RegExp(targetAI.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text)) {
