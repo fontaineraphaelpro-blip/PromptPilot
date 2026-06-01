@@ -2,17 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ScrollLink } from "@/components/navigation/scroll-link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
-import { isSalesMode } from "@/lib/sales-mode";
-import { PLAN_PRICES } from "@/lib/plans";
 
 const DISMISS_KEY = "pp_exit_dismissed";
 
 export function ExitIntentModal() {
-  const sales = isSalesMode();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -48,7 +46,7 @@ export function ExitIntentModal() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[101] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/15 bg-card p-8 shadow-[0_0_80px_-20px_rgba(255,255,255,0.3)]"
+            className="fixed left-1/2 top-1/2 z-[101] w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/15 bg-card p-6 sm:p-8 shadow-[0_0_80px_-20px_rgba(255,255,255,0.3)] max-h-[90vh] overflow-y-auto"
           >
             <button
               type="button"
@@ -61,38 +59,29 @@ export function ExitIntentModal() {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-black mb-6">
               <Sparkles className="h-6 w-6" />
             </div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Attends — ton prompt est à 30 secondes
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight pr-6">
+              Ton premier brief expert est à 30 secondes
             </h2>
             <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
-              Ne repars pas avec une idée floue. Crée ton compte gratuit et débloque un prompt
-              expert structuré — <strong className="text-foreground">{FREE_DAILY_LIMIT} générations offertes aujourd&apos;hui</strong>.
+              Crée un compte gratuit et teste PromptPilot sur ton projet —{" "}
+              <strong className="text-foreground">{FREE_DAILY_LIMIT} générations offertes par jour</strong>.
+              Pas de carte bancaire.
             </p>
             <p className="mt-4 inline-flex items-center gap-2 text-xs text-amber-200/90">
-              <Clock className="h-3.5 w-3.5" />
-              Offre Free — places limitées par jour
+              <Clock className="h-3.5 w-3.5 shrink-0" />
+              Upgrade Pro plus tard, depuis ton dashboard
             </p>
             <div className="mt-6 flex flex-col gap-3">
-              {sales ? (
-                <>
-                  <Button size="lg" className="w-full" asChild>
-                    <Link href="/pricing?plan=pro" onClick={dismiss}>
-                      Passer au Pro — {PLAN_PRICES.pro.label}
-                    </Link>
-                  </Button>
-                  <Button variant="outline" size="lg" className="w-full" asChild>
-                    <Link href="/#funnel" onClick={dismiss}>
-                      Essayer gratuit ({FREE_DAILY_LIMIT}/jour)
-                    </Link>
-                  </Button>
-                </>
-              ) : (
-                <Button size="lg" className="w-full" asChild>
-                  <Link href="/#funnel" onClick={dismiss}>
-                    Continuer mon prompt
-                  </Link>
-                </Button>
-              )}
+              <Button size="lg" className="w-full" asChild>
+                <Link href="/signup" onClick={dismiss}>
+                  S&apos;inscrire gratuitement
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="w-full" asChild>
+                <ScrollLink section="funnel" onClick={dismiss}>
+                  Tester sans compte
+                </ScrollLink>
+              </Button>
               <Button variant="ghost" size="sm" className="w-full" onClick={dismiss}>
                 Non merci
               </Button>

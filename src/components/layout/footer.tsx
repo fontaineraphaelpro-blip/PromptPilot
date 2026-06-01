@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { APP_NAME } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Sparkles } from "lucide-react";
+import { ScrollLink } from "@/components/navigation/scroll-link";
 
 export function Footer() {
   return (
@@ -88,9 +91,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#how" className="transition-colors hover:text-foreground">
+                <ScrollLink section="how" className="transition-colors hover:text-foreground">
                   Comment ça marche
-                </Link>
+                </ScrollLink>
               </li>
             </ul>
           </div>

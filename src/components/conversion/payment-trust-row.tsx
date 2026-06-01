@@ -1,8 +1,5 @@
 import { CreditCard, RefreshCw, Shield } from "lucide-react";
-import { isSalesMode } from "@/lib/sales-mode";
-
 export function PaymentTrustRow({ className = "" }: { className?: string }) {
-  if (!isSalesMode()) return null;
 
   const items = [
     { icon: CreditCard, text: "Paiement sécurisé Stripe" },

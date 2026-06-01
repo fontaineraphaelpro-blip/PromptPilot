@@ -12,7 +12,6 @@ import { ROI_HEADLINE } from "@/lib/product-value";
 import { PlanComparisonTable } from "@/components/landing/plan-comparison-table";
 import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
 import { PaymentTrustRow } from "@/components/conversion/payment-trust-row";
-import { isSalesMode } from "@/lib/sales-mode";
 
 interface PricingSectionProps {
   onSelectPlan?: (plan: "pro" | "creator") => void;
@@ -21,20 +20,19 @@ interface PricingSectionProps {
 
 export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSectionProps) {
   return (
-    <section id="pricing" className="relative px-4 py-28 sm:px-6 border-t border-border/60">
+    <section id="pricing" className="relative px-4 py-28 sm:px-6 border-t border-border/60 scroll-mt-20 sm:scroll-mt-24">
       <div className="absolute inset-0 bg-gradient-radial-top opacity-50 pointer-events-none" />
       <div className="relative w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
             Pricing
           </p>
-          <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">
-            {isSalesMode() ? "Passe au Pro en 1 clic" : "Tarifs simples"}
+          <h2 className="text-2xl font-bold sm:text-5xl tracking-tight px-2">
+            Commence en free, upgrade quand tu veux
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
-            {isSalesMode()
-              ? "Essaie gratuitement, upgrade quand tu veux — checkout Stripe, annulation instantanée."
-              : ROI_HEADLINE}
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg px-2">
+            {ROI_HEADLINE} Teste d&apos;abord gratuitement — le Pro se débloque depuis ton
+            dashboard.
           </p>
           <div className="mt-6 flex justify-center">
             <GuaranteeBadge />

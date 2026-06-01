@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { saveFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
-import { isSalesMode } from "@/lib/sales-mode";
 
 const POPULAR_AIS = ["ChatGPT", "Claude", "Cursor", "Midjourney", "Sora", "Lovable"] as const;
 
@@ -281,18 +280,11 @@ export function FunnelWizard() {
                 </div>
 
                 {demoError && (
-                  <div className="space-y-3 text-center">
+                  <div className="space-y-3 text-center px-2">
                     <p className="text-sm text-amber-200/90">{demoError}</p>
-                    {isSalesMode() && (
-                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button size="sm" asChild>
-                          <Link href="/signup">Créer un compte gratuit</Link>
-                        </Button>
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href="/pricing?plan=pro">Pro — 9€/mois</Link>
-                        </Button>
-                      </div>
-                    )}
+                    <Button size="sm" asChild className="w-full sm:w-auto">
+                      <Link href="/signup">Créer un compte gratuit — continuer</Link>
+                    </Button>
                   </div>
                 )}
 

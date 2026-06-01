@@ -8,16 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Menu, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { isSalesMode } from "@/lib/sales-mode";
-import { PLAN_PRICES } from "@/lib/plans";
+import { ScrollLink } from "@/components/navigation/scroll-link";
+import type { HomeSectionId } from "@/lib/scroll-to-section";
 
-const NAV_LINKS = [
-  { label: "Comment ça marche", href: "/#how" },
-  { label: "Améliorer", href: "/improve" },
-  { label: "Galerie", href: "/galerie" },
-  { label: "Blog", href: "/blog" },
-  { label: "Tarifs", href: "/pricing" },
-] as const;
+const NAV_SECTION_LINKS: { label: string; section: HomeSectionId }[] = [
+  { label: "Avant / Après", section: "examples" },
+  { label: "Démo", section: "demo" },
+  { label: "Comment ça marche", section: "how" },
+];
 
 interface NavbarProps {
   user?: { email: string } | null;
@@ -25,7 +23,6 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const sales = isSalesMode();
 
   return (
     <motion.header
@@ -46,16 +43,19 @@ export function Navbar({ user }: NavbarProps) {
           <span className="font-semibold tracking-tight text-sm sm:text-base">{APP_NAME}</span>
         </Link>
 
-        <nav className="hidden items-center gap-5 lg:gap-8 text-sm text-muted-foreground md:flex">
-          {NAV_LINKS.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
+        <nav className="hidden items-center gap-4 lg:gap-6 text-sm text-muted-foreground md:flex">
+          {NAV_SECTION_LINKS.map(({ label, section }) => (
+            <ScrollLink
+              key={section}
+              section={section}
               className="transition-colors hover:text-foreground whitespace-nowrap"
             >
               {label}
-            </Link>
+            </ScrollLink>
           ))}
+          <Link href="/pricing" className="transition-colors hover:text-foreground whitespace-nowrap">
+            Tarifs
+          </Link>
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -68,22 +68,13 @@ export function Navbar({ user }: NavbarProps) {
                 <Link href="/generate">Nouveau prompt</Link>
               </Button>
             </>
-          ) : sales ? (
-            <>
-              <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
-                <Link href="/#funnel">Essai gratuit</Link>
-              </Button>
-              <Button size="sm" className="text-xs sm:text-sm px-3 sm:px-4" asChild>
-                <Link href="/pricing?plan=pro">Pro — {PLAN_PRICES.pro.amount}€</Link>
-              </Button>
-            </>
           ) : (
             <>
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
                 <Link href="/login">Connexion</Link>
               </Button>
               <Button size="sm" className="text-xs sm:text-sm px-3 sm:px-4" asChild>
-                <Link href="/#funnel">Commencer</Link>
+                <Link href="/signup">S&apos;inscrire — gratuit</Link>
               </Button>
             </>
           )}
@@ -109,25 +100,41 @@ export function Navbar({ user }: NavbarProps) {
             transition={{ duration: 0.25 }}
             className="md:hidden overflow-hidden border-t border-white/10 bg-black/95 backdrop-blur-xl"
           >
-            <nav className={cn(MARKETING_CONTAINER, "flex flex-col gap-1 py-4")}>
-              {NAV_LINKS.map(({ label, href }) => (
-                <Link
-                  key={label}
-                  href={href}
+            <nav className={cn(MARKETING_CONTAINER, "flex flex-col gap-1 py-4 max-h-[70vh] overflow-y-auto")}>
+              {NAV_SECTION_LINKS.map(({ label, section }) => (
+                <ScrollLink
+                  key={section}
+                  section={section}
                   className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
                   onClick={() => setMobileOpen(false)}
                 >
                   {label}
-                </Link>
+                </ScrollLink>
               ))}
+              <Link
+                href="/pricing"
+                className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                onClick={() => setMobileOpen(false)}
+              >
+                Tarifs
+              </Link>
               {!user && (
-                <Link
-                  href="/login"
-                  className="rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-white/5 sm:hidden"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Connexion
-                </Link>
+                <>
+                  <ScrollLink
+                    section="funnel"
+                    className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Tester maintenant
+                  </ScrollLink>
+                  <Link
+                    href="/login"
+                    className="rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-white/5"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Connexion
+                  </Link>
+                </>
               )}
               {user && (
                 <Link

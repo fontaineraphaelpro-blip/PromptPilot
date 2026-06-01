@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { ScrollLink } from "@/components/navigation/scroll-link";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
@@ -22,27 +23,30 @@ const VIDEO_URL = process.env.NEXT_PUBLIC_DEMO_VIDEO_URL;
 
 export function DemoVideoSection() {
   return (
-    <section className="py-16 sm:py-20 border-t border-border/40 w-full" id="demo">
+    <section className="py-16 sm:py-20 border-t border-border/40 w-full scroll-mt-20 sm:scroll-mt-24" id="demo">
       <div className={cn(MARKETING_CONTAINER)}>
-        <FadeIn className="text-center mb-8">
+        <FadeIn className="text-center mb-6 sm:mb-8 px-2">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
-            Aperçu produit
+            Démo interactive
           </p>
-          <h2 className="text-2xl font-bold sm:text-3xl tracking-tight">
-            Une phrase → brief <span className="gradient-text">1 000+ mots</span> scoré /100
+          <h2 className="text-2xl font-bold sm:text-3xl lg:text-4xl tracking-tight leading-tight">
+            L&apos;app en direct :{" "}
+            <span className="gradient-text">idée → score → copier</span>
           </h2>
           <p className="mt-3 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Simulation fidèle à l&apos;app : mode <strong className="text-foreground">Expert · Détaillé</strong>
-            , sections ##, contraintes, critères d&apos;acceptation — le même livrable que tu copies
-            dans ChatGPT ou Cursor.
+            Regarde la génération se dérouler comme dans PromptPilot : saisie, barre de progression,
+            score /100 et brief prêt à coller — en moins de 30 secondes.
           </p>
         </FadeIn>
 
         <DemoProductAnimation />
 
-        <FadeIn delay={0.15} className="mt-8 flex flex-col items-center gap-4">
-          <Button asChild>
-            <Link href="/#funnel">Essayer avec mon idée</Link>
+        <FadeIn delay={0.15} className="mt-6 sm:mt-8 flex flex-col items-center gap-3 px-4 w-full sm:w-auto">
+          <Button asChild size="lg" className="w-full sm:w-auto">
+            <ScrollLink section="funnel">Tester avec mon idée</ScrollLink>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="w-full sm:w-auto border-white/20">
+            <Link href="/signup">Créer un compte free</Link>
           </Button>
           {VIDEO_URL && (
             <div className="w-full max-w-2xl mt-4">

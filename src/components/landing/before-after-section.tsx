@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ScrollLink } from "@/components/navigation/scroll-link";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowRight, Sparkles, X, Check, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
-import { isSalesMode } from "@/lib/sales-mode";
 import { MARKETING_SHOWCASES } from "@/lib/marketing/expert-prompt-showcases";
 
 export function BeforeAfterSection() {
@@ -29,20 +29,20 @@ export function BeforeAfterSection() {
   const wordMultiplier = Math.round(item.afterWordCount / Math.max(1, item.beforeWordCount));
 
   return (
-    <section id="examples" className="relative py-20 sm:py-28 border-t border-border/60 w-full">
+    <section id="examples" className="relative py-16 sm:py-28 border-t border-border/60 w-full overflow-x-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className={MARKETING_CONTAINER}>
-        <FadeIn className="text-center mb-10 sm:mb-12">
+        <FadeIn className="text-center mb-8 sm:mb-12 px-2">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-            Avant / Après
+            Comparaison
           </p>
-          <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl tracking-tight">
-            9 mots dans ta tête →{" "}
-            <span className="gradient-text">1 000+ mots exploitables</span>
+          <h2 className="text-2xl font-bold sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+            Ton prompt actuel{" "}
+            <span className="text-muted-foreground font-normal">vs</span>{" "}
+            <span className="gradient-text">ce que PromptPilot produit</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">
-            À gauche : ce que la plupart des gens collent dans ChatGPT. À droite : le brief exact
-            que PromptPilot génère en mode <strong className="text-foreground">Expert · Détaillé</strong>{" "}
-            — sections, contraintes, critères d&apos;acceptation.
+            Même idée — à gauche la phrase qu&apos;on colle souvent (score ~30/100). À droite le
+            brief structuré mode Expert · Détaillé, prêt à coller dans ton IA.
           </p>
         </FadeIn>
 
@@ -69,20 +69,21 @@ export function BeforeAfterSection() {
             key={item.id}
             className="relative rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-6 lg:p-8"
           >
-            <p className="text-center text-sm text-muted-foreground mb-6">
-              Idée : <span className="text-foreground font-medium">{item.idea}</span>
-              <span className="mx-2 text-white/20">·</span>
-              <span className="text-white/70">{item.targetAI}</span>
-              <span className="mx-2 text-white/20 hidden sm:inline">·</span>
-              <span className="hidden sm:inline text-violet-300/90">
-                ×{wordMultiplier} plus de contenu structuré
-              </span>
-            </p>
+            <div className="text-center text-sm text-muted-foreground mb-5 sm:mb-6 space-y-1 px-1">
+              <p>
+                Idée : <span className="text-foreground font-medium">{item.idea}</span>
+              </p>
+              <p className="text-white/70">
+                {item.targetAI}
+                <span className="mx-2 text-white/20">·</span>
+                <span className="text-violet-300/90">×{wordMultiplier} de contenu structuré</span>
+              </p>
+            </div>
 
-            <div className="grid gap-4 lg:grid-cols-[minmax(0,0.42fr)_auto_minmax(0,0.58fr)] lg:gap-5 items-stretch">
+            <div className="grid gap-3 sm:gap-4 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1.15fr)] lg:gap-5 items-stretch">
               {/* AVANT */}
-              <div className="relative rounded-xl border border-red-500/30 bg-red-950/25 p-4 sm:p-5 flex flex-col min-h-[200px] lg:min-h-[360px]">
-                <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="relative rounded-xl border border-red-500/30 bg-red-950/25 p-3 sm:p-5 flex flex-col min-h-0 lg:min-h-[340px]">
+                <div className="flex items-start justify-between gap-2 mb-3">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-red-300">
                     <X className="h-3 w-3" />
                     Ce que tu tapes
@@ -95,7 +96,7 @@ export function BeforeAfterSection() {
                     <span className="text-[10px] text-red-400/80">{item.beforeWordCount} mots</span>
                   </div>
                 </div>
-                <p className="text-base sm:text-lg text-muted-foreground/90 line-through decoration-red-400/60 mb-4 font-medium">
+                <p className="text-sm sm:text-lg text-muted-foreground/90 line-through decoration-red-400/60 mb-3 sm:mb-4 font-medium break-words">
                   « {item.before} »
                 </p>
                 <ul className="mt-auto space-y-1.5">
@@ -132,7 +133,7 @@ export function BeforeAfterSection() {
               </div>
 
               {/* APRÈS */}
-              <div className="relative rounded-xl border border-emerald-500/40 bg-emerald-950/20 p-4 sm:p-5 flex flex-col min-h-[280px] lg:min-h-[360px] shadow-[0_0_48px_-12px_rgba(74,222,128,0.4)]">
+              <div className="relative rounded-xl border border-emerald-500/40 bg-emerald-950/20 p-3 sm:p-5 flex flex-col min-h-[240px] sm:min-h-[280px] lg:min-h-[340px] shadow-[0_0_48px_-12px_rgba(74,222,128,0.4)]">
                 <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-200">
                     <Check className="h-3 w-3" />
@@ -152,7 +153,7 @@ export function BeforeAfterSection() {
                   <FileText className="h-3 w-3" />
                   Mode Expert · Détaillé — extrait réel (structure app)
                 </p>
-                <pre className="text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 flex-1 overflow-y-auto max-h-[min(320px,45vh)] lg:max-h-[300px] pr-1 rounded-lg border border-white/10 bg-black/40 p-3 before-after-prompt-scroll">
+                <pre className="text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 flex-1 overflow-y-auto max-h-[220px] sm:max-h-[min(280px,40vh)] lg:max-h-[280px] pr-1 rounded-lg border border-white/10 bg-black/40 p-2.5 sm:p-3 before-after-prompt-scroll">
                   {item.afterDetailed}
                 </pre>
                 <p className="mt-3 text-[10px] text-emerald-400/95 font-medium shrink-0">
@@ -178,32 +179,16 @@ export function BeforeAfterSection() {
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.15} className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-          {isSalesMode() ? (
-            <>
-              <Button asChild size="lg" className="w-full sm:w-auto">
-                <Link href="/pricing?plan=pro">
-                  Obtenir ce brief — Pro 9€
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white/20">
-                <Link href="/#funnel">Essayer gratuitement</Link>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button asChild size="lg" className="w-full sm:w-auto">
-                <Link href="/#funnel">
-                  Transformer mon idée
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white/20">
-                <Link href="/improve">J&apos;ai déjà un prompt raté</Link>
-              </Button>
-            </>
-          )}
+        <FadeIn delay={0.15} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 px-2 sm:px-0">
+          <Button asChild size="lg" className="w-full sm:w-auto">
+            <ScrollLink section="funnel">
+              Tester sur mon idée
+              <ArrowRight className="h-4 w-4" />
+            </ScrollLink>
+          </Button>
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white/20">
+            <Link href="/signup">S&apos;inscrire — gratuit</Link>
+          </Button>
         </FadeIn>
       </div>
     </section>

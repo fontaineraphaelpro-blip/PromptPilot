@@ -22,7 +22,7 @@ export default async function MarketingLayout({
       <SalesSetupBanner />
       {showConversion && <FomoStrip />}
       {showConversion && <ConversionShell />}
-      <main className="flex-1 w-full pb-20 sm:pb-0">{children}</main>
+      <main className="flex-1 w-full pb-24 sm:pb-20">{children}</main>
       <Footer />
     </div>
   );

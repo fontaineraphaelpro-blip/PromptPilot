@@ -10,11 +10,11 @@
 | `NEXT_PUBLIC_APP_URL` | Même URL |
 | `OPENAI_API_KEY` | Clé OpenAI + budget/plafond activé |
 
-## Mode vente
+## Upgrade Pro (app)
 
-Activé par défaut (`NEXT_PUBLIC_SALES_MODE` absent ou ≠ `false`) : hero/navbar orientés Pro, checkout Stripe sur la home (`/#pricing`), barre sticky et exit-intent conversion.
+`NEXT_PUBLIC_SALES_MODE` (défaut actif) : bannière upgrade sur le **dashboard** pour les comptes Free. La home pousse l’inscription gratuite, pas le checkout Pro.
 
-Désactiver : `NEXT_PUBLIC_SALES_MODE=false` sur Railway.
+Désactiver les prompts upgrade in-app : `NEXT_PUBLIC_SALES_MODE=false`.
 
 Sans `NEXT_PUBLIC_STRIPE_*_PRICE_ID`, une bannière admin s’affiche en haut du site marketing.
 

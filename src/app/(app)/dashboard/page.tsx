@@ -12,6 +12,7 @@ import {
   getDailyLimit,
 } from "@/lib/plans";
 import { OnboardingBanner } from "@/components/onboarding/onboarding-banner";
+import { FreePlanUpgradeBanner } from "@/components/dashboard/free-plan-upgrade-banner";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,6 +48,7 @@ export default async function DashboardPage() {
         <CheckoutSuccessBanner />
       </Suspense>
       <OnboardingBanner />
+      {profile.plan === "free" && <FreePlanUpgradeBanner />}
       <div>
         <h1 className="text-2xl font-bold sm:text-3xl">
           Bonjour, {firstName} 👋

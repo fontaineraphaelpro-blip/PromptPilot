@@ -4,7 +4,7 @@ import { SocialProof } from "@/components/conversion/social-proof";
 import { FinalCtaSection } from "@/components/conversion/final-cta-section";
 import { AIMarquee } from "@/components/landing/ai-marquee";
 import { HowItWorks } from "@/components/landing/how-it-works";
-import { HomePricingSection } from "@/components/landing/home-pricing-section";
+import { PricingSection } from "@/components/landing/pricing-section";
 import { FaqSection } from "@/components/landing/faq-section";
 import { TASK_TYPES } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,10 +14,12 @@ import { ValuePropositionSection } from "@/components/landing/value-proposition-
 import { SocialProofCounter } from "@/components/conversion/social-proof-counter";
 import { HomeSeoJsonLd } from "@/components/landing/home-seo";
 import { DemoVideoSection } from "@/components/landing/demo-video-section";
+import { HomeScrollHandler } from "@/components/navigation/home-scroll-handler";
 
 export default function HomePage() {
   return (
     <>
+      <HomeScrollHandler />
       <HomeSeoJsonLd />
       <HeroSection />
       <div className="flex justify-center px-4 -mt-8 mb-4">
@@ -54,7 +56,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <HomePricingSection />
+      <PricingSection />
       <FaqSection />
       <FinalCtaSection />
     </>

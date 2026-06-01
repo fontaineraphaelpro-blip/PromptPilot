@@ -165,8 +165,8 @@ export function DemoProductAnimation() {
           />
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 bg-black/60">
-          <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black/60">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black shrink-0">
               <Sparkles className="h-4 w-4" />
             </span>
@@ -178,10 +178,10 @@ export function DemoProductAnimation() {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-violet-500/40 bg-violet-500/10 px-2 py-0.5 text-[10px] font-medium text-violet-300">
-              Brief ~{EXPERT_WORDS.toLocaleString("fr-FR")} mots
+            <span className="hidden min-[400px]:inline-flex items-center gap-1.5 rounded-full border border-violet-500/40 bg-violet-500/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-violet-300 max-w-[120px] sm:max-w-none truncate">
+              ~{EXPERT_WORDS.toLocaleString("fr-FR")} mots
             </span>
-            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 demo-live-dot" />
               Sortie réelle app
             </span>
@@ -195,10 +195,10 @@ export function DemoProductAnimation() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 min-h-[380px] sm:min-h-[440px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-[440px]">
           <div
             className={cn(
-              "p-4 sm:p-5 border-b lg:border-b-0 lg:border-r border-white/10 transition-opacity duration-300",
+              "p-3 sm:p-5 border-b lg:border-b-0 lg:border-r border-white/10 transition-opacity duration-300",
               phase === "generating" && "opacity-60"
             )}
           >
@@ -262,7 +262,7 @@ export function DemoProductAnimation() {
             </div>
           </div>
 
-          <div className="relative p-4 sm:p-5 bg-gradient-to-br from-white/[0.03] to-transparent overflow-hidden flex flex-col">
+          <div className="relative p-3 sm:p-5 bg-gradient-to-br from-white/[0.03] to-transparent overflow-hidden flex flex-col min-h-[280px] sm:min-h-[320px] lg:min-h-0">
             {phase === "input" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-40">
                 <Zap className="h-10 w-10 text-muted-foreground mb-3" />
@@ -401,7 +401,7 @@ export function DemoProductAnimation() {
                   ))}
                 </div>
 
-                <div className="flex-1 min-h-[200px] rounded-xl border border-emerald-500/25 bg-black/60 overflow-hidden flex flex-col">
+                <div className="flex-1 min-h-[160px] sm:min-h-[200px] rounded-xl border border-emerald-500/25 bg-black/60 overflow-hidden flex flex-col">
                   <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-2 bg-emerald-950/30 shrink-0">
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-300">
                       <FileText className="h-3 w-3" />

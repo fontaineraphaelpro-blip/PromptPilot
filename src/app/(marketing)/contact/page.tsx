@@ -51,7 +51,7 @@ export default function ContactPage() {
               Réponses aux questions fréquentes sur les plans et la génération.
             </p>
             <Button variant="outline" className="mt-4" asChild>
-              <Link href="/#pricing">Voir la FAQ tarifs</Link>
+              <Link href="/pricing">Voir la FAQ tarifs</Link>
             </Button>
           </div>
         )}
