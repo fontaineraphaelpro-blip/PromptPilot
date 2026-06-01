@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import type { WorkflowPack } from "@/lib/workflows/packs";
 import { saveTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { Wand2 } from "lucide-react";
+import { WorkflowFlowDiagram } from "@/components/workflows/workflow-flow-diagram";
 
 export function WorkflowPackClient({
   pack,
@@ -25,6 +26,8 @@ export function WorkflowPackClient({
   }
 
   return (
+    <div className="space-y-4">
+      <WorkflowFlowDiagram steps={pack.steps} />
     <ol className="space-y-3">
       {pack.steps.map((step) => (
         <li
@@ -49,5 +52,6 @@ export function WorkflowPackClient({
         </li>
       ))}
     </ol>
+    </div>
   );
 }

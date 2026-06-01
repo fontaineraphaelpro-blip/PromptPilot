@@ -5,34 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { cn } from "@/lib/utils";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
-
-const faqs = [
-  {
-    q: "Quelles IA sont supportées ?",
-    a: "ChatGPT, Claude, Gemini, Midjourney, DALL·E, Runway, Sora, Veo, Lovable, Bolt, Cursor et Replit.",
-  },
-  {
-    q: "Combien de prompts gratuits par jour ?",
-    a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Pro : 200/jour. Creator : illimité.`,
-  },
-  {
-    q: "Quelle différence entre Pro (9€) et Creator (19€) ?",
-    a: "Pro : illimité, score /100, preview, templates premium, favoris, tags et options avancées — idéal si tu génères souvent. Creator : tout Pro + la variante Expert complète (brief production), niveau Expert par défaut et workflows métier (SaaS, LinkedIn, Dev). Choisis Creator si tu veux le prompt le plus long et actionnable à chaque fois.",
-  },
-  {
-    q: "En quoi PromptPilot est différent de ChatGPT ?",
-    a: "ChatGPT répond à ta question. PromptPilot produit le prompt structuré à coller dans l'outil de ton choix : adapté à 12+ IA, scoré /100, avec preview et 4 variantes. Tu achètes du prompt engineering, pas une conversation.",
-  },
-  {
-    q: "Mes prompts sont-ils sauvegardés ?",
-    a: "Oui, chaque génération est enregistrée dans ton historique. Les favoris sont disponibles à partir du plan Pro.",
-  },
-  {
-    q: "Puis-je annuler mon abonnement ?",
-    a: "Oui, à tout moment via le portail Stripe dans Paramètres > Facturation.",
-  },
-];
+import { LANDING_FAQS } from "@/lib/faq-data";
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
@@ -49,7 +22,7 @@ export function FaqSection() {
           </h2>
         </FadeIn>
         <dl className="mt-12 space-y-3">
-          {faqs.map(({ q, a }, i) => {
+          {LANDING_FAQS.map(({ q, a }, i) => {
             const isOpen = open === i;
             return (
               <FadeIn key={q} delay={i * 0.08}>

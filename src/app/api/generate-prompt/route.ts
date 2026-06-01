@@ -168,6 +168,11 @@ export async function POST(request: Request) {
       throw genError;
     }
 
+    const tags =
+      result.prompt_score != null && result.prompt_score >= 85
+        ? Array.from(new Set(["excellence"]))
+        : [];
+
     const saved = await prisma.prompt.create({
       data: {
         userId: user.id,
@@ -188,6 +193,7 @@ export async function POST(request: Request) {
           : undefined,
         previewSummary: result.preview_summary ?? "",
         previewQuestions: result.preview_questions ?? [],
+        tags,
       },
     });
 

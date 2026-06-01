@@ -12,9 +12,13 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { BeforeAfterSection } from "@/components/landing/before-after-section";
 import { ValuePropositionSection } from "@/components/landing/value-proposition-section";
 import { SocialProofCounter } from "@/components/conversion/social-proof-counter";
+import { HomeSeoJsonLd } from "@/components/landing/home-seo";
+import { DemoVideoSection } from "@/components/landing/demo-video-section";
+
 export default function HomePage() {
   return (
     <>
+      <HomeSeoJsonLd />
       <HeroSection />
       <div className="flex justify-center px-4 -mt-8 mb-4">
         <SocialProofCounter />
@@ -47,6 +51,7 @@ export default function HomePage() {
       </section>
 
       <HowItWorks />
+      <DemoVideoSection />
       <BeforeAfterSection />
       <PricingSection />
       <FaqSection />

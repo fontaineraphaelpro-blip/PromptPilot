@@ -1,0 +1,20 @@
+#promptpilot-fab {
+  position: fixed;
+  bottom: 88px;
+  right: 20px;
+  z-index: 2147483646;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #0a0a0a;
+  color: #fff;
+  font: 600 12px system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#promptpilot-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}

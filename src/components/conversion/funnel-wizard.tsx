@@ -16,7 +16,8 @@ import {
   Sparkles,
   Wand2,
 } from "lucide-react";
-import { buildTeaserPrompt, saveFunnelDraft } from "@/lib/conversion/funnel-storage";
+import { saveFunnelDraft } from "@/lib/conversion/funnel-storage";
+import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
 
 const POPULAR_AIS = ["ChatGPT", "Claude", "Cursor", "Midjourney", "Sora", "Lovable"] as const;
 
@@ -34,46 +35,51 @@ export function FunnelWizard() {
   const [idea, setIdea] = useState("");
   const [targetAi, setTargetAi] = useState<string>("Cursor");
   const [generating, setGenerating] = useState(false);
-  const [typedLines, setTypedLines] = useState(0);
   const [teaser, setTeaser] = useState("");
+  const [demoScore, setDemoScore] = useState<number | null>(null);
+  const [demoError, setDemoError] = useState<string | null>(null);
 
   const canNextStep0 = idea.trim().length >= 8;
   const canNextStep1 = !!targetAi;
 
-  useEffect(() => {
-    if (step !== 2 || !generating) return;
-    const full = buildTeaserPrompt(idea, targetAi);
-    setTeaser(full);
-    const lines = full.split("\n").length;
-    setTypedLines(0);
-    const interval = setInterval(() => {
-      setTypedLines((n) => {
-        if (n >= lines) {
-          clearInterval(interval);
-          setGenerating(false);
-          return n;
-        }
-        return n + 1;
-      });
-    }, 120);
-    return () => clearInterval(interval);
-  }, [step, generating, idea, targetAi]);
-
-  function goToPreview() {
+  async function goToPreview() {
     setStep(2);
     setGenerating(true);
+    setDemoError(null);
+    setTeaser("");
+    setDemoScore(null);
+
+    try {
+      const res = await fetch("/api/demo/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userIdea: idea.trim(), targetAI: targetAi }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setDemoError(json.message ?? json.error ?? "Limite démo atteinte");
+        if (json.requiresSignup) {
+          saveFunnelDraft({ idea: idea.trim(), targetAi, teaserPrompt: "" });
+        }
+        return;
+      }
+      setTeaser(json.generated_prompt ?? "");
+      setDemoScore(json.prompt_score ?? null);
+    } catch {
+      setDemoError("Erreur réseau. Réessayez.");
+    } finally {
+      setGenerating(false);
+    }
   }
 
   function handleUnlock() {
-    const prompt = buildTeaserPrompt(idea, targetAi);
-    saveFunnelDraft({ idea: idea.trim(), targetAi, teaserPrompt: prompt });
+    saveFunnelDraft({
+      idea: idea.trim(),
+      targetAi,
+      teaserPrompt: teaser,
+    });
     router.push("/signup?from=funnel");
   }
-
-  const visibleTeaser = teaser
-    .split("\n")
-    .slice(0, typedLines)
-    .join("\n");
 
   return (
     <section id="funnel" className="relative px-4 py-16 sm:px-6 sm:py-20 scroll-mt-24">
@@ -87,6 +93,9 @@ export function FunnelWizard() {
             Crée ton premier prompt{" "}
             <span className="gradient-text">maintenant</span>
           </h2>
+          <div className="mt-4 flex justify-center">
+            <GuaranteeBadge />
+          </div>
         </div>
 
         {/* Progress */}
@@ -270,16 +279,27 @@ export function FunnelWizard() {
                   )}
                 </div>
 
+                {demoError && (
+                  <p className="text-sm text-amber-200/90 text-center">{demoError}</p>
+                )}
+
                 <div className="relative rounded-xl border border-white/15 bg-black/60 overflow-hidden">
                   <pre className="p-4 text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap font-mono leading-relaxed max-h-[220px] overflow-hidden">
-                    {visibleTeaser || " "}
+                    {teaser || (generating ? "Génération IA en cours…" : " ")}
                   </pre>
-                  {!generating && (
+                  {!generating && teaser && (
                     <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-black via-black/90 to-transparent pb-6 pt-16">
                       <Lock className="h-8 w-8 text-white/80 mb-3" />
-                      <p className="text-sm font-semibold text-center px-4">
-                        + score /100, preview IA, 4 variantes & brief Expert
-                      </p>
+                      {demoScore != null && (
+                        <p className="text-sm font-semibold text-center px-4">
+                          Score qualité : {demoScore}/100 — variantes & Expert après inscription
+                        </p>
+                      )}
+                      {demoScore == null && (
+                        <p className="text-sm font-semibold text-center px-4">
+                          + variantes, preview & brief Expert
+                        </p>
+                      )}
                       <p className="text-xs text-muted-foreground mt-1 text-center px-4">
                         Inscription gratuite — {FREE_DAILY_LIMIT} prompts/jour · upgrade illimité dès 9€
                       </p>
@@ -287,7 +307,7 @@ export function FunnelWizard() {
                   )}
                 </div>
 
-                {!generating && (
+                {!generating && (teaser || demoError) && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

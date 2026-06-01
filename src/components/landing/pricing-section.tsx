@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { PRICING_PLANS } from "@/lib/plans";
 import { ROI_HEADLINE } from "@/lib/product-value";
 import { PlanComparisonTable } from "@/components/landing/plan-comparison-table";
+import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
 
 interface PricingSectionProps {
   onSelectPlan?: (plan: "pro" | "creator") => void;
@@ -29,6 +30,9 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
             {ROI_HEADLINE}
           </p>
+          <div className="mt-6 flex justify-center">
+            <GuaranteeBadge />
+          </div>
         </FadeIn>
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">

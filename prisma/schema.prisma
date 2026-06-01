@@ -68,11 +68,25 @@ model Prompt {
   previewQuestions String[] @default([]) @map("preview_questions")
   shareToken      String?  @unique @map("share_token")
   shareEnabled    Boolean  @default(false) @map("share_enabled")
+  copyFeedback    String?  @map("copy_feedback")
+  copyFeedbackAt  DateTime? @map("copy_feedback_at")
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@index([userId])
   @@index([createdAt(sort: Desc)])
+  @@index([promptScore])
   @@map("prompts")
+}
+
+model DemoUsage {
+  id     String   @id @default(uuid()) @db.Uuid
+  ipHash String   @map("ip_hash")
+  date   String
+  kind   String   @default("demo")
+  usedAt DateTime @default(now()) @map("used_at")
+
+  @@index([ipHash, date, kind])
+  @@map("demo_usage")
 }
 
 model DailyUsage {

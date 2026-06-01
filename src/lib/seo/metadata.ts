@@ -25,12 +25,14 @@ export function buildPageMetadata(opts: {
       siteName: APP_NAME,
       locale: "fr_FR",
       type: opts.type ?? "website",
+      images: [{ url: `${base}/opengraph-image`, width: 1200, height: 630, alt: APP_NAME }],
       ...(opts.publishedAt && { publishedTime: opts.publishedAt }),
     },
     twitter: {
       card: "summary_large_image",
       title: opts.title,
       description: opts.description,
+      images: [`${base}/opengraph-image`],
     },
   };
 }

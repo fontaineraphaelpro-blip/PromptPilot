@@ -39,6 +39,7 @@ export function mapPrompt(row: Prompt): PromptRecord {
     preview_questions: row.previewQuestions ?? [],
     share_token: row.shareToken,
     share_enabled: row.shareEnabled,
+    copy_feedback: row.copyFeedback,
     created_at: row.createdAt.toISOString(),
   };
 }

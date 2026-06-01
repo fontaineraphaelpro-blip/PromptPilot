@@ -26,6 +26,7 @@ import { PromptExportMenu } from "@/components/generate/prompt-export-menu";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { CopyFeedback } from "@/components/generate/copy-feedback";
 
 interface PromptResultCardProps {
   result: GeneratePromptResult & {
@@ -33,6 +34,7 @@ interface PromptResultCardProps {
     original_idea?: string;
     target_ai?: TargetAI;
     guarantee_regen_available?: boolean;
+    copy_feedback?: string | null;
   };
   plan?: Plan;
   isFavorite?: boolean;
@@ -56,6 +58,7 @@ export function PromptResultCard({
   const { copy, copied } = useCopy();
   const [activeTab, setActiveTab] = useState("main");
   const [saving, setSaving] = useState(false);
+  const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
   const expertUnlocked = hasAdvancedVariants(plan);
   const favoritesAllowed = canUseFavorites(plan);
@@ -95,8 +98,10 @@ export function PromptResultCard({
     }
     const text = variants[activeTab] ?? result.generated_prompt;
     const ok = await copy(text);
-    if (ok) toast.success("Copié !");
-    else toast.error("Impossible de copier");
+    if (ok) {
+      toast.success("Copié !");
+      if (result.id) setShowCopyFeedback(true);
+    } else toast.error("Impossible de copier");
   }
 
   async function handleSave() {
@@ -234,6 +239,10 @@ export function PromptResultCard({
             Recommencer
           </Button>
         </div>
+
+        {result.id && (showCopyFeedback || result.copy_feedback) && (
+          <CopyFeedback promptId={result.id} initial={result.copy_feedback} />
+        )}
       </CardContent>
     </Card>
   );

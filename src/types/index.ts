@@ -41,6 +41,7 @@ export interface PromptRecord {
   preview_questions: string[];
   share_token: string | null;
   share_enabled: boolean;
+  copy_feedback?: string | null;
   created_at: string;
 }
 

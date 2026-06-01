@@ -4,6 +4,7 @@ import { getOrCreateProfile } from "@/lib/profile";
 import { prisma } from "@/lib/db";
 import { mapPrompt } from "@/lib/mappers";
 import { PromptList } from "@/components/history/prompt-list";
+import { ExcellencePromptsBanner } from "@/components/history/excellence-prompts-banner";
 import { EmptyState } from "@/components/shared/empty-state";
 import { History } from "lucide-react";
 import { FREE_HISTORY_LIMIT } from "@/lib/constants";
@@ -44,7 +45,10 @@ export default async function HistoryPage() {
         </p>
       )}
       {prompts.length > 0 ? (
-        <PromptList prompts={prompts} plan={profile.plan} />
+        <>
+          <ExcellencePromptsBanner prompts={prompts} />
+          <PromptList prompts={prompts} plan={profile.plan} />
+        </>
       ) : (
         <EmptyState
           icon={History}

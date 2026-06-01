@@ -28,8 +28,9 @@ export function Navbar({ user }: NavbarProps) {
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex lg:gap-8">
           {[
             { label: "Comment ça marche", href: "/#how" },
+            { label: "Améliorer", href: "/improve" },
+            { label: "Galerie", href: "/galerie" },
             { label: "Blog", href: "/blog" },
-            { label: "Prompts IA", href: "/prompts-ia" },
             { label: "Tarifs", href: "/pricing" },
           ].map(({ label, href }) => (
             <Link

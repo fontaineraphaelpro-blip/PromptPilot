@@ -16,6 +16,7 @@ import { canAccessPremiumTemplates } from "@/lib/plans";
 import type { Plan } from "@/lib/constants";
 import { saveTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { cn } from "@/lib/utils";
+import { getTemplateProvenScore } from "@/lib/templates-proven";
 
 interface TemplateGridProps {
   templates: Template[];
@@ -36,13 +37,21 @@ function TemplateCard({
   copied: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const provenScore = getTemplateProvenScore(t.title);
 
   return (
     <Card className={cn("glass-card flex flex-col h-full", locked && "border-white/15")}>
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-base leading-snug">{t.title}</CardTitle>
-          {t.is_premium && <Badge variant="pro">Premium</Badge>}
+          <div className="flex flex-wrap gap-1 justify-end">
+            {provenScore != null && (
+              <Badge variant="outline" className="text-[10px] border-emerald-500/40 text-emerald-400">
+                ~{provenScore}/100 moy.
+              </Badge>
+            )}
+            {t.is_premium && <Badge variant="pro">Premium</Badge>}
+          </div>
         </div>
         <CardDescription className="leading-relaxed">{t.description}</CardDescription>
         <p className="text-xs text-muted-foreground font-mono">

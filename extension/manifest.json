@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "PromptPilot — Optimiser mes prompts",
+  "version": "1.0.0",
+  "description": "Ouvre PromptPilot pour restructurer et scorer ton prompt depuis ChatGPT ou Claude.",
+  "action": {
+    "default_title": "Optimiser avec PromptPilot",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}

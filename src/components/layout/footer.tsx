@@ -62,8 +62,23 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/improve" className="transition-colors hover:text-foreground">
+                  Améliorer mon prompt
+                </Link>
+              </li>
+              <li>
+                <Link href="/galerie" className="transition-colors hover:text-foreground">
+                  Galerie communauté
+                </Link>
+              </li>
+              <li>
                 <Link href="/pricing" className="transition-colors hover:text-foreground">
                   Tarifs
+                </Link>
+              </li>
+              <li>
+                <Link href="/a-propos" className="transition-colors hover:text-foreground">
+                  À propos
                 </Link>
               </li>
               <li>

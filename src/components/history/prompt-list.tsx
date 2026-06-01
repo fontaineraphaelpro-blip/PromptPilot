@@ -8,7 +8,8 @@ import { SelectField } from "@/components/ui/select-field";
 import { Input } from "@/components/ui/input";
 import { TARGET_AIS, TASK_TYPES } from "@/lib/constants";
 import { useCopy } from "@/hooks/use-copy";
-import { Copy, Star, Trash2, Check, Search, Wand2 } from "lucide-react";
+import { Copy, Star, Trash2, Check, Search, Wand2, Award } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import { saveAdaptPrefill } from "@/lib/conversion/adapt-prefill";
@@ -136,15 +137,26 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
         <p className="text-center text-muted-foreground py-12">Aucun prompt trouvé.</p>
       ) : (
         <ul className="space-y-3">
-          {filtered.map((p) => (
+          {filtered.map((p) => {
+            const isExcellence =
+              (p.prompt_score ?? 0) >= 85 || (p.tags ?? []).includes("excellence");
+            return (
             <li
               key={p.id}
-              className="rounded-xl border border-border bg-card p-4 shadow-sm"
+              className={isExcellence ? "rounded-xl border border-primary/30 bg-primary/5 p-4 shadow-sm" : "rounded-xl border border-border bg-card p-4 shadow-sm"}
             >
               <Link href={`/history/${p.id}`} className="block">
-                <p className="font-medium line-clamp-2 hover:text-primary">
-                  {p.original_idea}
-                </p>
+                <div className="flex items-start gap-2">
+                  <p className="font-medium line-clamp-2 hover:text-primary flex-1">
+                    {p.original_idea}
+                  </p>
+                  {isExcellence && (
+                    <Badge variant="outline" className="shrink-0 gap-1 text-[10px] border-primary/40">
+                      <Award className="h-3 w-3" />
+                      Top
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   {p.target_ai} · {p.task_type} ·{" "}
                   {new Date(p.created_at).toLocaleDateString("fr-FR")}
@@ -188,7 +200,8 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
                 </Button>
               </div>
             </li>
-          ))}
+          );
+          })}
         </ul>
       )}
     </div>
