@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 import {
   LANDING_SAAS_DEMO,
   getDemoGeneratingLines,
-  countWords,
 } from "@/lib/marketing/expert-prompt-showcases";
 
 const IDEA = LANDING_SAAS_DEMO.idea;
@@ -288,7 +287,7 @@ export function DemoProductAnimation() {
                     style={{ width: `${genProgress}%` }}
                   />
                 </div>
-                <div className="flex-1 min-h-0 rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[10px] sm:text-[11px] leading-relaxed overflow-y-auto max-h-[280px]">
+                <div className="flex-1 min-h-0 max-h-[160px] sm:max-h-[200px] rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[10px] sm:text-[11px] leading-relaxed overflow-y-auto demo-prompt-scroll">
                   {GENERATING_LINES.slice(0, visibleLines).map((line, i) => (
                     <p
                       key={i}
@@ -378,7 +377,7 @@ export function DemoProductAnimation() {
                   ))}
                 </div>
 
-                <div className="flex gap-1 shrink-0">
+                <div className="flex flex-wrap gap-1.5 shrink-0 min-w-0">
                   {(
                     [
                       { id: "principal" as const, label: "Principal" },
@@ -390,7 +389,7 @@ export function DemoProductAnimation() {
                       type="button"
                       onClick={() => setVariant(tab.id)}
                       className={cn(
-                        "rounded-lg px-2.5 py-1 text-[10px] font-semibold border transition-colors",
+                        "rounded-lg px-2 py-1 text-[10px] font-semibold border transition-colors shrink-0",
                         variant === tab.id
                           ? "bg-white text-black border-white"
                           : "border-white/15 text-muted-foreground hover:border-white/30"
@@ -401,35 +400,34 @@ export function DemoProductAnimation() {
                   ))}
                 </div>
 
-                <div className="flex-1 min-h-[160px] sm:min-h-[200px] rounded-xl border border-emerald-500/25 bg-black/60 overflow-hidden flex flex-col">
-                  <div className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-2 bg-emerald-950/30 shrink-0">
+                <div className="flex flex-col min-h-0 max-h-[min(220px,42vh)] sm:max-h-[260px] rounded-xl border border-emerald-500/25 bg-black/60 overflow-hidden">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 border-b border-white/10 px-3 py-2 bg-emerald-950/30 shrink-0">
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-300">
-                      <FileText className="h-3 w-3" />
+                      <FileText className="h-3 w-3 shrink-0" />
                       {variant === "expert" ? "Variante Expert" : "Variante principale"}
                     </span>
                     <span className="text-[10px] tabular-nums text-muted-foreground">
-                      {countWords(displayPrompt).toLocaleString("fr-FR")} mots affichés
-                      {variant === "expert" && ` · ${EXPERT_WORDS.toLocaleString("fr-FR")} total`}
+                      {EXPERT_WORDS.toLocaleString("fr-FR")} mots · défilez ↓
                     </span>
                   </div>
-                  <pre className="flex-1 overflow-y-auto p-3 text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 demo-prompt-scroll">
+                  <pre className="flex-1 min-h-[140px] max-h-[min(200px,36vh)] sm:max-h-[220px] overflow-y-auto p-3 text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 demo-prompt-scroll">
                     {displayPrompt}
                   </pre>
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap shrink-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 min-w-0">
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-bold text-black transition-transform",
+                      "inline-flex items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2.5 text-xs font-bold text-black transition-transform w-full sm:w-auto",
                       copied && "scale-95"
                     )}
                   >
-                    <Copy className="h-3.5 w-3.5" />
-                    Copier le brief complet
+                    <Copy className="h-3.5 w-3.5 shrink-0" />
+                    Copier le brief
                   </span>
                   {copied && (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-400">
-                      <Check className="h-3.5 w-3.5" />
+                    <span className="inline-flex items-center justify-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-2 text-xs font-semibold text-emerald-400 w-full sm:w-auto">
+                      <Check className="h-3.5 w-3.5 shrink-0" />
                       Prêt pour ChatGPT
                     </span>
                   )}

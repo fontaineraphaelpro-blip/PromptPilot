@@ -31,8 +31,9 @@ export function StickyCtaBar() {
         >
           <div className="mx-auto flex max-w-4xl items-center gap-2 sm:gap-3">
             <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium leading-snug">
-                {FREE_DAILY_LIMIT} prompts gratuits aujourd&apos;hui
+              <p className="text-xs sm:text-sm font-medium leading-snug inline-flex flex-wrap items-baseline gap-x-1.5">
+                <span className="tabular-nums">{FREE_DAILY_LIMIT}</span>
+                <span>prompts gratuits aujourd&apos;hui</span>
               </p>
               <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
                 Parcours guidé en 3 étapes — sans carte

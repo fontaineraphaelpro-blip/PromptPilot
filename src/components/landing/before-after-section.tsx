@@ -46,14 +46,14 @@ export function BeforeAfterSection() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.05} className="flex flex-wrap justify-center gap-2 mb-8">
+        <FadeIn delay={0.05} className="flex flex-wrap justify-center gap-2 mb-8 px-1 max-w-full">
           {MARKETING_SHOWCASES.map((ex, i) => (
             <button
               key={ex.id}
               type="button"
               onClick={() => setActive(i)}
               className={cn(
-                "rounded-full px-4 py-2 text-xs sm:text-sm font-medium border transition-all",
+                "rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border transition-all shrink-0",
                 active === i
                   ? "bg-white text-black border-white"
                   : "border-white/15 text-muted-foreground hover:border-white/30 hover:text-foreground"
@@ -153,7 +153,10 @@ export function BeforeAfterSection() {
                   <FileText className="h-3 w-3" />
                   Mode Expert · Détaillé — extrait réel (structure app)
                 </p>
-                <pre className="text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 flex-1 overflow-y-auto max-h-[220px] sm:max-h-[min(280px,40vh)] lg:max-h-[280px] pr-1 rounded-lg border border-white/10 bg-black/40 p-2.5 sm:p-3 before-after-prompt-scroll">
+                <p className="text-[9px] text-muted-foreground mb-1.5 sm:hidden">
+                  ↓ Faites défiler pour lire le brief complet
+                </p>
+                <pre className="text-[10px] sm:text-[11px] leading-relaxed whitespace-pre-wrap font-sans text-foreground/90 flex-1 min-h-0 overflow-y-auto max-h-[200px] sm:max-h-[min(260px,38vh)] lg:max-h-[260px] pr-1 rounded-lg border border-white/10 bg-black/40 p-2.5 sm:p-3 before-after-prompt-scroll">
                   {item.afterDetailed}
                 </pre>
                 <p className="mt-3 text-[10px] text-emerald-400/95 font-medium shrink-0">
@@ -179,14 +182,23 @@ export function BeforeAfterSection() {
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.15} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 px-2 sm:px-0">
-          <Button asChild size="lg" className="w-full sm:w-auto">
+        <FadeIn delay={0.15} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 px-2 sm:px-0 max-w-full min-w-0">
+          <Button
+            asChild
+            size="lg"
+            className="w-full sm:w-auto min-w-0 max-w-full h-auto py-3 px-4 sm:px-8 whitespace-normal justify-center"
+          >
             <ScrollLink section="funnel">
               Tester sur mon idée
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 shrink-0" />
             </ScrollLink>
           </Button>
-          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white/20">
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="w-full sm:w-auto min-w-0 max-w-full h-auto py-3 px-4 sm:px-8 border-white/20"
+          >
             <Link href="/signup">S&apos;inscrire — gratuit</Link>
           </Button>
         </FadeIn>
