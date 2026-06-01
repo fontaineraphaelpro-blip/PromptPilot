@@ -1,7 +1,24 @@
 import { auth } from "@/auth";
+import { detectLocale } from "@/lib/i18n/detect";
+import { LOCALE_COOKIE, LOCALE_HEADER } from "@/lib/i18n/types";
 import { normalizeAppUrl } from "@/lib/env";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
+const LOCALE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function applyLocale(request: NextRequest, response: NextResponse): NextResponse {
+  const locale = detectLocale(request);
+  response.headers.set(LOCALE_HEADER, locale);
+  if (!request.cookies.get(LOCALE_COOKIE)?.value) {
+    response.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: LOCALE_MAX_AGE,
+      sameSite: "lax",
+    });
+  }
+  return response;
+}
 
 const protectedPaths = [
   "/dashboard",
@@ -42,7 +59,7 @@ function canonicalHostRedirect(req: NextRequest): NextResponse | null {
 
 export default auth((req) => {
   const canon = canonicalHostRedirect(req);
-  if (canon) return canon;
+  if (canon) return applyLocale(req, canon);
 
   const { pathname } = req.nextUrl;
   const isLoggedIn = !!req.auth;
@@ -53,16 +70,16 @@ export default auth((req) => {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(url);
+    return applyLocale(req, NextResponse.redirect(url));
   }
 
   if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
     const url = req.nextUrl.clone();
     url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    return applyLocale(req, NextResponse.redirect(url));
   }
 
-  return NextResponse.next();
+  return applyLocale(req, NextResponse.next());
 });
 
 export const config = {

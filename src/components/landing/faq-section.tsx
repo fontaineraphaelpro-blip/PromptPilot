@@ -5,24 +5,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { cn } from "@/lib/utils";
-import { LANDING_FAQS } from "@/lib/faq-data";
+import { useLocale } from "@/components/providers/locale-provider";
 
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
+  const { messages: m } = useLocale();
 
   return (
     <section className="px-4 py-28 sm:px-6 border-t border-border/40">
       <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
         <FadeIn className="text-center">
-          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-            FAQ
-          </p>
-          <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">
-            Questions fréquentes
-          </h2>
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">FAQ</p>
+          <h2 className="text-3xl font-bold sm:text-5xl tracking-tight">{m.faq.title}</h2>
         </FadeIn>
         <dl className="mt-12 space-y-3">
-          {LANDING_FAQS.map(({ q, a }, i) => {
+          {m.faq.items.map(({ q, a }, i) => {
             const isOpen = open === i;
             return (
               <FadeIn key={q} delay={i * 0.08}>

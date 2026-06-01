@@ -8,6 +8,8 @@ import { generatePromptWithOpenAI } from "@/lib/openai/generate";
 import { computePromptScore } from "@/lib/prompt-score";
 import type { GeneratePromptInput } from "@/types";
 import { safeErrorMessage } from "@/lib/api-error";
+import { localeToPromptLanguage } from "@/lib/i18n/detect";
+import { getLocaleFromRequest } from "@/lib/i18n/request-locale";
 
 const schema = z.object({
   userIdea: z.string().min(8).max(2000),
@@ -44,13 +46,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const locale = getLocaleFromRequest(request);
     const input: GeneratePromptInput = {
       userIdea: parsed.data.userIdea,
       targetAI: parsed.data.targetAI as GeneratePromptInput["targetAI"],
       taskType: "Autre",
       detailLevel: "Rapide",
       tone: "Professionnel",
-      language: "Français",
+      language: localeToPromptLanguage(locale),
       includeConstraints: true,
       includeOutputFormat: true,
       includeExamples: false,

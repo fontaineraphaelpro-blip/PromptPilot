@@ -3,9 +3,12 @@ import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { AuthSessionProvider } from "@/components/providers/session-provider";
+import { LocaleProvider } from "@/components/providers/locale-provider";
 import "./globals.css";
 import { APP_NAME } from "@/lib/constants";
 import { getAppUrl } from "@/lib/env";
+import { getMessages } from "@/lib/i18n/get-messages";
+import { getServerLocale } from "@/lib/i18n/server";
 import { GoogleAnalyticsHead } from "@/components/analytics/google-analytics-head";
 import { GoogleAnalyticsPageView } from "@/components/analytics/google-analytics-page-view";
 import { SiteAnalytics } from "@/components/analytics/site-analytics";
@@ -20,46 +23,60 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getAppUrl()),
-  title: {
-    default: `${APP_NAME} — Prompts IA experts en un clic`,
-    template: `%s — ${APP_NAME}`,
-  },
-  description:
-    "Transforme ton idée en prompt parfait pour ChatGPT, Claude, Cursor, Midjourney, Sora et plus. Génération instantanée, variantes expert, historique.",
-  keywords: ["prompt IA", "ChatGPT", "Claude", "Cursor", "Midjourney", "prompt engineering"],
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    siteName: APP_NAME,
-    title: `${APP_NAME} — Prompts IA experts`,
-    description: "Décris ton idée, choisis ton IA, reçois un prompt expert prêt à copier.",
-    url: getAppUrl(),
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${APP_NAME} — Prompts IA experts`,
-    description: "Génère des prompts optimisés pour toutes les IA en quelques secondes.",
-  },
-  robots: { index: true, follow: true },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon", sizes: "48x48", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
-  },
-  manifest: "/manifest.webmanifest",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getServerLocale();
+  const m = getMessages(locale);
+  const ogLocale = locale === "en" ? "en_US" : "fr_FR";
 
-export default function RootLayout({
+  return {
+    metadataBase: new URL(getAppUrl()),
+    title: {
+      default: `${APP_NAME} — ${m.meta.title}`,
+      template: `%s — ${APP_NAME}`,
+    },
+    description: m.meta.description,
+    keywords: [
+      locale === "en" ? "AI prompt" : "prompt IA",
+      "ChatGPT",
+      "Claude",
+      "Cursor",
+      "Midjourney",
+      locale === "en" ? "prompt engineering" : "prompt engineering",
+    ],
+    openGraph: {
+      type: "website",
+      locale: ogLocale,
+      siteName: APP_NAME,
+      title: `${APP_NAME} — ${m.meta.title}`,
+      description: m.meta.description,
+      url: getAppUrl(),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${APP_NAME} — ${m.meta.title}`,
+      description: m.meta.description,
+    },
+    robots: { index: true, follow: true },
+    icons: {
+      icon: [
+        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: "/icon", sizes: "48x48", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+    },
+    manifest: "/manifest.webmanifest",
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getServerLocale();
+
   return (
-    <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
         <GoogleAnalyticsHead />
       </head>
@@ -67,9 +84,11 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalyticsPageView />
         </Suspense>
-        <AuthSessionProvider>
-          {children}
-        </AuthSessionProvider>
+        <LocaleProvider initialLocale={locale}>
+          <AuthSessionProvider>
+            {children}
+          </AuthSessionProvider>
+        </LocaleProvider>
         <Toaster position="top-center" theme="dark" richColors />
         <SiteAnalytics />
       </body>

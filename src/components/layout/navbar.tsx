@@ -13,11 +13,13 @@ import { cn } from "@/lib/utils";
 import { ScrollLink } from "@/components/navigation/scroll-link";
 import type { HomeSectionId } from "@/lib/scroll-to-section";
 import { scrollToHomeTop } from "@/lib/scroll-to-section";
+import { useLocale } from "@/components/providers/locale-provider";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 
-const NAV_SECTION_LINKS: { label: string; section: HomeSectionId }[] = [
-  { label: "Avant / Après", section: "examples" },
-  { label: "Démo", section: "demo" },
-  { label: "Comment ça marche", section: "how" },
+const NAV_SECTIONS: { key: "beforeAfter" | "demo" | "how"; section: HomeSectionId }[] = [
+  { key: "beforeAfter", section: "examples" },
+  { key: "demo", section: "demo" },
+  { key: "how", section: "how" },
 ];
 
 interface NavbarProps {
@@ -27,6 +29,7 @@ interface NavbarProps {
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { messages: m } = useLocale();
 
   return (
     <motion.header
@@ -52,37 +55,38 @@ export function Navbar({ user }: NavbarProps) {
         </Link>
 
         <nav className="hidden items-center gap-4 lg:gap-6 text-sm text-muted-foreground md:flex">
-          {NAV_SECTION_LINKS.map(({ label, section }) => (
+          {NAV_SECTIONS.map(({ key, section }) => (
             <ScrollLink
               key={section}
               section={section}
               className="transition-colors hover:text-foreground whitespace-nowrap"
             >
-              {label}
+              {m.nav[key]}
             </ScrollLink>
           ))}
           <Link href="/pricing" className="transition-colors hover:text-foreground whitespace-nowrap">
-            Tarifs
+            {m.nav.pricing}
           </Link>
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <LanguageSwitcher className="hidden sm:inline-flex" />
           {user ? (
             <>
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard">{m.nav.dashboard}</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/generate">Nouveau prompt</Link>
+                <Link href="/generate">{m.nav.newPrompt}</Link>
               </Button>
             </>
           ) : (
             <>
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
-                <Link href="/login">Connexion</Link>
+                <Link href="/login">{m.nav.login}</Link>
               </Button>
               <Button size="sm" className="text-xs sm:text-sm px-3 sm:px-4" asChild>
-                <Link href="/signup">S&apos;inscrire — gratuit</Link>
+                <Link href="/signup">{m.nav.signup}</Link>
               </Button>
             </>
           )}
@@ -91,7 +95,7 @@ export function Navbar({ user }: NavbarProps) {
             variant="ghost"
             size="icon"
             className="md:hidden h-9 w-9"
-            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={mobileOpen ? m.nav.closeMenu : m.nav.openMenu}
             onClick={() => setMobileOpen((o) => !o)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -109,14 +113,17 @@ export function Navbar({ user }: NavbarProps) {
             className="md:hidden overflow-hidden border-t border-white/10 bg-black/95 backdrop-blur-xl"
           >
             <nav className={cn(MARKETING_CONTAINER, "flex flex-col gap-1 py-4 max-h-[70vh] overflow-y-auto")}>
-              {NAV_SECTION_LINKS.map(({ label, section }) => (
+              <div className="px-3 pb-2 sm:hidden">
+                <LanguageSwitcher />
+              </div>
+              {NAV_SECTIONS.map(({ key, section }) => (
                 <ScrollLink
                   key={section}
                   section={section}
                   className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {label}
+                  {m.nav[key]}
                 </ScrollLink>
               ))}
               <Link
@@ -124,7 +131,7 @@ export function Navbar({ user }: NavbarProps) {
                 className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
                 onClick={() => setMobileOpen(false)}
               >
-                Tarifs
+                {m.nav.pricing}
               </Link>
               {!user && (
                 <>
@@ -133,14 +140,14 @@ export function Navbar({ user }: NavbarProps) {
                     className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Tester maintenant
+                    {m.nav.tryNow}
                   </ScrollLink>
                   <Link
                     href="/login"
                     className="rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-white/5"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Connexion
+                    {m.nav.login}
                   </Link>
                 </>
               )}
@@ -150,7 +157,7 @@ export function Navbar({ user }: NavbarProps) {
                   className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
                   onClick={() => setMobileOpen(false)}
                 >
-                  Dashboard
+                  {m.nav.dashboard}
                 </Link>
               )}
             </nav>

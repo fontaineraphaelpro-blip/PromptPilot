@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { useLocale } from "@/components/providers/locale-provider";
 
 export function StickyCtaBar() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const { messages: m } = useLocale();
 
   useEffect(() => {
     const onScroll = () => {
@@ -33,15 +35,13 @@ export function StickyCtaBar() {
             <div className="min-w-0 flex-1">
               <p className="text-xs sm:text-sm font-medium leading-snug inline-flex flex-wrap items-baseline gap-x-1.5">
                 <span className="tabular-nums">{FREE_DAILY_LIMIT}</span>
-                <span>prompts gratuits aujourd&apos;hui</span>
+                <span>{m.sticky.promptsToday}</span>
               </p>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
-                Parcours guidé en 3 étapes — sans carte
-              </p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{m.sticky.sub}</p>
             </div>
             <Button size="sm" className="shrink-0 text-xs sm:text-sm h-9" asChild>
               <ScrollLink section="funnel">
-                Tester
+                {m.sticky.cta}
                 <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </ScrollLink>
             </Button>
@@ -49,7 +49,7 @@ export function StickyCtaBar() {
               type="button"
               onClick={() => setDismissed(true)}
               className="shrink-0 rounded-lg p-2 text-muted-foreground hover:bg-white/5"
-              aria-label="Fermer"
+              aria-label={m.sticky.close}
             >
               <X className="h-4 w-4" />
             </button>

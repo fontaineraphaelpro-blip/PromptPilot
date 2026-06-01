@@ -16,6 +16,7 @@ import { Loader2 } from "lucide-react";
 import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import { toast } from "sonner";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
+import { useLocale } from "@/components/providers/locale-provider";
 
 interface AuthFormProps {
   mode: "login" | "signup";
@@ -29,6 +30,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   const isLogin = mode === "login";
   const schema = isLogin ? loginSchema : signupSchema;
+  const { messages: m } = useLocale();
 
   const {
     register,
@@ -87,19 +89,15 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <Card className="w-full max-w-md mx-auto glass-card">
       <CardHeader>
-        <CardTitle>{isLogin ? "Connexion" : "Inscription"}</CardTitle>
+        <CardTitle>{isLogin ? m.auth.loginTitle : m.auth.signupTitle}</CardTitle>
         <CardDescription>
-          {isLogin
-            ? "Accédez à votre espace PromptPilot"
-            : getFunnelDraft()
-              ? "Dernière étape : débloque ton prompt complet en 30 secondes"
-              : `Créez votre compte gratuit — ${FREE_DAILY_LIMIT} prompts/jour`}
+          {isLogin ? m.auth.loginDesc : m.auth.signupDesc}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{m.auth.email}</Label>
             <Input id="email" type="email" placeholder="vous@email.com" {...register("email")} />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -107,7 +105,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password">{m.auth.password}</Label>
               {isLogin && (
                 <Link
                   href="/forgot-password"
@@ -170,22 +168,22 @@ export function AuthForm({ mode }: AuthFormProps) {
           )}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            {isLogin ? "Se connecter" : "Créer mon compte"}
+            {isLogin ? m.auth.submitLogin : m.auth.submitSignup}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           {isLogin ? (
             <>
-              Pas de compte ?{" "}
+              {m.auth.noAccount}{" "}
               <Link href="/signup" className="text-foreground hover:underline">
-                S&apos;inscrire
+                {m.auth.signupLink}
               </Link>
             </>
           ) : (
             <>
-              Déjà inscrit ?{" "}
+              {m.auth.hasAccount}{" "}
               <Link href="/login" className="text-foreground hover:underline">
-                Se connecter
+                {m.auth.loginLink}
               </Link>
             </>
           )}

@@ -18,19 +18,16 @@ import {
 } from "lucide-react";
 import { saveFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
+import { useLocale } from "@/components/providers/locale-provider";
+import { LOCALE_HEADER } from "@/lib/i18n/types";
 
 const POPULAR_AIS = ["ChatGPT", "Claude", "Cursor", "Midjourney", "Sora", "Lovable"] as const;
 
-const IDEA_EXAMPLES = [
-  "Une app fitness avec suivi calories",
-  "Campagne LinkedIn pour mon SaaS",
-  "Logo minimaliste startup IA",
-];
-
-const STEPS = ["Ton idée", "Ton IA", "Ton prompt"];
-
 export function FunnelWizard() {
   const router = useRouter();
+  const { locale, messages: m } = useLocale();
+  const STEPS = m.funnel.steps;
+  const IDEA_EXAMPLES = m.funnel.ideaExamples;
   const [step, setStep] = useState(0);
   const [idea, setIdea] = useState("");
   const [targetAi, setTargetAi] = useState<string>("Cursor");
@@ -52,12 +49,15 @@ export function FunnelWizard() {
     try {
       const res = await fetch("/api/demo/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          [LOCALE_HEADER]: locale,
+        },
         body: JSON.stringify({ userIdea: idea.trim(), targetAI: targetAi }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setDemoError(json.message ?? json.error ?? "Limite démo atteinte");
+        setDemoError(json.message ?? json.error ?? m.funnel.errorLimit);
         if (json.requiresSignup) {
           saveFunnelDraft({ idea: idea.trim(), targetAi, teaserPrompt: "" });
         }
@@ -66,7 +66,7 @@ export function FunnelWizard() {
       setTeaser(json.generated_prompt ?? "");
       setDemoScore(json.prompt_score ?? null);
     } catch {
-      setDemoError("Erreur réseau. Réessayez.");
+      setDemoError(m.funnel.errorNetwork);
     } finally {
       setGenerating(false);
     }
@@ -90,11 +90,11 @@ export function FunnelWizard() {
       <div className="relative w-full max-w-3xl mx-auto min-w-0 px-1 sm:px-6">
         <div className="text-center mb-6 sm:mb-10 px-1">
           <p className="text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-muted-foreground mb-3">
-            Parcours guidé — 30 secondes
+            {m.funnel.kicker}
           </p>
           <h2 className="text-xl font-bold sm:text-4xl tracking-tight leading-tight">
-            Crée ton premier prompt{" "}
-            <span className="gradient-text">maintenant</span>
+            {m.funnel.title}{" "}
+            <span className="gradient-text">{m.funnel.titleHighlight}</span>
           </h2>
           <div className="mt-4 hidden sm:flex justify-center">
             <GuaranteeBadge />
@@ -153,7 +153,8 @@ export function FunnelWizard() {
               >
                 <div>
                   <label className="text-sm font-medium">
-                    Étape 1 — Quelle est ton idée ? <span className="text-muted-foreground">(1 phrase)</span>
+                    {m.funnel.stepLabel(1, STEPS.length)}
+                    {m.funnel.ideaTitle}
                   </label>
                   <Textarea
                     value={idea}
@@ -163,7 +164,7 @@ export function FunnelWizard() {
                     autoFocus
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">Inspire-toi :</p>
+                <p className="text-xs text-muted-foreground">{m.funnel.ideaHint}</p>
                 <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                   {IDEA_EXAMPLES.map((ex) => (
                     <button
@@ -182,8 +183,8 @@ export function FunnelWizard() {
                   disabled={!canNextStep0}
                   onClick={() => setStep(1)}
                 >
-                  <span className="sm:hidden">Continuer</span>
-                  <span className="hidden sm:inline">Continuer — choisir mon IA</span>
+                  <span className="sm:hidden">{m.funnel.continue}</span>
+                  <span className="hidden sm:inline">{m.funnel.continuePickAi}</span>
                   <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>

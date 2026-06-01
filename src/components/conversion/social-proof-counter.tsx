@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
+import { useLocale } from "@/components/providers/locale-provider";
 
 const STORAGE_KEY = "pp_weekly_prompt_display";
 const MIN_WEEKLY = 500;
@@ -24,6 +25,7 @@ function getStableWeeklyCount(): number {
 }
 
 export function SocialProofCounter() {
+  const { locale, messages: m } = useLocale();
   const [weeklyCount, setWeeklyCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -32,8 +34,8 @@ export function SocialProofCounter() {
 
   const label =
     weeklyCount != null
-      ? `${weeklyCount.toLocaleString("fr-FR")} prompts générés cette semaine`
-      : "Des centaines de prompts générés chaque semaine";
+      ? m.social.weekly(weeklyCount.toLocaleString(locale === "en" ? "en-US" : "fr-FR"))
+      : m.social.weeklyFallback;
 
   return (
     <p className="inline-flex items-center justify-center gap-2 text-sm text-muted-foreground text-center px-4 max-w-full">
