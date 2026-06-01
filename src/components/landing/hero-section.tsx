@@ -57,7 +57,7 @@ export function HeroSection() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto sm:min-w-[180px] border-white/20" asChild>
-              <Link href="/improve">Améliorer mon prompt</Link>
+              <Link href="/#examples">Voir avant / après</Link>
             </Button>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">

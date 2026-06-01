@@ -51,8 +51,8 @@ export default function HomePage() {
       </section>
 
       <HowItWorks />
-      <DemoVideoSection />
       <BeforeAfterSection />
+      <DemoVideoSection />
       <PricingSection />
       <FaqSection />
       <FinalCtaSection />
