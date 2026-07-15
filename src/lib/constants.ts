@@ -44,7 +44,8 @@ export const LANGUAGES = ["Français", "Anglais"] as const;
 
 export const PLANS = ["free", "pro", "creator"] as const;
 
-export const FREE_DAILY_LIMIT = 2;
+/** Quota gratuit TOTAL (à vie, pas de reset journalier) — pousse à l'upgrade */
+export const FREE_LIFETIME_LIMIT = 5;
 export const PRO_DAILY_FAIR_USE_LIMIT = 200;
 export const FREE_HISTORY_LIMIT = 30;
 

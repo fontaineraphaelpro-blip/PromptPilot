@@ -1,4 +1,4 @@
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 
 export const messages = {
   meta: {
@@ -32,7 +32,7 @@ export const messages = {
       "One sentence in. You get a structured prompt, scored /100, with preview and 4 variants — no more 45-minute rewrites.",
     ctaTry: "Try for free",
     ctaSignup: "Create free account",
-    footnote: `${FREE_DAILY_LIMIT} prompts/day free · no card · upgrade to Pro later if you want`,
+    footnote: `${FREE_LIFETIME_LIMIT} free prompts to try · no card · upgrade to Pro whenever you want`,
     statAis: "AIs supported",
     statScore: "Max score",
     statVariants: "Variants",
@@ -66,7 +66,7 @@ export const messages = {
     errorLimit: "Demo limit reached",
   },
   sticky: {
-    promptsToday: "free prompts today",
+    promptsToday: "free prompts to try",
     sub: "3-step guided flow — no card required",
     cta: "Try it",
     close: "Close",
@@ -89,7 +89,7 @@ export const messages = {
     loginTitle: "Log in",
     signupTitle: "Create account",
     loginDesc: "Access your PromptPilot workspace",
-    signupDesc: `Free account — ${FREE_DAILY_LIMIT} prompts/day to start`,
+    signupDesc: `Free account — ${FREE_LIFETIME_LIMIT} free prompts to try`,
     email: "Email",
     password: "Password",
     submitLogin: "Log in",
@@ -118,8 +118,8 @@ export const messages = {
         a: "ChatGPT, Claude, Gemini, Midjourney, DALL·E, Runway, Sora, Veo, Lovable, Bolt, Cursor, and Replit.",
       },
       {
-        q: "How many free prompts per day?",
-        a: `Free plan includes ${FREE_DAILY_LIMIT} generations per day. Pro: 200/day. Creator: unlimited.`,
+        q: "How many free prompts do I get?",
+        a: `The Free plan includes ${FREE_LIFETIME_LIMIT} free generations to try the quality. Pro: 200/day. Creator: unlimited.`,
       },
       {
         q: "What's the difference between Pro ($9) and Creator ($19)?",

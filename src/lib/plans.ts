@@ -1,5 +1,5 @@
 import type { Plan } from "@/lib/constants";
-import { FREE_DAILY_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
 
 export const PLAN_LABELS: Record<Plan, string> = {
   free: "Free",
@@ -30,9 +30,9 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     id: "free",
     name: "Free",
     price: "0€",
-    description: "Goûte la qualité — quota limité",
+    description: "Goûte la qualité — pour tester",
     features: [
-      `${FREE_DAILY_LIMIT} prompts/jour · score /100 + preview`,
+      `${FREE_LIFETIME_LIMIT} prompts offerts · score /100 + preview`,
       "Variantes Principal, Court, Détaillé",
       "Adaptation 12+ IA (ChatGPT, Claude, Cursor…)",
       "30 derniers prompts en historique",
@@ -80,9 +80,12 @@ export const PRICING_PLANS: PricingPlanCard[] = [
   },
 ];
 
-export function getDailyLimit(plan: Plan): number | null {
-  if (plan === "free") return FREE_DAILY_LIMIT;
-  if (plan === "pro") return PRO_DAILY_FAIR_USE_LIMIT;
+/** Free : quota TOTAL à vie. Pro : plafond journalier. Creator : illimité (null). */
+export function getPromptQuota(
+  plan: Plan
+): { limit: number; period: "lifetime" | "daily" } | null {
+  if (plan === "free") return { limit: FREE_LIFETIME_LIMIT, period: "lifetime" };
+  if (plan === "pro") return { limit: PRO_DAILY_FAIR_USE_LIMIT, period: "daily" };
   return null;
 }
 
@@ -117,7 +120,7 @@ export function getPlanBadgeVariant(
 
 export function getPlanFeaturesSummary(plan: Plan): string {
   if (plan === "free") {
-    return `${FREE_DAILY_LIMIT} prompts/jour · historique limité · templates gratuits`;
+    return `${FREE_LIFETIME_LIMIT} prompts offerts · historique limité · templates gratuits`;
   }
   if (plan === "pro") {
     return `${PLAN_PRICES.pro.label} · ${PRO_DAILY_FAIR_USE_LIMIT} prompts/jour · favoris · templates premium`;

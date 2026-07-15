@@ -1,4 +1,4 @@
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 
 export const messages = {
   meta: {
@@ -32,7 +32,7 @@ export const messages = {
       "Une phrase suffit. Tu reçois un prompt structuré, scoré /100, avec preview et 4 variantes — sans réécrire pendant 45 minutes.",
     ctaTry: "Tester gratuitement",
     ctaSignup: "Créer un compte free",
-    footnote: `${FREE_DAILY_LIMIT} prompts/jour offerts · sans carte · upgrade Pro plus tard si tu veux`,
+    footnote: `${FREE_LIFETIME_LIMIT} prompts offerts pour tester · sans carte · upgrade Pro quand tu veux`,
     statAis: "IA supportées",
     statScore: "Score max",
     statVariants: "Variantes",
@@ -66,7 +66,7 @@ export const messages = {
     errorLimit: "Limite démo atteinte",
   },
   sticky: {
-    promptsToday: "prompts gratuits aujourd'hui",
+    promptsToday: "prompts gratuits pour tester",
     sub: "Parcours guidé en 3 étapes — sans carte",
     cta: "Tester",
     close: "Fermer",
@@ -89,7 +89,7 @@ export const messages = {
     loginTitle: "Connexion",
     signupTitle: "Créer un compte",
     loginDesc: "Accédez à votre espace PromptPilot",
-    signupDesc: `Compte gratuit — ${FREE_DAILY_LIMIT} prompts/jour pour commencer`,
+    signupDesc: `Compte gratuit — ${FREE_LIFETIME_LIMIT} prompts offerts pour tester`,
     email: "Email",
     password: "Mot de passe",
     submitLogin: "Se connecter",
@@ -118,8 +118,8 @@ export const messages = {
         a: "ChatGPT, Claude, Gemini, Midjourney, DALL·E, Runway, Sora, Veo, Lovable, Bolt, Cursor et Replit.",
       },
       {
-        q: "Combien de prompts gratuits par jour ?",
-        a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Pro : 200/jour. Creator : illimité.`,
+        q: "Combien de prompts gratuits ?",
+        a: `Le plan Free inclut ${FREE_LIFETIME_LIMIT} générations offertes pour tester la qualité. Pro : 200/jour. Creator : illimité.`,
       },
       {
         q: "Quelle différence entre Pro (9€) et Creator (19€) ?",

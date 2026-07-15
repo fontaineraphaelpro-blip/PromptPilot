@@ -40,7 +40,7 @@ Tu es copywriter SaaS B2B senior (10+ ans), spécialiste conversion freemium →
 Rédiger la copy complète d'une landing page one-page, prête à intégrer dans un site Next.js. Livrable : texte section par section, titres H1/H2, micro-copy boutons, FAQ (5 questions).
 
 ## Structure obligatoire (dans cet ordre)
-1. Hero — promesse outcome en 8–12 mots + sous-titre bénéfice chiffré + CTA primaire « Essayer gratuitement » + micro-preuve (ex. « 2 prompts/jour offerts »)
+1. Hero — promesse outcome en 8–12 mots + sous-titre bénéfice chiffré + CTA primaire « Essayer gratuitement » + micro-preuve (ex. « 5 prompts offerts »)
 2. Logos / bandeau confiance (placeholder [LOGO_CLIENT])
 3. Problème (3 pains en bullets — temps perdu, prompts vagues, résultats IA moyens)
 4. Solution — comment PromptPilot transforme une idée en brief R-C-T-C scoré

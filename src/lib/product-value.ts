@@ -1,5 +1,5 @@
 import type { Plan } from "@/lib/constants";
-import { FREE_DAILY_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
 
 /** Différenciateurs visibles — ce que ChatGPT seul ne fait pas pour le client */
 export const PRODUCT_DIFFERENTIATORS = [
@@ -56,8 +56,8 @@ export type PlanComparisonRow = {
 
 export const PLAN_COMPARISON_ROWS: PlanComparisonRow[] = [
   {
-    feature: "Prompts par jour",
-    free: `${FREE_DAILY_LIMIT}`,
+    feature: "Prompts inclus",
+    free: `${FREE_LIFETIME_LIMIT} offerts`,
     pro: `${PRO_DAILY_FAIR_USE_LIMIT}/jour`,
     creator: "Illimité",
   },

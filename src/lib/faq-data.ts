@@ -1,4 +1,4 @@
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 
 export const LANDING_FAQS = [
   {
@@ -6,8 +6,8 @@ export const LANDING_FAQS = [
     a: "ChatGPT, Claude, Gemini, Midjourney, DALL·E, Runway, Sora, Veo, Lovable, Bolt, Cursor et Replit.",
   },
   {
-    q: "Combien de prompts gratuits par jour ?",
-    a: `Le plan Free inclut ${FREE_DAILY_LIMIT} générations par jour. Pro : 200/jour. Creator : illimité.`,
+    q: "Combien de prompts gratuits ?",
+    a: `Le plan Free inclut ${FREE_LIFETIME_LIMIT} générations offertes pour tester la qualité. Pro : 200/jour. Creator : illimité.`,
   },
   {
     q: "Quelle différence entre Pro (9€) et Creator (19€) ?",

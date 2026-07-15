@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { FREE_DAILY_LIMIT, TARGET_AIS } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT, TARGET_AIS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -319,7 +319,7 @@ export function FunnelWizard() {
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground mt-1 text-center px-4">
-                        Inscription gratuite — {FREE_DAILY_LIMIT} prompts/jour
+                        Inscription gratuite — {FREE_LIFETIME_LIMIT} prompts offerts
                         <span className="hidden sm:inline"> · upgrade Pro plus tard</span>
                       </p>
                     </div>

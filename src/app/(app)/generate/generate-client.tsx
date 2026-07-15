@@ -27,6 +27,7 @@ interface GenerateClientProps {
     used: number;
     limit: number | null;
     remaining: number | null;
+    period?: "lifetime" | "daily" | null;
   };
   openaiReady: boolean;
 }
@@ -201,7 +202,8 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         </div>
         {usage.limit !== null && (
           <Badge variant={atLimit ? "outline" : "default"} className="shrink-0">
-            {usage.used}/{usage.limit} prompts aujourd&apos;hui
+            {usage.used}/{usage.limit}{" "}
+            {usage.period === "lifetime" ? "prompts gratuits" : "prompts aujourd'hui"}
           </Badge>
         )}
         {usage.limit === null && plan === "creator" && (
@@ -226,7 +228,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
               {plan === "free"
-                ? "Limite gratuite atteinte. Passez au Pro (200/jour) ou Creator (illimité)."
+                ? "Tes prompts gratuits sont épuisés. Passe au Pro (200/jour) ou Creator (illimité) pour continuer."
                 : "Limite Pro atteinte (200/jour). Passez au Creator pour continuer."}
             </p>
             <Button size="sm" asChild>
@@ -284,7 +286,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         <Card className="border-white/10 bg-white/[0.02]">
           <CardContent className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-xs text-muted-foreground">
-              Plan Free · {usage.remaining ?? 0} génération(s) restante(s) aujourd&apos;hui
+              Plan Free · {usage.remaining ?? 0} génération(s) gratuite(s) restante(s)
             </p>
             <Button size="sm" variant="outline" asChild>
               <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>

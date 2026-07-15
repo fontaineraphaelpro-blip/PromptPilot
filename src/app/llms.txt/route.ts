@@ -1,4 +1,4 @@
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, FREE_LIFETIME_LIMIT } from "@/lib/constants";
 import { getAppUrl } from "@/lib/env";
 import { getSupportEmail } from "@/lib/support";
 
@@ -12,7 +12,7 @@ export function GET() {
 - Générateur de prompts avec score qualité /100
 - Preview avant de coller dans l'IA cible
 - 4 variantes : Principal, Court, Détaillé, Expert
-- Plans : Free (${2} prompts/jour), Pro (200/jour), Creator (illimité)
+- Plans : Free (${FREE_LIFETIME_LIMIT} prompts offerts), Pro (200/jour), Creator (illimité)
 
 ## Pages utiles
 - Accueil : ${base}/

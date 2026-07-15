@@ -5,7 +5,7 @@ import { ScrollLink } from "@/components/navigation/scroll-link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 import { useLocale } from "@/components/providers/locale-provider";
 
 export function StickyCtaBar() {
@@ -34,7 +34,7 @@ export function StickyCtaBar() {
           <div className="mx-auto flex max-w-4xl items-center gap-2 sm:gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-xs sm:text-sm font-medium leading-snug inline-flex flex-wrap items-baseline gap-x-1.5">
-                <span className="tabular-nums">{FREE_DAILY_LIMIT}</span>
+                <span className="tabular-nums">{FREE_LIFETIME_LIMIT}</span>
                 <span>{m.sticky.promptsToday}</span>
               </p>
               <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{m.sticky.sub}</p>

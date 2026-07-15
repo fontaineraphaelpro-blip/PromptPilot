@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
 import { toast } from "sonner";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { useLocale } from "@/components/providers/locale-provider";

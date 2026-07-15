@@ -1,6 +1,6 @@
 import { sendEmail } from "@/lib/email";
 import { getAppUrl } from "@/lib/env";
-import { APP_NAME, FREE_DAILY_LIMIT } from "@/lib/constants";
+import { APP_NAME, FREE_LIFETIME_LIMIT } from "@/lib/constants";
 
 export async function sendDraftReminderEmail(email: string, ideaPreview: string): Promise<void> {
   const appUrl = getAppUrl();
@@ -19,10 +19,10 @@ export async function sendQuotaExhaustedEmail(email: string): Promise<void> {
   const appUrl = getAppUrl();
   await sendEmail({
     to: email,
-    subject: `Quota du jour atteint — ${APP_NAME}`,
+    subject: `Quota gratuit épuisé — ${APP_NAME}`,
     html: `
-      <p>Vous avez utilisé vos ${FREE_DAILY_LIMIT} générations gratuites aujourd'hui.</p>
-      <p><a href="${appUrl}/pricing?plan=pro">Passer au Pro</a> (200/jour) ou revenez demain.</p>
+      <p>Vous avez utilisé vos ${FREE_LIFETIME_LIMIT} générations gratuites.</p>
+      <p><a href="${appUrl}/pricing?plan=pro">Passer au Pro</a> (200 prompts/jour, 9€/mois) pour continuer à générer des prompts experts.</p>
     `,
   });
 }

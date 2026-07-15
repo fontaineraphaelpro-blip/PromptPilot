@@ -5,7 +5,7 @@ import { ScrollLink } from "@/components/navigation/scroll-link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
 
 export function FinalCtaSection() {
@@ -16,7 +16,7 @@ export function FinalCtaSection() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-emerald-200/90 mb-6">
             <Sparkles className="h-4 w-4" />
-            Plan free — {FREE_DAILY_LIMIT} prompts/jour
+            Plan free — {FREE_LIFETIME_LIMIT} prompts offerts
           </p>
           <h2 className="text-2xl font-bold sm:text-4xl tracking-tight relative px-2">
             Prêt à tester sur ton vrai projet ?

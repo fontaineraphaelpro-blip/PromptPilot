@@ -122,21 +122,23 @@ export async function POST(request: Request) {
       used: 0,
       limit: null as number | null,
       remaining: null as number | null,
+      period: null as "lifetime" | "daily" | null,
     };
 
     if (!skipUsage) {
       usage = await reservePromptSlot(user.id, profile.plan);
       usageReserved = true;
       if (!usage.allowed) {
-        const upgradeMessage =
-          profile.plan === "free"
-            ? "Passez au plan Pro (200 prompts/jour) ou Creator (illimité)."
-            : profile.plan === "pro"
-              ? "Limite d'usage équitable atteinte (200/jour). Passez au Creator pour l'illimité."
-              : "Limite quotidienne atteinte.";
+        const isFree = profile.plan === "free";
+        const errorTitle = isFree ? "Quota gratuit épuisé" : "Limite quotidienne atteinte";
+        const upgradeMessage = isFree
+          ? "Vous avez utilisé vos prompts gratuits. Passez au Pro (200 prompts/jour, 9€/mois) ou Creator (illimité) pour continuer."
+          : profile.plan === "pro"
+            ? "Limite d'usage équitable atteinte (200/jour). Passez au Creator pour l'illimité."
+            : "Limite quotidienne atteinte.";
         return NextResponse.json(
           {
-            error: "Limite quotidienne atteinte",
+            error: errorTitle,
             message: upgradeMessage,
             used: usage.used,
             limit: usage.limit,

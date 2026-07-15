@@ -6,7 +6,7 @@ import { ScrollLink } from "@/components/navigation/scroll-link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
-import { FREE_DAILY_LIMIT } from "@/lib/constants";
+import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 
 const DISMISS_KEY = "pp_exit_dismissed";
 
@@ -64,7 +64,7 @@ export function ExitIntentModal() {
             </h2>
             <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
               Crée un compte gratuit et teste PromptPilot sur ton projet —{" "}
-              <strong className="text-foreground">{FREE_DAILY_LIMIT} générations offertes par jour</strong>.
+              <strong className="text-foreground">{FREE_LIFETIME_LIMIT} générations offertes</strong>.
               Pas de carte bancaire.
             </p>
             <p className="mt-4 inline-flex items-center gap-2 text-xs text-amber-200/90">

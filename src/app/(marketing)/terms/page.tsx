@@ -22,7 +22,7 @@ export default function TermsPage() {
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Plans et paiements</h2>
       <p>
-        Le plan Free inclut une limite quotidienne de générations. Le plan Pro inclut un usage
+        Le plan Free inclut un nombre limité de générations offertes (sans renouvellement). Le plan Pro inclut un usage
         généreux de {PRO_DAILY_FAIR_USE_LIMIT} générations par jour. Le plan Creator est illimité
         sous réserve d&apos;un usage raisonnable. Les abonnements sont facturés via Stripe
         (mensuel ou annuel si proposé). Annulation à tout moment depuis le portail de facturation.
