@@ -8,7 +8,7 @@ import {
   getStripe,
 } from "@/lib/stripe";
 import type { OneShotProductId } from "@/lib/commerce-products";
-import { getOneShotPriceId } from "@/lib/stripe-oneshot";
+import { getOneShotLineItem } from "@/lib/stripe-oneshot";
 
 export async function createCheckoutUrl(
   user: AuthUser,
@@ -59,7 +59,6 @@ export async function createOneShotCheckoutUrl(
   product: OneShotProductId,
   promptId?: string
 ): Promise<string> {
-  const priceId = getOneShotPriceId(product);
   const stripe = getStripe();
   const appUrl = getAppUrl();
 
@@ -75,16 +74,25 @@ export async function createOneShotCheckoutUrl(
         ? "/workflows?checkout=workflow_unlocked"
         : "/dashboard?checkout=credits";
 
+  // price_data = pas besoin de créer de produit dans le Dashboard Stripe
+  // metadata.oneshot_product = source de vérité pour le webhook
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
-    line_items: [{ price: priceId, quantity: 1 }],
+    line_items: [getOneShotLineItem(product)],
     success_url: `${appUrl}${successPath}`,
     cancel_url: `${appUrl}/pricing?checkout=cancelled`,
     metadata: {
       user_id: user.id,
       oneshot_product: product,
       ...(promptId ? { prompt_id: promptId } : {}),
+    },
+    payment_intent_data: {
+      metadata: {
+        user_id: user.id,
+        oneshot_product: product,
+        ...(promptId ? { prompt_id: promptId } : {}),
+      },
     },
     client_reference_id: `${user.id}:oneshot:${product}`,
     ...(profile?.stripeCustomerId
