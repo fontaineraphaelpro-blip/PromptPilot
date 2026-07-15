@@ -80,6 +80,42 @@ const blocks: SeoArticle["blocks"] = [
       "Copier la sortie sans y injecter vos preuves réelles — le texte sonne bien mais ne convainc pas",
     ],
   },
+  { type: "h2", text: "Exemple avant / après : accroche de page de vente" },
+  {
+    type: "p",
+    text: "Avant (prompt vague) : « Écris une accroche pour ma formation Canva. » → « Libérez votre créativité dès aujourd'hui ! »",
+  },
+  {
+    type: "p",
+    text: "Après (prompt avec persona + douleur) : « Accroche H1 max 12 mots pour freelances graphistes français qui perdent 4–6 h/semaine sur des fichiers clients mal organisés. Formation Canva Pro 6 modules, 197 €. Interdit : « créativité », « révélez le potentiel ». » → quelque chose du genre « Arrêtez de refaire vos fichiers clients jusqu'à 23 h » — pas parfait d'emblée, mais déjà vendable après une retouche.",
+  },
+  { type: "h2", text: "Ce qui ne marche PAS en copywriting IA" },
+  {
+    type: "ul",
+    items: [
+      "Demander « un texte persuasif américain » pour une offre B2B française à 890 € — le ton casse la confiance",
+      "Coller des faux témoignages « générés » : illégal et visible à 10 mètres",
+      "Optimiser le CTA avant d'avoir clarifié l'offre et le prix",
+      "Générer 10 pages de vente avant d'avoir une seule preuve client réelle",
+    ],
+  },
+  { type: "h2", text: "Quand NE PAS laisser ChatGPT écrire pour vendre" },
+  {
+    type: "p",
+    text: "Claims santé ou finance non validés, garanties inventées, comparaisons concurrentes agressives sans preuve, emails de litige ou de résiliation. Utilisez l'IA pour la structure et le premier jet ; validez chaque chiffre, chaque promesse et chaque condition légale avant publication. Si votre panier moyen dépasse 1 000 € ou si vous vendez du B2B à des comités, prévoyez toujours une relecture humaine du funnnel complet.",
+  },
+  { type: "h2", text: "Mini checklist avant d'envoyer un prompt de vente" },
+  {
+    type: "ol",
+    items: [
+      "Persona + situation réelle notés",
+      "Objection n°1 écrite en une phrase",
+      "Prix / offre / limites précisés",
+      "Au moins une preuve réelle collée (ou explicitement absente)",
+      "Ton et tutoiement/vouvoiement choisis",
+      "Un seul livrable demandé (pas page + ads + emails)",
+    ],
+  },
   {
     type: "tip",
     title: "Le raccourci",
@@ -101,6 +137,16 @@ const blocks: SeoArticle["blocks"] = [
     type: "p",
     text: "La logique (persona + objection + preuve) est universelle. Claude excelle sur les tons nuancés et les textes longs, Gemini sur l'intégration de données récentes. Adaptez le format : Claude préfère les instructions en paragraphes, ChatGPT les listes.",
   },
+  { type: "h3", text: "Faut-il mentionner le prix dans le prompt ?" },
+  {
+    type: "p",
+    text: "Oui, presque toujours. Sans prix, ChatGPT écrit comme pour une offre « entre 29 € et 9 900 € » — donc pour personne. Si le prix est sensible, donnez au moins une fourchette et le positionnement (entrée / milieu / premium).",
+  },
+  { type: "h3", text: "Combien de variantes tester sur une publicité ?" },
+  {
+    type: "p",
+    text: "Trois angles (douleur, désir, preuve) suffisent pour démarrer sur Meta. Au-delà de 6–8 créas sans données, vous diluez le budget. Laissez tourner 3–5 jours avec un budget minimal avant de juger — et ne reconstruisez pas le prompt à chaque micro-variation : changez d'abord le hook.",
+  },
 ];
 
 export const articlePromptsVente: SeoArticle = {
@@ -118,6 +164,7 @@ export const articlePromptsVente: SeoArticle = {
     "prompt email marketing",
     "prompt prospection LinkedIn",
     "ChatGPT copywriting",
+    "prompt fiche produit",
   ],
   relatedSlugs: [
     "prompts-marketing-copywriting",

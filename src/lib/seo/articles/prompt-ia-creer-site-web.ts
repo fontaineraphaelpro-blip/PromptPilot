@@ -77,6 +77,47 @@ const blocks: SeoArticle["blocks"] = [
       "La maintenance : un site vit — prévoyez qui fera les mises à jour",
     ],
   },
+  { type: "h2", text: "Outils vs prompts : où mettez-vous l'effort ?" },
+  {
+    type: "p",
+    text: "Beaucoup comparent Lovable et Bolt pendant des jours alors que leur brief tient en une phrase. Inversez la priorité : un brief solide obtenu en 20 minutes sur n'importe lequel des deux outils bat un brief flou sur « le meilleur » outil du moment. Les écarts de qualité entre plateformes existent (design par défaut, export code, intégrations), mais ils pèsent moins que pages listées, couleurs fixées et contenus réels. Testez le même brief sur deux outils gratuits si vous hésitez — en 30 minutes vous avez votre verdict pour VOTRE cas, pas celui d'un YouTubeur.",
+  },
+  { type: "h2", text: "Exemple avant / après : salon de coiffure" },
+  {
+    type: "p",
+    text: "Avant : « Crée un site pour mon salon de coiffure. » → hero violet, boutons « Book Now », horaires inventés, photos de stock douteuses.",
+  },
+  {
+    type: "p",
+    text: "Après : brief avec pages listées, couleurs #1A1A1A / #F7E7CE, référence visuelle, vrais horaires, interdiction d'inventer les prix, mobile-first, CTA « Prendre rendez-vous » vers un formulaire (pas Calendly inventé). Premier jet déjà à 60–70 % ; il reste typo, photos réelles et mentions légales. Comptez 2–4 heures d'itération disciplinée pour un vitrine correct, pas « 5 minutes magiques » comme sur les pubs LinkedIn.",
+  },
+  { type: "h2", text: "Ce qui ne marche PAS sur Lovable / Bolt / v0" },
+  {
+    type: "ul",
+    items: [
+      "Cinq changements dans le même message (« change le hero, ajoute un blog, refais le footer, branche Stripe »)",
+      "Demander un « design unique » sans référence ni palette — l'IA retombe sur ses défauts",
+      "Laisser l'outil inventer témoignages et tarifs que vous collerez en prod",
+      "Vouloir une app e-commerce complexe + admin + multi-langue dès le prompt 1",
+    ],
+  },
+  { type: "h2", text: "Quand NE PAS passer par un site « un prompt »" },
+  {
+    type: "p",
+    text: "Catalogue Shopify à milliers de SKU, marketplace multi-vendeurs, app avec logique métier critique (santé, finance, données RH), ou projet où un design system d'agence est déjà contracté. Dans ces cas, un prototype IA reste utile… comme brief pour un développeur, pas comme produit final. Pour un site vitrine local (resto, coach, artisan), le ratio temps/qualité est souvent imbattable.",
+  },
+  { type: "h2", text: "Mini checklist avant le premier prompt" },
+  {
+    type: "ol",
+    items: [
+      "Liste des pages écrite",
+      "Parcours principal de l'utilisateur résumé en une phrase",
+      "Palette (hex) + 1 référence visuelle",
+      "Textes réels ou placeholders explicitement marqués",
+      "Fonctionnalités hors scope listées (ce qu'on ne fait PAS au V1)",
+      "Interdits design (pas de violet par défaut, pas d'animation lourde…)",
+    ],
+  },
   {
     type: "tip",
     title: "Avant de lancer votre premier prompt",
@@ -102,6 +143,16 @@ const blocks: SeoArticle["blocks"] = [
   {
     type: "p",
     text: "Le design générique vient d'un brief sans direction artistique. Ajoutez systématiquement : une référence visuelle précise (« comme linear.app », « comme le site de [marque] »), vos codes couleurs, et l'interdiction explicite des dégradés violets par défaut. Puis itérez section par section.",
+  },
+  { type: "h3", text: "Faut-il savoir coder pour corriger ensuite ?" },
+  {
+    type: "p",
+    text: "Non pour un vitrine simple hébergé sur Lovable/Bolt. Oui dès que vous exportez vers un repo et que vous voulez du sur-mesure durable — là, Cursor + un développeur (même à temps partiel) devient le bon duo. Gardez l'outil no-code tant que les besoins évoluent lentement.",
+  },
+  { type: "h3", text: "Comment gérer le RGPD des formulaires ?" },
+  {
+    type: "p",
+    text: "L'IA peut générer une page mentions légales et une case de consentement, mais la conformité réelle dépend de votre hébergeur, de votre outil d'email et de votre finalité de traitement. Faites relire par quelqu'un qui connaît le sujet — ou utilisez un générateur juridique sérieux + votre politique réelle. Ne publiez jamais une politique inventée.",
   },
 ];
 

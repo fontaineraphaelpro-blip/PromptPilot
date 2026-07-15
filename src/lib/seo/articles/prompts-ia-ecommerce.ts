@@ -61,6 +61,42 @@ const blocks: SeoArticle["blocks"] = [
       "Promettre des délais ou garanties dans les pubs que votre logistique ne tient pas",
     ],
   },
+  { type: "h2", text: "Exemple avant / après : bullet fiche produit" },
+  {
+    type: "p",
+    text: "Avant (spec brute) : « Capacité 750 ml, BPA free, isotherme 12 h. »",
+  },
+  {
+    type: "p",
+    text: "Après (prompt qui force la traduction usage) : « Garde l'eau fraîche jusqu'à la fin du bureau — même oubliée dans la voiture une heure. » Même produit, même boutique Shopify France : le second bullet répond à une situation vécue. Sur un catalogue de 80 SKU, ce réflexe (spec → usage) fait souvent plus pour le taux de conversion que d'ajouter une barre de confiance générique.",
+  },
+  { type: "h2", text: "Ce qui ne marche PAS en e-commerce IA" },
+  {
+    type: "ul",
+    items: [
+      "Dupliquer une fiche en changeant 3 mots sur 50 variantes couleur — Google et les clients s'en aperçoivent",
+      "Générer des avis 5 étoiles fictifs (illégal, risque DGCCRF)",
+      "Promettre « livraison 24 h partout en France » si votre 3PL ne tient que le 48–72 h",
+      "Laisser Midjourney remplacer la photo exacte du produit reçu — litiges et retours assurés",
+    ],
+  },
+  { type: "h2", text: "Quand NE PAS utiliser l'IA" },
+  {
+    type: "p",
+    text: "Claims santé / nutrition réglementés, notices de sécurité, conditions de garantie juridiques, réponses à un litige client sensible ou à une mise en demeure. Utilisez l'IA pour draft et structure ; validez avec un humain (et parfois un pro). Pour le merchandising créatif et le volume de fiches, en revanche, refuser l'IA c'est vous tirer une balle dans le pied.",
+  },
+  { type: "h2", text: "Mini checklist boutique avant de scaler" },
+  {
+    type: "ol",
+    items: [
+      "Une fiche modèle validée (ton + structure + longueur)",
+      "Source de vérité produit (specs réelles) jamais inventée par l'IA",
+      "Mot-clé principal + secondaire par fiche",
+      "Section « pas pour vous si… » pour la crédibilité",
+      "Séquence panier abandonné avec vraie objection (pas juste -10 %)",
+      "Relecture humaine sur les best-sellers (top 20 % du CA)",
+    ],
+  },
   {
     type: "tip",
     title: "Standardiser la qualité",
@@ -82,8 +118,17 @@ const blocks: SeoArticle["blocks"] = [
     type: "p",
     text: "Google pénalise le contenu inutile, pas le contenu assisté par IA. Une fiche unique, précise et utile au client se positionne — qu'elle soit écrite par IA briefée ou à la main. Le quasi-dupliqué et le bourrage de mots-clés se font déclasser dans les deux cas.",
   },
+  { type: "h3", text: "Comment industrialiser 200 fiches sans duplicate content ?" },
+  {
+    type: "p",
+    text: "Fixez une fiche modèle, puis un prompt de déclinaison qui interdit les formulations identiques et force les différences produit (usage, taille, matière, objection). Variez aussi les FAQ (2–3 questions spécifiques par SKU). Priorisez le catalogue par CA : écrivez d'abord ce qui rapporte.",
+  },
+  { type: "h3", text: "Faut-il un humain sur chaque email CRM ?" },
+  {
+    type: "p",
+    text: "Sur les templates panier abandonné / post-achat : un humain valide le master, l'IA décline. Sur les réponses service client : l'IA propose, un humain envoie — surtout dès qu'il y a colère, remboursement ou produit dangereux. Le coût d'une mauvaise réponse dépasse largement les 90 secondes de relecture.",
+  },
 ];
-
 export const articlePromptsEcommerce: SeoArticle = {
   slug: "prompts-ia-ecommerce",
   title: "Prompts IA pour e-commerce : fiches produits, pubs, emails qui vendent",

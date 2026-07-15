@@ -68,6 +68,42 @@ const blocks: SeoArticle["blocks"] = [
       "Négliger le suivi — 80 % des signatures se jouent dans les relances, automatisez-en la rédaction, jamais l'envoi aveugle",
     ],
   },
+  { type: "h2", text: "Exemple avant / après : cold email freelance" },
+  {
+    type: "p",
+    text: "Avant : « Bonjour, je me permets de vous contacter car je suis développeur freelance et je pourrais vous aider sur votre site. Seriez-vous disponible pour un call ? » → taux de réponse proche de zéro, et à raison.",
+  },
+  {
+    type: "p",
+    text: "Après (brief structuré + personnalisation) : observation réelle sur le site (temps de chargement mobile, page Produits cassée), une phrase de résultat chiffré sur une boutique Shopify similaire, une question ouverte. 75–90 mots. Première ligne écrite à la main pour ce prospect ; le corps vient du prompt. Sur un volume de 40 emails/semaine ciblés, 8–12 % de réponses utiles est déjà un bon plancher en B2B français — à condition de ne pas spammer la même boîte trois fois.",
+  },
+  { type: "h2", text: "Ce qui ne marche PAS (même avec un « super » prompt)" },
+  {
+    type: "ul",
+    items: [
+      "Envoyer 80 messages identiques en changeant uniquement le prénom",
+      "Laisser l'IA inventer un chiffre de résultat client que vous n'avez jamais obtenu",
+      "Répondre aux briefs Malt en 40 mots vides (« je suis motivé et polyvalent »)",
+      "Automatiser l'envoi des relances sans lire le dernier message du prospect",
+    ],
+  },
+  { type: "h2", text: "Quand NE PAS utiliser l'IA en freelance" },
+  {
+    type: "p",
+    text: "Premier échange avec un client stratégique où la relation prime, négociation de tarif délicate, situation de conflit ou de non-paiement, et tout document contractuel qui engage votre responsabilité. L'IA peut préparer des options de formulation ; vous choisissez et assumez. Idem pour les témoignages : reformuler, oui ; inventer, jamais.",
+  },
+  { type: "h2", text: "Mini checklist funnel freelance" },
+  {
+    type: "ol",
+    items: [
+      "Positionnement en une phrase écrit (avant de prospecter)",
+      "Preuve chiffrée réelle collée dans les prompts",
+      "Variable de personnalisation par prospect (pas seulement le prénom)",
+      "Section « hors périmètre » dans chaque proposition",
+      "Deux relances planifiées, texte prêt, envoi manuel",
+      "Bilan de mission envoyé avant de demander le témoignage",
+    ],
+  },
   {
     type: "tip",
     title: "Industrialiser sans robotiser",
@@ -88,6 +124,16 @@ const blocks: SeoArticle["blocks"] = [
   {
     type: "p",
     text: "Une proposition commerciale passe de 3 h à 45 min (rédaction + personnalisation). Une séquence de prospection de 2 h à 30 min. Sur un mois de prospection active, comptez 10 à 15 h récupérées — à réinvestir dans les appels, que l'IA ne fera pas à votre place.",
+  },
+  { type: "h3", text: "Malt, Upwork ou cold email : quel canal briefer en premier ?" },
+  {
+    type: "p",
+    text: "Celui où vous avez déjà un peu de traction. Si vous avez 3–4 missions Malt derrière vous, commencez par optimiser les réponses aux briefs (ROI immédiat). Le cold email devient intéressant quand votre offre est claire et que vous avez un résultat chiffré à citer — sinon vous brûlez des adresses pour rien.",
+  },
+  { type: "h3", text: "Comment éviter le ton « robot LinkedIn » ?" },
+  {
+    type: "p",
+    text: "Collez 2–3 messages que vous avez déjà écrits et qui sonnent comme vous. Demandez à l'IA d'imiter ce registre, puis relisez à voix haute. Supprimez systématiquement « j'espère que vous allez bien », les listes de soft skills et les emojis si ce n'est pas votre style.",
   },
 ];
 

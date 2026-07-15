@@ -70,6 +70,42 @@ const blocks: SeoArticle["blocks"] = [
     type: "p",
     text: "Méfiez-vous des outils « 100 % gratuits illimités » : générer un vrai prompt expert coûte des appels aux meilleurs modèles, donc un outil gratuit illimité utilise soit un modèle faible, soit vos données comme produit. Le modèle honnête est le freemium : des générations offertes pour juger la qualité sur VOTRE cas d'usage, puis un abonnement si l'outil vous fait réellement gagner du temps. PromptPilot offre 5 générations gratuites — assez pour tester sur un email, une image produit et une feature de code.",
   },
+  { type: "h2", text: "Exemple avant / après : page de vente formation" },
+  {
+    type: "p",
+    text: "Cas réel type formateur indépendant : « génère un prompt pour ma page de vente formation Excel ». Version bibliothèque générique → ChatGPT sort une page US avec « seize the opportunity » et zéro mention du prix TTC. Version générateur dédié qui force persona + objection + preuves → le prompt produit pour ChatGPT inclut déjà le public (salariés cadres, France), l'objection prix, et l'interdiction d'inventer des témoignages. Même modèle ChatGPT derrière : le second brief sort un texte que vous pouvez corriger en 15 minutes au lieu de tout réécrire.",
+  },
+  { type: "h2", text: "Ce qui ne marche PAS dans le choix d'outil" },
+  {
+    type: "ul",
+    items: [
+      "Choisir uniquement sur le nombre de « templates » affichés — 10 000 prompts moyens ne battent pas 1 brief adapté",
+      "Comparer un générateur pour Midjourney avec un GPT ChatGPT : ce ne sont pas les mêmes métiers",
+      "Attendre qu'un outil écrive à votre place le contenu final — il prépare le brief ; l'IA cible exécute",
+      "Ignorer la preview / le score quand ils existent : c'est exactement le signal que le GPT custom n'a pas",
+    ],
+  },
+  { type: "h2", text: "Quand NE PAS utiliser un générateur" },
+  {
+    type: "p",
+    text: "Pour une reformulation de deux phrases, une traduction, ou un autocomplete de fonction : ouvrez ChatGPT ou Cursor directement. Un générateur brille quand le brief est riche (vente, design, feature multi-fichiers) ou quand vous changez souvent d'IA cible. Si vous écrivez déjà des briefs R-C-T-C en 4 minutes chrono, l'outil devient optionnel — vous le jugeerez au volume, pas à la théorie.",
+  },
+  { type: "h2", text: "Mini checklist avant d'acheter / de s'abonner" },
+  {
+    type: "ol",
+    items: [
+      "Ai-je testé mon pire cas d'usage (pas le démo marketing) ?",
+      "L'outil adapte-t-il le format à mon IA réelle (Cursor, Midjourney…) ?",
+      "Puis-je voir / scorer le prompt avant de le coller ?",
+      "Le freemium suffit-il pour juger en conditions réelles (3–5 tâches) ?",
+      "Ai-je mesuré le temps gagné vs mon brief manuel actuel ?",
+    ],
+  },
+  {
+    type: "tip",
+    title: "Testez sur votre pire cas",
+    text: "Pour évaluer n'importe quel générateur : prenez la tâche où l'IA vous déçoit le plus (page de vente, image produit, feature complexe). Comparez la sortie IA avec votre prompt habituel vs le prompt généré. Le verdict tient en une génération.",
+  },
   { type: "h2", text: "FAQ — les questions que vous vous posez" },
   { type: "h3", text: "Quel est le meilleur générateur de prompt pour ChatGPT ?" },
   {
@@ -79,7 +115,7 @@ const blocks: SeoArticle["blocks"] = [
   { type: "h3", text: "Existe-t-il un générateur de prompt pour Midjourney en français ?" },
   {
     type: "p",
-    text: "Oui — vous décrivez la scène en français, l'outil produit le prompt Midjourney optimisé (souvent en anglais, car le modèle y est plus stable) avec les paramètres techniques. PromptPilot gère Midjourney, DALL·E, Runway, Sora et Veo pour l'image et la vidéo.",
+    text: "Oui — vous décrivez la scène en français, l'outil produit le prompt Midjourney optimisé (souvent en anglais, car le modèle y est plus stable) avec les paramètres techniques. Les bons outils gèrent aussi DALL·E, Runway, Sora et Veo pour l'image et la vidéo.",
   },
   { type: "h3", text: "Un générateur de prompts vaut-il le coup pour un développeur ?" },
   {
@@ -91,10 +127,15 @@ const blocks: SeoArticle["blocks"] = [
     type: "p",
     text: "Oui, avec un méta-prompt (« améliore ce prompt »), et c'est mieux que rien. Mais ChatGPT optimise pour lui-même, sans score, sans variantes, et sans connaître les spécificités des autres outils. C'est l'option dépannage, pas l'option production.",
   },
+  { type: "h3", text: "Combien de temps gagne-t-on vraiment ?" },
   {
-    type: "tip",
-    title: "Testez sur votre pire cas",
-    text: "Pour évaluer n'importe quel générateur : prenez la tâche où l'IA vous déçoit le plus (page de vente, image produit, feature complexe). Comparez la sortie IA avec votre prompt habituel vs le prompt généré. Le verdict tient en une génération.",
+    type: "p",
+    text: "Sur un brief de vente ou d'image produit, comptez 20–40 minutes de structuration manuelle évitées par livrable — plus les 2–3 itérations ratées. Sur une semaine à 8 livrables, on parle souvent de 3–5 heures. Si vous ne faites qu'un email par mois, le ROI est plus faible : gardez la méthode manuelle.",
+  },
+  { type: "h3", text: "Les bibliothèques de prompts gratuits sont-elles obsolètes ?" },
+  {
+    type: "p",
+    text: "Non — elles restent excellentes pour découvrir des structures et s'inspirer. Elles deviennent dangereuses dès qu'on les colle telles quelles en production. Utilisez-les comme exemples, pas comme copie finale.",
   },
 ];
 
@@ -113,6 +154,7 @@ export const articleMeilleurGenerateur: SeoArticle = {
     "générateur de prompt gratuit",
     "générateur prompt ChatGPT",
     "outil création prompt",
+    "comparatif générateur prompt",
   ],
   relatedSlugs: [
     "promptpilot-vs-prompts-manuels",
