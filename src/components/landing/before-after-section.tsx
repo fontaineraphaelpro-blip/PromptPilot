@@ -189,7 +189,7 @@ export function BeforeAfterSection() {
             className="w-full sm:w-auto min-w-0 max-w-full h-auto py-3 px-4 sm:px-8 whitespace-normal justify-center"
           >
             <ScrollLink section="funnel">
-              Tester sur mon idée
+              Générer mon brief gratuit
               <ArrowRight className="h-4 w-4 shrink-0" />
             </ScrollLink>
           </Button>
@@ -199,9 +199,12 @@ export function BeforeAfterSection() {
             variant="outline"
             className="w-full sm:w-auto min-w-0 max-w-full h-auto py-3 px-4 sm:px-8 border-white/20"
           >
-            <Link href="/signup">S&apos;inscrire — gratuit</Link>
+            <Link href="/signup">Créer mon compte</Link>
           </Button>
         </FadeIn>
+        <p className="mt-4 text-center text-xs text-muted-foreground px-4">
+          Même qualité sur ton idée · 30–60 min économisées par brief
+        </p>
       </div>
     </section>
   );

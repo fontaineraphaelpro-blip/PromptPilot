@@ -15,7 +15,7 @@ export const LANDING_FAQS = [
   },
   {
     q: "En quoi PromptPilot est différent de ChatGPT ?",
-    a: "ChatGPT répond à ta question. PromptPilot produit le prompt structuré à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes.",
+    a: "ChatGPT répond à ta question. PromptPilot produit le brief à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes. Un brief expert = 30 à 60 min gagnées — Pro à 9€/mois rentabilisé dès la 2ᵉ génération.",
   },
   {
     q: "Garantie qualité si le score est bas ?",

@@ -8,17 +8,20 @@ const steps = [
   {
     icon: MessageSquare,
     title: "Décris ton idée",
-    description: "Une phrase suffit. PromptPilot comprend ton intention et ton contexte.",
+    description:
+      "Une phrase suffit. PromptPilot structure le rôle, le contexte et les contraintes — comme un brief consultant.",
   },
   {
     icon: Cpu,
     title: "Choisis ton IA",
-    description: "ChatGPT, Claude, Cursor, Midjourney, Sora… chaque prompt est adapté à l'outil.",
+    description:
+      "ChatGPT, Claude, Cursor, Midjourney, Sora… chaque brief est adapté au vocabulaire de l'outil.",
   },
   {
     icon: Copy,
-    title: "Copie ton prompt",
-    description: "Prompt structuré + variantes court, détaillé et expert. Prêt à coller.",
+    title: "Copie ton brief scoré",
+    description:
+      "Score /100, preview, 4 variantes. Tu sais si c'est prêt avant de coller — zéro allers-retours inutiles.",
   },
 ];
 
@@ -34,7 +37,7 @@ export function HowItWorks() {
             Comment ça marche
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-lg">
-            Trois étapes. Zéro friction. Un prompt expert à chaque fois.
+            Trois étapes. 30 secondes. Un brief expert scoré — 30 à 60 min économisées.
           </p>
         </FadeIn>
 

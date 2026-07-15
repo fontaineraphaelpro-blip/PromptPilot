@@ -42,7 +42,10 @@ export const PRODUCT_DIFFERENTIATORS = [
 ] as const;
 
 export const ROI_HEADLINE =
-  "Un prompt expert structuré = 30 à 60 min de travail manuel économisées. Pro à 9€/mois, c'est rentabilisé dès la 2ᵉ génération.";
+  "Un brief expert = 30 à 60 min de travail manuel économisées. Pro à 9€/mois : rentabilisé dès la 2ᵉ génération.";
+
+export const VALUE_ONE_LINER =
+  "ChatGPT répond. PromptPilot te donne le brief à coller — scoré, multi-IA, 4 variantes.";
 
 type ComparisonCell = boolean | string;
 
@@ -142,13 +145,13 @@ export function getUpgradeHighlights(currentPlan: Plan): UpgradeHighlight[] {
   if (currentPlan === "free") {
     return [
       {
-        title: "Prompts illimités",
-        description: "Plus de quota à 2/jour — génère autant que tu veux pour tes clients ou projets.",
+        title: "Volume Pro pour produire",
+        description: `Plus de limite à ${FREE_LIFETIME_LIMIT} prompts — génère pour tes clients et projets, 200/jour.`,
         plan: "pro",
       },
       {
         title: "Templates premium & favoris",
-        description: "Bibliothèque pro + retrouve tes meilleurs prompts en 1 clic.",
+        description: "Bibliothèque pro + retrouve tes meilleurs briefs en 1 clic.",
         plan: "pro",
       },
       {

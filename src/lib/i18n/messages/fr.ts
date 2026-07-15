@@ -29,13 +29,14 @@ export const messages = {
     titleHighlight: "un brief prêt à coller en 30 s",
     title2: "ChatGPT, Claude, Cursor, Midjourney & 12+ outils",
     subtitle:
-      "Une phrase suffit. Tu reçois un prompt structuré, scoré /100, avec preview et 4 variantes — sans réécrire pendant 45 minutes.",
-    ctaTry: "Tester gratuitement",
-    ctaSignup: "Créer un compte free",
-    footnote: `${FREE_LIFETIME_LIMIT} prompts offerts pour tester · sans carte · upgrade Pro quand tu veux`,
+      "Une phrase suffit. Tu reçois un brief expert scoré /100, avec preview et 4 variantes — 30 à 60 min de travail manuel économisées à chaque génération.",
+    ctaTry: "Générer mon brief gratuit",
+    ctaSignup: "Créer mon compte",
+    footnote: `${FREE_LIFETIME_LIMIT} prompts offerts · sans carte · Pro à 9€/mois rentabilisé dès la 2ᵉ génération`,
     statAis: "IA supportées",
-    statScore: "Score max",
+    statScore: "Score /100",
     statVariants: "Variantes",
+    statTime: "min gagnées",
   },
   social: {
     weeklyFallback: "Des centaines de prompts générés chaque semaine",
@@ -66,14 +67,14 @@ export const messages = {
     errorLimit: "Limite démo atteinte",
   },
   sticky: {
-    promptsToday: "prompts gratuits pour tester",
-    sub: "Parcours guidé en 3 étapes — sans carte",
-    cta: "Tester",
+    promptsToday: "prompts experts offerts",
+    sub: "Brief scoré + 4 variantes — sans carte",
+    cta: "Générer mon brief",
     close: "Fermer",
   },
   home: {
-    useCases: "Use cases",
-    useCasesTitle: "Pour chaque type de projet",
+    useCases: "Cas d'usage",
+    useCasesTitle: "Du marketing au code — un brief expert pour chaque projet",
     taskTypes: {
       Business: "Business",
       Marketing: "Marketing",
@@ -89,7 +90,7 @@ export const messages = {
     loginTitle: "Connexion",
     signupTitle: "Créer un compte",
     loginDesc: "Accédez à votre espace PromptPilot",
-    signupDesc: `Compte gratuit — ${FREE_LIFETIME_LIMIT} prompts offerts pour tester`,
+    signupDesc: `Compte gratuit — ${FREE_LIFETIME_LIMIT} briefs experts pour juger la qualité`,
     email: "Email",
     password: "Mot de passe",
     submitLogin: "Se connecter",
@@ -127,7 +128,7 @@ export const messages = {
       },
       {
         q: "En quoi PromptPilot est différent de ChatGPT ?",
-        a: "ChatGPT répond à ta question. PromptPilot produit le prompt structuré à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes.",
+        a: "ChatGPT répond à ta question. PromptPilot produit le brief à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes. Un prompt expert structuré = 30 à 60 min gagnées — Pro à 9€/mois est rentabilisé dès la 2ᵉ génération.",
       },
       {
         q: "Garantie qualité si le score est bas ?",

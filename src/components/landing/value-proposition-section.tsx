@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { ScrollLink } from "@/components/navigation/scroll-link";
+import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
-import { PRODUCT_DIFFERENTIATORS, ROI_HEADLINE } from "@/lib/product-value";
+import { PRODUCT_DIFFERENTIATORS, ROI_HEADLINE, VALUE_ONE_LINER } from "@/lib/product-value";
 import {
   Sparkles,
   Gauge,
@@ -9,6 +12,7 @@ import {
   Layers,
   FileText,
   Workflow,
+  ArrowRight,
 } from "lucide-react";
 
 const ICONS = [Sparkles, Gauge, Eye, Layers, FileText, Workflow] as const;
@@ -30,8 +34,8 @@ export function ValuePropositionSection() {
             <span className="gradient-text">studio de prompts</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg leading-relaxed">
-            Tu ne paies pas pour poser une question à une IA. Tu paies pour recevoir un brief
-            expert, scoré et prêt à coller — adapté à ton outil, en 30 secondes.
+            {VALUE_ONE_LINER} Tu ne paies pas pour poser une question — tu paies pour un brief
+            expert, scoré et prêt à coller, en 30 secondes.
           </p>
         </FadeIn>
 
@@ -60,9 +64,22 @@ export function ValuePropositionSection() {
         </div>
 
         <FadeIn delay={0.35}>
-          <p className="mt-12 text-center text-sm sm:text-base text-muted-foreground max-w-3xl mx-auto border border-white/10 rounded-2xl bg-white/[0.03] px-6 py-4">
-            <span className="text-foreground font-medium">ROI :</span> {ROI_HEADLINE}
-          </p>
+          <div className="mt-12 text-center max-w-3xl mx-auto border border-white/10 rounded-2xl bg-white/[0.03] px-6 py-6 space-y-5">
+            <p className="text-sm sm:text-base text-muted-foreground">
+              <span className="text-foreground font-medium">ROI :</span> {ROI_HEADLINE}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button size="lg" className="group" asChild>
+                <ScrollLink section="funnel">
+                  Générer mon brief gratuit
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </ScrollLink>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/signup">Créer mon compte</Link>
+              </Button>
+            </div>
+          </div>
         </FadeIn>
       </div>
     </section>

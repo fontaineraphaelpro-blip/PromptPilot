@@ -29,13 +29,14 @@ export const messages = {
     titleHighlight: "get a paste-ready brief in 30s",
     title2: "ChatGPT, Claude, Cursor, Midjourney & 12+ tools",
     subtitle:
-      "One sentence in. You get a structured prompt, scored /100, with preview and 4 variants — no more 45-minute rewrites.",
-    ctaTry: "Try for free",
-    ctaSignup: "Create free account",
-    footnote: `${FREE_LIFETIME_LIMIT} free prompts to try · no card · upgrade to Pro whenever you want`,
+      "One sentence in. You get an expert brief scored /100, with preview and 4 variants — 30–60 minutes of manual work saved every time.",
+    ctaTry: "Generate my free brief",
+    ctaSignup: "Create my account",
+    footnote: `${FREE_LIFETIME_LIMIT} free prompts · no card · Pro at €9/mo pays for itself after 2 briefs`,
     statAis: "AIs supported",
-    statScore: "Max score",
+    statScore: "Score /100",
     statVariants: "Variants",
+    statTime: "min saved",
   },
   social: {
     weeklyFallback: "Hundreds of prompts generated every week",
@@ -66,14 +67,14 @@ export const messages = {
     errorLimit: "Demo limit reached",
   },
   sticky: {
-    promptsToday: "free prompts to try",
-    sub: "3-step guided flow — no card required",
-    cta: "Try it",
+    promptsToday: "expert prompts free",
+    sub: "Scored brief + 4 variants — no card",
+    cta: "Generate my brief",
     close: "Close",
   },
   home: {
     useCases: "Use cases",
-    useCasesTitle: "For every project type",
+    useCasesTitle: "From marketing to code — an expert brief for every project",
     taskTypes: {
       Business: "Business",
       Marketing: "Marketing",
@@ -89,7 +90,7 @@ export const messages = {
     loginTitle: "Log in",
     signupTitle: "Create account",
     loginDesc: "Access your PromptPilot workspace",
-    signupDesc: `Free account — ${FREE_LIFETIME_LIMIT} free prompts to try`,
+    signupDesc: `Free account — ${FREE_LIFETIME_LIMIT} expert briefs to judge the quality`,
     email: "Email",
     password: "Password",
     submitLogin: "Log in",
@@ -127,7 +128,7 @@ export const messages = {
       },
       {
         q: "How is PromptPilot different from ChatGPT?",
-        a: "ChatGPT answers your question. PromptPilot produces the structured prompt to paste: tailored for 12+ AIs, scored /100, with preview and 4 variants.",
+        a: "ChatGPT answers your question. PromptPilot produces the brief to paste: tailored for 12+ AIs, scored /100, with preview and 4 variants. One expert brief = 30–60 min saved — Pro at €9/mo pays for itself after 2 generations.",
       },
       {
         q: "Quality guarantee if the score is low?",

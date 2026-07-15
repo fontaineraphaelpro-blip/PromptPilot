@@ -310,17 +310,17 @@ export function FunnelWizard() {
                       <Lock className="h-8 w-8 text-white/80 mb-3" />
                       {demoScore != null && (
                         <p className="text-sm font-semibold text-center px-4">
-                          Score qualité : {demoScore}/100 — variantes & Expert après inscription
+                          Score {demoScore}/100 — récupère le brief complet + 4 variantes
                         </p>
                       )}
                       {demoScore == null && (
                         <p className="text-sm font-semibold text-center px-4">
-                          + variantes, preview & brief Expert
+                          Brief scoré + variantes + preview — compte free
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground mt-1 text-center px-4">
-                        Inscription gratuite — {FREE_LIFETIME_LIMIT} prompts offerts
-                        <span className="hidden sm:inline"> · upgrade Pro plus tard</span>
+                        Inscription gratuite — {FREE_LIFETIME_LIMIT} briefs experts offerts
+                        <span className="hidden sm:inline"> · sans carte</span>
                       </p>
                     </div>
                   )}

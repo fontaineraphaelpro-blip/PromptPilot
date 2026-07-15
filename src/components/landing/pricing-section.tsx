@@ -25,14 +25,14 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
       <div className="relative w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-            Pricing
+            Tarifs
           </p>
           <h2 className="text-2xl font-bold sm:text-5xl tracking-tight px-2">
-            Commence en free, upgrade quand tu veux
+            30–60 min gagnées par brief — Pro rentabilisé dès le 2ᵉ
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg px-2">
-            {ROI_HEADLINE} Teste d&apos;abord gratuitement — le Pro se débloque depuis ton
-            dashboard.
+            {ROI_HEADLINE} Teste gratuitement sur ton vrai projet, puis passe au Pro pour
+            produire sans limite de qualité.
           </p>
           <div className="mt-6 flex justify-center">
             <GuaranteeBadge />

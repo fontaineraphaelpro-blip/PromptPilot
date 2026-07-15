@@ -30,11 +30,14 @@ export function SocialProof() {
       <div className="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-            Ils ont converti leur idée
+            Résultats concrets
           </p>
           <h2 className="text-2xl font-bold sm:text-3xl tracking-tight">
-            Des créateurs qui ne repartent plus les mains vides
+            Des heures récupérées — des prompts qui convertissent
           </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+            Score /100, multi-IA, 4 variantes : ce que ChatGPT seul ne structure pas pour toi.
+          </p>
         </FadeIn>
         <div className="grid gap-6 md:grid-cols-3">
           {TESTIMONIALS.map((t, i) => (

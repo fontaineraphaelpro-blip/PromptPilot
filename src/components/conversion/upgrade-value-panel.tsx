@@ -36,12 +36,12 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
           <Crown className="h-4 w-4 text-primary" />
-          Passe au niveau supérieur — débloque la vraie valeur
+          Passe au Pro — rentabilisé dès 2 briefs
         </CardTitle>
         {typeof promptScore === "number" && promptScore >= 70 && (
           <p className="text-xs text-muted-foreground">
-            Ton prompt est déjà scoré {promptScore}/100 — imagine la variante Expert complète
-            et des générations illimitées.
+            Ton brief est déjà scoré {promptScore}/100 — débloque le volume Pro et la variante
+            Expert pour produire sans frein.
           </p>
         )}
       </CardHeader>

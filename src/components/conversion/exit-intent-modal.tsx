@@ -60,30 +60,29 @@ export function ExitIntentModal() {
               <Sparkles className="h-6 w-6" />
             </div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight pr-6">
-              Ton premier brief expert est à 30 secondes
+              Ne repars pas sans ton brief expert
             </h2>
             <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
-              Crée un compte gratuit et teste PromptPilot sur ton projet —{" "}
-              <strong className="text-foreground">{FREE_LIFETIME_LIMIT} générations offertes</strong>.
-              Pas de carte bancaire.
+              Compte gratuit en 30 secondes —{" "}
+              <strong className="text-foreground">
+                {FREE_LIFETIME_LIMIT} briefs scorés /100
+              </strong>{" "}
+              pour juger la qualité sur ton vrai projet. Sans carte.
             </p>
-            <p className="mt-4 inline-flex items-center gap-2 text-xs text-amber-200/90">
+            <p className="mt-4 inline-flex items-center gap-2 text-xs text-emerald-200/90">
               <Clock className="h-3.5 w-3.5 shrink-0" />
-              Upgrade Pro plus tard, depuis ton dashboard
+              30–60 min gagnées par brief · Pro rentabilisé dès la 2ᵉ génération
             </p>
             <div className="mt-6 flex flex-col gap-3">
               <Button size="lg" className="w-full" asChild>
                 <Link href="/signup" onClick={dismiss}>
-                  S&apos;inscrire gratuitement
+                  Créer mon compte — gratuit
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="w-full" asChild>
                 <ScrollLink section="funnel" onClick={dismiss}>
-                  Tester sans compte
+                  Voir un aperçu en 30 s
                 </ScrollLink>
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full" onClick={dismiss}>
-                Non merci
               </Button>
             </div>
           </motion.div>

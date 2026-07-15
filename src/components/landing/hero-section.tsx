@@ -74,11 +74,11 @@ export function HeroSection() {
           <div className="mt-12 sm:mt-16 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg mx-auto text-center px-2">
             {[
               { value: "12+", label: m.hero.statAis },
-              { value: "100", label: m.hero.statScore },
+              { value: "30–60", label: m.hero.statTime },
               { value: "4", label: m.hero.statVariants },
             ].map(({ value, label }) => (
               <div key={label}>
-                <p className="text-2xl sm:text-3xl font-bold">{value}</p>
+                <p className="text-2xl sm:text-3xl font-bold tabular-nums">{value}</p>
                 <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">{label}</p>
               </div>
             ))}

@@ -16,14 +16,14 @@ export function FinalCtaSection() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-emerald-200/90 mb-6">
             <Sparkles className="h-4 w-4" />
-            Plan free — {FREE_LIFETIME_LIMIT} prompts offerts
+            {FREE_LIFETIME_LIMIT} briefs experts offerts · sans carte
           </p>
           <h2 className="text-2xl font-bold sm:text-4xl tracking-tight relative px-2">
-            Prêt à tester sur ton vrai projet ?
+            Prêt à économiser 30–60 min sur ton prochain prompt ?
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg max-w-xl mx-auto relative px-2">
-            Inscris-toi en 30 secondes, génère ton premier brief expert. Tu pourras passer au Pro
-            depuis ton dashboard quand tu seras convaincu.
+            Inscris-toi en 30 secondes. Génère un brief scoré /100, avec preview et 4 variantes —
+            adapté à ton IA. Pro à 9€/mois se rentabilise dès la 2ᵉ génération.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center relative px-4 sm:px-0">
             <Button size="lg" className="group w-full sm:min-w-[240px]" asChild>
@@ -33,7 +33,7 @@ export function FinalCtaSection() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:min-w-[200px]" asChild>
-              <ScrollLink section="funnel">Tester sans compte</ScrollLink>
+              <ScrollLink section="funnel">Aperçu en 30 secondes</ScrollLink>
             </Button>
           </div>
         </div>
