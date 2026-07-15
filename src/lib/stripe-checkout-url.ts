@@ -20,11 +20,18 @@ export function getPublicPlanCheckoutEnv(plan: PaidPlan): string {
   if (plan === "starter") {
     return (
       process.env.NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID?.trim() ||
+      // Legacy : ancien « Pro » 9€ → Starter
       process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID?.trim() ||
       ""
     );
   }
-  return process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() || "";
+  // Pro (19€) — interne « plus »
+  return (
+    process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() ||
+    // Legacy : ancien Creator affiché à 19€ → Pro
+    process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID?.trim() ||
+    ""
+  );
 }
 
 export function buildPaymentLinkUrl(

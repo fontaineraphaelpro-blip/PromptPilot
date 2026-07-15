@@ -66,10 +66,12 @@ Si tu mets seulement `xxx.up.railway.app` sans `https://`, le code corrige au ru
 | `OPENAI_API_KEY` | Génération de prompts |
 | `STRIPE_SECRET_KEY` | Paiements |
 | `STRIPE_WEBHOOK_SECRET` | Webhooks Stripe (obligatoire en prod) |
-| `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` | ID `price_...` **ou** lien `https://buy.stripe.com/...` pour le Pro (9€) |
-| `NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID` | ID `price_...` **ou** Payment Link pour le Creator (19€) |
-| `STRIPE_PRO_PRICE_ID` | (Optionnel) Vrai `price_...` si tu utilises des Payment Links — pour les webhooks |
-| `STRIPE_CREATOR_PRICE_ID` | (Optionnel) Idem pour Creator |
+| `NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID` | Starter 9€ — `price_...` ou Payment Link |
+| `NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID` | **Pro 19€** — `price_...` ou Payment Link |
+| `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` | (Legacy) ancien Pro 9€ → utilisé comme Starter si STARTER absent |
+| `NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID` | (Legacy) ancien Creator 19€ → **utilisé comme Pro** si PLUS absent |
+| `STRIPE_STARTER_PRICE_ID` / `STRIPE_PLUS_PRICE_ID` | Vrais `price_...` si tu utilises des Payment Links (webhooks) |
+| `STRIPE_CREATOR_PRICE_ID` | (Legacy) vrai `price_...` 19€ → mappé Pro au webhook |
 
 ### Stripe — configuration correcte
 
@@ -77,9 +79,9 @@ Si tu mets seulement `xxx.up.railway.app` sans `https://`, le code corrige au ru
 
 Deux options :
 
-1. **Recommandé** — Stripe Dashboard → **Produits** → ton abonnement → **Tarifs** → copie l’ID `price_...` dans `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` et `NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID`.
+1. **Recommandé** — Stripe Dashboard → **Produits** → tarif → copie `price_...` dans `NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID` et `NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID` (Pro 19€).
 
-2. **Payment Links** — tu peux garder `https://buy.stripe.com/...` dans ces variables (le code redirige directement). Ajoute aussi `STRIPE_PRO_PRICE_ID` / `STRIPE_CREATOR_PRICE_ID` avec les vrais `price_...` pour que les webhooks mettent à jour le plan automatiquement.
+2. **Payment Links** — tu peux garder `https://buy.stripe.com/...` dans ces variables (redirection directe). Ajoute aussi `STRIPE_STARTER_PRICE_ID` / `STRIPE_PLUS_PRICE_ID` (ou legacy `STRIPE_CREATOR_PRICE_ID` pour le 19€) pour que les webhooks activent le bon plan.
 
 ---
 

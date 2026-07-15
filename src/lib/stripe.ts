@@ -35,7 +35,10 @@ function yearlyEnvFor(plan: PaidPlan): string | undefined {
     );
   }
   if (plan === "plus") {
-    return process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID_YEARLY?.trim();
+    return (
+      process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID_YEARLY?.trim() ||
+      process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim()
+    );
   }
   return undefined;
 }
@@ -95,7 +98,10 @@ function getKnownPriceIds(plan: PaidPlan): string[] {
       process.env.STRIPE_STARTER_PRICE_ID?.trim() ||
       process.env.STRIPE_PRO_PRICE_ID?.trim();
   } else if (plan === "plus") {
-    serverVal = process.env.STRIPE_PLUS_PRICE_ID?.trim();
+    serverVal =
+      process.env.STRIPE_PLUS_PRICE_ID?.trim() ||
+      // Legacy Creator 19€ → Pro
+      process.env.STRIPE_CREATOR_PRICE_ID?.trim();
   }
 
   if (isStripePriceId(publicVal)) ids.add(publicVal);
@@ -142,7 +148,7 @@ export function stripeConfigErrorMessage(error: unknown): string | null {
   ) {
     return (
       "Configuration Stripe incorrecte : NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID (ou PRO legacy) et " +
-      "NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID doivent être des ID price_... " +
+      "NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID (ou CREATOR legacy = Pro 19€) doivent être des ID price_... " +
       "(Stripe → Produits → Tarif → ID), pas des liens buy.stripe.com. " +
       "Les Payment Links sont aussi acceptés — redéployez avec la dernière version."
     );
