@@ -18,10 +18,10 @@ export default async function AppLayout({
   const profile = await getOrCreateProfile(user.id, user.email);
 
   return (
-    <div className="flex min-h-dvh min-w-0 overflow-x-hidden">
+    <div className="flex min-h-dvh min-w-0 w-full max-w-full">
       <DashboardSidebar plan={profile.plan} />
       <div className="flex min-w-0 flex-1 flex-col pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
-        <main className="flex-1 min-w-0 overflow-x-hidden p-4 pt-[max(1rem,env(safe-area-inset-top))] sm:p-6 lg:p-8">
+        <main className="flex-1 min-w-0 p-4 pt-[max(1rem,env(safe-area-inset-top))] sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

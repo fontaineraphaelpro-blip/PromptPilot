@@ -12,6 +12,7 @@ import { getServerLocale } from "@/lib/i18n/server";
 import { GoogleAnalyticsHead } from "@/components/analytics/google-analytics-head";
 import { GoogleAnalyticsPageView } from "@/components/analytics/google-analytics-page-view";
 import { SiteAnalytics } from "@/components/analytics/site-analytics";
+import { ScrollFix } from "@/components/layout/scroll-fix";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,11 +84,11 @@ export default async function RootLayout({
   const locale = await getServerLocale();
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <head>
         <GoogleAnalyticsHead />
       </head>
-      <body className="min-h-full w-full overflow-x-hidden flex flex-col font-sans">
+      <body className="w-full max-w-full font-sans">
         <Suspense fallback={null}>
           <GoogleAnalyticsPageView />
         </Suspense>
@@ -97,6 +98,7 @@ export default async function RootLayout({
           </AuthSessionProvider>
         </LocaleProvider>
         <Toaster position="top-right" theme="dark" richColors offset={72} />
+        <ScrollFix />
         <SiteAnalytics />
       </body>
     </html>

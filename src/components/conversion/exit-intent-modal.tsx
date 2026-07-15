@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
 import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 import { PLAN_PRICES } from "@/lib/plans";
-import { useScrollLock } from "@/hooks/use-scroll-lock";
 import { isMarketingProPush } from "@/lib/sales-mode";
 
 const DISMISS_KEY = "pp_exit_dismissed";
@@ -17,7 +16,6 @@ export function ExitIntentModal() {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const pushPro = isMarketingProPush();
-  useScrollLock(open);
 
   useEffect(() => {
     if (sessionStorage.getItem(DISMISS_KEY)) return;

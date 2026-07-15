@@ -26,8 +26,8 @@ export default async function MarketingLayout({
     <div
       className={
         conversionMode
-          ? "relative flex min-h-dvh w-full flex-col overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
-          : "relative flex min-h-dvh w-full flex-col overflow-x-hidden"
+          ? "relative flex min-h-dvh w-full max-w-full flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
+          : "relative flex min-h-dvh w-full max-w-full flex-col"
       }
     >
       <MarketingAmbient />
