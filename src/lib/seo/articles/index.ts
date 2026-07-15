@@ -15,6 +15,12 @@ import { articleMarketing } from "./prompts-marketing-copywriting";
 import { articleVideo } from "./prompts-video-sora-runway";
 import { articleExemplesGratuits } from "./exemples-prompts-ia-gratuits";
 import { articlePromptpilotVsManuel } from "./promptpilot-vs-prompts-manuels";
+import { articleMeilleurGenerateur } from "./meilleur-generateur-de-prompt-ia";
+import { articlePromptsVente } from "./prompts-chatgpt-vendre-plus";
+import { articlePromptsFreelance } from "./prompts-ia-freelance-clients";
+import { articleCreerSiteWeb } from "./prompt-ia-creer-site-web";
+import { articlePromptsCreateurs } from "./prompts-instagram-tiktok-createurs";
+import { articlePromptsEcommerce } from "./prompts-ia-ecommerce";
 
 export const SEO_ARTICLES: SeoArticle[] = [
   articleQuestCeQuunPrompt,
@@ -33,4 +39,10 @@ export const SEO_ARTICLES: SeoArticle[] = [
   articleVideo,
   articleExemplesGratuits,
   articlePromptpilotVsManuel,
+  articleMeilleurGenerateur,
+  articlePromptsVente,
+  articlePromptsFreelance,
+  articleCreerSiteWeb,
+  articlePromptsCreateurs,
+  articlePromptsEcommerce,
 ];
