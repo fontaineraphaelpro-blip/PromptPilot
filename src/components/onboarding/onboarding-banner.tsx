@@ -46,12 +46,12 @@ export function OnboardingBanner() {
                 <span className="inline-flex items-center gap-1">
                   <Eye className="h-3.5 w-3.5" /> Copie
                 </span>{" "}
-                la variante Principal, Court ou Détaillé selon ton besoin
+                la variante Principal ou Court (Détaillé dès Starter)
               </li>
             </ol>
             <Button size="sm" asChild>
               <Link href="/generate" onClick={dismiss}>
-                Générer mon premier prompt
+                Générer mon premier brief
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -59,7 +59,7 @@ export function OnboardingBanner() {
           <button
             type="button"
             onClick={dismiss}
-            className="text-muted-foreground hover:text-foreground p-1"
+            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5"
             aria-label="Fermer"
           >
             <X className="h-4 w-4" />

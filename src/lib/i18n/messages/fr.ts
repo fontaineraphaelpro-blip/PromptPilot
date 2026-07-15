@@ -101,7 +101,7 @@ export const messages = {
     loginLink: "Se connecter",
   },
   app: {
-    dashboard: "Dashboard",
+    dashboard: "Accueil",
     generate: "Générer",
     history: "Historique",
     favorites: "Favoris",

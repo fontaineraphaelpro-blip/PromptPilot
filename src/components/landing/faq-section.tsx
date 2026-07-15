@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { cn } from "@/lib/utils";
@@ -27,7 +26,8 @@ export function FaqSection() {
                   <button
                     type="button"
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex w-full items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-white/[0.02]"
+                    className="flex w-full min-h-11 items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-white/[0.02]"
+                    aria-expanded={isOpen}
                   >
                     <dt className="font-semibold pr-4">{q}</dt>
                     <ChevronDown
@@ -37,21 +37,18 @@ export function FaqSection() {
                       )}
                     />
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.dd
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="px-6 pb-6 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                          {a}
-                        </p>
-                      </motion.dd>
+                  <dd
+                    className={cn(
+                      "grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.21,0.47,0.32,0.98)]",
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                     )}
-                  </AnimatePresence>
+                  >
+                    <div className="overflow-hidden">
+                      <p className="px-6 pb-6 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
+                        {a}
+                      </p>
+                    </div>
+                  </dd>
                 </div>
               </FadeIn>
             );

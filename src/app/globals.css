@@ -44,14 +44,40 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
   width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 body {
   width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .gradient-text,
+  .orb,
+  .marquee-track,
+  .scan-line,
+  .pulse-dot,
+  .demo-mock-glow,
+  .demo-live-dot,
+  .hover-lift {
+    animation: none !important;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
 }
 
 ::selection {
@@ -225,14 +251,30 @@ body {
   0% { transform: translateY(-100%); opacity: 0; }
   10% { opacity: 0.6; }
   90% { opacity: 0.6; }
-  100% { transform: translateY(100vh); opacity: 0; }
+  100% { transform: translateY(100%); opacity: 0; }
 }
 
-/* Glass nav */
+/* Glass surfaces */
 .glass-nav {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-nav-bottom {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .orb {
+    animation: none;
+    opacity: 0.22;
+  }
 }
 
 .glass-card {

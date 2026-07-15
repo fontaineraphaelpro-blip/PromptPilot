@@ -8,7 +8,7 @@ import { ExcellencePromptsBanner } from "@/components/history/excellence-prompts
 import { EmptyState } from "@/components/shared/empty-state";
 import { History } from "lucide-react";
 import { FREE_HISTORY_LIMIT } from "@/lib/constants";
-import { hasUnlimitedPrompts } from "@/lib/plans";
+import { hasFullHistory, PLAN_PRICES } from "@/lib/plans";
 import { Button } from "@/components/ui/button";
 
 export default async function HistoryPage() {
@@ -16,12 +16,12 @@ export default async function HistoryPage() {
   if (!user) return null;
 
   const profile = await getOrCreateProfile(user.id, user.email);
-  const unlimited = hasUnlimitedPrompts(profile.plan);
+  const fullHistory = hasFullHistory(profile.plan);
 
   const rows = await prisma.prompt.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
-    ...(unlimited ? {} : { take: FREE_HISTORY_LIMIT }),
+    ...(fullHistory ? {} : { take: FREE_HISTORY_LIMIT }),
   });
 
   const totalCount = await prisma.prompt.count({
@@ -29,19 +29,23 @@ export default async function HistoryPage() {
   });
 
   const prompts = rows.map(mapPrompt);
-  const truncated = !unlimited && totalCount > FREE_HISTORY_LIMIT;
+  const truncated = !fullHistory && totalCount > FREE_HISTORY_LIMIT;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <h1 className="text-2xl font-bold">Historique</h1>
+      <div>
+        <h1 className="text-2xl font-bold">Historique</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Tous tes briefs générés — retrouve, copie, marque en favori.
+        </p>
+      </div>
       {truncated && (
         <p className="text-sm text-muted-foreground rounded-lg border border-border bg-muted/30 p-4">
-          Plan Free : affichage des {FREE_HISTORY_LIMIT} prompts les plus récents sur {totalCount}{" "}
-          au total.{" "}
+          Affichage des {FREE_HISTORY_LIMIT} briefs les plus récents sur {totalCount} au total.{" "}
           <Button variant="link" className="h-auto p-0 text-sm" asChild>
-            <Link href="/pricing?plan=pro">Passer au Pro</Link>
+            <Link href="/pricing?plan=pro">Pro ({PLAN_PRICES.plus.label})</Link>
           </Button>{" "}
-          pour l&apos;historique complet.
+          débloque l&apos;historique complet.
         </p>
       )}
       {prompts.length > 0 ? (
@@ -52,9 +56,9 @@ export default async function HistoryPage() {
       ) : (
         <EmptyState
           icon={History}
-          title="Aucun prompt"
-          description="Générez votre premier prompt pour le retrouver ici."
-          actionLabel="Créer un prompt"
+          title="Aucun brief pour l’instant"
+          description="Génère ton premier prompt expert — il apparaîtra ici automatiquement."
+          actionLabel="Créer un brief"
           actionHref="/generate"
         />
       )}

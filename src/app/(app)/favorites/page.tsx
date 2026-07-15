@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { mapPrompt } from "@/lib/mappers";
 import { PromptList } from "@/components/history/prompt-list";
 import { EmptyState } from "@/components/shared/empty-state";
-import { canUseFavorites } from "@/lib/plans";
+import { canUseFavorites, PLAN_PRICES } from "@/lib/plans";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
@@ -25,10 +25,15 @@ export default async function FavoritesPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <h1 className="text-2xl font-bold">Favoris</h1>
+      <div>
+        <h1 className="text-2xl font-bold">Favoris</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Tes meilleurs briefs, accessibles en un clic.
+        </p>
+      </div>
       {!favoritesAllowed && (
-        <p className="text-sm text-muted-foreground rounded-lg border border-border bg-muted/30 p-4">
-          Les favoris sont inclus dans Pro (19€/mois).{" "}
+        <p className="text-sm text-muted-foreground rounded-xl border border-border bg-muted/30 p-4">
+          Les favoris sont inclus avec Pro ({PLAN_PRICES.plus.label}).{" "}
           <Button variant="link" className="h-auto p-0 text-sm" asChild>
             <Link href="/pricing?plan=pro">Voir Pro</Link>
           </Button>
@@ -39,14 +44,14 @@ export default async function FavoritesPage() {
       ) : (
         <EmptyState
           icon={Star}
-          title="Aucun favori"
+          title={favoritesAllowed ? "Aucun favori pour l’instant" : "Favoris réservés à Pro"}
           description={
             favoritesAllowed
-              ? "Marquez des prompts en favoris depuis l'historique."
-              : "Passez au Pro pour sauvegarder vos meilleurs prompts en favoris."
+              ? "Depuis l’historique, tape sur l’étoile pour garder un brief ici."
+              : `Passe Pro (${PLAN_PRICES.plus.label}) pour sauvegarder tes meilleurs briefs.`
           }
-          actionLabel={favoritesAllowed ? "Voir l'historique" : "Voir les tarifs"}
-          actionHref={favoritesAllowed ? "/history" : "/pricing?plan=pro"}
+          actionLabel={favoritesAllowed ? "Voir l’historique" : "Comparer les plans"}
+          actionHref={favoritesAllowed ? "/history" : "/pricing"}
         />
       )}
     </div>

@@ -15,7 +15,7 @@ export function HeroSection() {
   const { messages: m } = useLocale();
 
   return (
-    <section className="relative w-full min-h-[min(85vh,900px)] flex items-center overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-20">
+    <section className="relative w-full min-h-[min(85dvh,900px)] flex items-center overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-20">
       <GridBackground />
       <div className="scan-line pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 

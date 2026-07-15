@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
 import type { Template } from "@/types";
 import { TEMPLATE_CATEGORIES } from "@/lib/constants";
-import { canAccessPremiumTemplates } from "@/lib/plans";
+import { canAccessPremiumTemplates, PLAN_PRICES } from "@/lib/plans";
 import type { Plan } from "@/lib/constants";
 import { saveTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { cn } from "@/lib/utils";
@@ -78,7 +78,7 @@ function TemplateCard({
               </span>
               <p className="text-sm font-medium">Prompt Premium</p>
               <p className="text-xs text-muted-foreground max-w-[220px]">
-                Débloque avec Pro (9€) ou Creator (19€) pour lire, copier et utiliser ce template.
+                Inclus avec Pro ou Creator — pour lire, copier et utiliser ce template.
               </p>
             </div>
           )}
@@ -106,7 +106,7 @@ function TemplateCard({
             <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
               <Link href="/pricing?plan=pro">
                 <Lock className="h-3 w-3" />
-                Débloquer — Pro 19€/mois
+                Débloquer avec Pro
               </Link>
             </Button>
           ) : (
@@ -146,7 +146,10 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   async function handleCopy(id: string, content: string, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toastUpgradeRequired("Les templates premium sont inclus avec Pro (19€/mois).", "plus");
+      toastUpgradeRequired(
+        `Les templates premium sont inclus avec Pro (${PLAN_PRICES.plus.label}).`,
+        "plus"
+      );
       return;
     }
     await copy(content, id);
@@ -155,7 +158,10 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   function handleUse(t: Template, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toastUpgradeRequired("Les templates premium sont inclus avec Pro (19€/mois).", "plus");
+      toastUpgradeRequired(
+        `Les templates premium sont inclus avec Pro (${PLAN_PRICES.plus.label}).`,
+        "plus"
+      );
       return;
     }
     saveTemplatePrefill({

@@ -15,12 +15,18 @@ export default async function MarketingLayout({
   const showConversion = !user;
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div
+      className={
+        showConversion
+          ? "relative flex min-h-dvh w-full flex-col overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
+          : "relative flex min-h-dvh w-full flex-col overflow-x-hidden"
+      }
+    >
       <MarketingAmbient />
       <Navbar user={user ? { email: user.email } : null} />
       <SalesSetupBanner />
       {showConversion && <ConversionShell />}
-      <main className="flex-1 w-full pb-24 sm:pb-20">{children}</main>
+      <main className="flex-1 w-full">{children}</main>
       <Footer />
     </div>
   );

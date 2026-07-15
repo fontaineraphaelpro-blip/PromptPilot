@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Loader2 } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { PRICING_PLANS, PLAN_PRICES, type PaidPlan } from "@/lib/plans";
 import { ROI_HEADLINE } from "@/lib/product-value";
@@ -54,10 +53,7 @@ export function PricingSection({
         <div className="mt-16 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {PRICING_PLANS.map((plan, i) => (
             <FadeIn key={plan.name} delay={i * 0.08}>
-              <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
+              <div className="hover-lift h-full">
                 <Card
                   className={cn(
                     "h-full glass-card overflow-hidden",
@@ -116,13 +112,16 @@ export function PricingSection({
                     )}
                   </CardFooter>
                 </Card>
-              </motion.div>
+              </div>
             </FadeIn>
           ))}
         </div>
 
         <FadeIn className="mt-20">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-6 py-10 sm:px-10">
+          <div
+            id="credits"
+            className="scroll-mt-24 rounded-2xl border border-white/10 bg-white/[0.02] px-6 py-10 sm:px-10"
+          >
             <div className="text-center max-w-xl mx-auto">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
                 Sans abonnement

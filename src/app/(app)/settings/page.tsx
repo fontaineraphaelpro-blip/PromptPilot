@@ -22,7 +22,7 @@ export default async function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Compte</CardTitle>
-          <CardDescription>Informations de votre profil</CardDescription>
+          <CardDescription>Infos de ton profil</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -58,7 +58,7 @@ export default async function SettingsPage() {
           </Button>
           {profile.plan === "free" && (
             <Button asChild>
-              <Link href="/pricing">Passer au Pro</Link>
+              <Link href="/pricing?plan=pro">Voir Pro</Link>
             </Button>
           )}
           {(profile.plan === "starter" || profile.plan === "plus") && (

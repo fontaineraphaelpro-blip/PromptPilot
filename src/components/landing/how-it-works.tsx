@@ -2,7 +2,6 @@
 
 import { MessageSquare, Cpu, Copy } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
-import { motion } from "framer-motion";
 
 const steps = [
   {
@@ -44,11 +43,7 @@ export function HowItWorks() {
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {steps.map((step, i) => (
             <FadeIn key={step.title} delay={i * 0.12}>
-              <motion.div
-                className="gradient-border hover-lift relative rounded-2xl p-8 h-full"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
+              <div className="gradient-border hover-lift relative rounded-2xl p-8 h-full">
                 <span className="font-mono text-xs text-muted-foreground">
                   0{i + 1}
                 </span>
@@ -57,7 +52,7 @@ export function HowItWorks() {
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                   {step.description}
                 </p>
-              </motion.div>
+              </div>
             </FadeIn>
           ))}
         </div>

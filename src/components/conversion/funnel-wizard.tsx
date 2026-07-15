@@ -84,7 +84,7 @@ export function FunnelWizard() {
   return (
     <section
       id="funnel"
-      className="relative px-3 py-12 sm:px-6 sm:py-20 scroll-mt-24 overflow-x-hidden w-full max-w-[100vw]"
+      className="relative px-3 py-12 sm:px-6 sm:py-20 scroll-mt-24 overflow-x-hidden w-full min-w-0"
     >
       <div className="absolute inset-0 bg-gradient-radial-top opacity-40 pointer-events-none" />
       <div className="relative w-full max-w-3xl mx-auto min-w-0 px-1 sm:px-6">
@@ -161,7 +161,6 @@ export function FunnelWizard() {
                     onChange={(e) => setIdea(e.target.value)}
                     placeholder="Ex : Je veux une landing page pour mon SaaS de prompts IA..."
                     className="mt-3 min-h-[120px] text-base border-white/15 bg-black/40"
-                    autoFocus
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">{m.funnel.ideaHint}</p>

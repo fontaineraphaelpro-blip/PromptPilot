@@ -1,9 +1,12 @@
 "use client";
 
-import { motion, type HTMLMotionProps } from "framer-motion";
+import type { ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface FadeInProps extends HTMLMotionProps<"div"> {
+interface FadeInProps {
+  children: ReactNode;
+  className?: string;
   delay?: number;
   duration?: number;
   y?: number;
@@ -15,8 +18,13 @@ export function FadeIn({
   delay = 0,
   duration = 0.6,
   y = 24,
-  ...props
 }: FadeInProps) {
+  const reduce = useReducedMotion();
+
+  if (reduce) {
+    return <div className={cn(className)}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y }}
@@ -24,7 +32,6 @@ export function FadeIn({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={cn(className)}
-      {...props}
     >
       {children}
     </motion.div>
@@ -36,10 +43,16 @@ export function FadeInHero({
   className,
   delay = 0,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) {
+  const reduce = useReducedMotion();
+
+  if (reduce) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}

@@ -9,7 +9,6 @@ import type { GeneratePromptResult } from "@/types";
 import { TARGET_AIS, type Plan, type TargetAI } from "@/lib/constants";
 import { canUseFavorites, PLAN_PRICES } from "@/lib/plans";
 import { canUseExpertDetailLevel } from "@/lib/generate-plan-guard";
-import { PLUS_MONTHLY_LIMIT, STARTER_MONTHLY_LIMIT } from "@/lib/constants";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { getAdaptPrefill } from "@/lib/conversion/adapt-prefill";
@@ -28,7 +27,7 @@ interface GenerateClientProps {
     used: number;
     limit: number | null;
     remaining: number | null;
-    period?: "lifetime" | "monthly" | "daily" | null;
+    period?: "lifetime" | "monthly" | null;
     credits?: number;
   };
   openaiReady: boolean;
@@ -117,7 +116,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
 
       if (!res.ok) {
         if (res.status === 401) {
-          toast.error("Session expirée — reconnectez-vous");
+          toast.error("Session expirée — reconnecte-toi");
           window.location.href = "/login?redirect=/generate";
           return;
         }
@@ -194,7 +193,9 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
     toast.error("Impossible de mettre à jour le favori");
   }
 
-  const atLimit = usage.limit !== null && !usage.allowed;
+  const credits = usage.credits ?? 0;
+  const atLimit = !usage.allowed && credits === 0;
+  const canGenerate = usage.allowed || credits > 0;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -202,25 +203,32 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            Générateur de prompts
+            Nouveau brief
           </h1>
           <p className="text-muted-foreground mt-1">
-            Transforme ton idée en prompt expert optimisé pour l&apos;IA choisie.
+            Une idée, une IA — un brief scoré prêt à coller.
           </p>
         </div>
-        {usage.limit !== null && (
-          <Badge variant={atLimit ? "outline" : "default"} className="shrink-0">
-            {usage.used}/{usage.limit}{" "}
-            {usage.period === "lifetime"
-              ? "prompts gratuits"
-              : usage.period === "monthly"
-                ? "ce mois"
-                : "prompts"}
-          </Badge>
-        )}
-        {usage.limit === null && plan === "creator" && (
-          <Badge variant="creator">Illimité</Badge>
-        )}
+        <div className="flex flex-wrap gap-2 shrink-0">
+          {usage.limit !== null && (
+            <Badge variant={atLimit && credits === 0 ? "outline" : "default"}>
+              {usage.used}/{usage.limit}{" "}
+              {usage.period === "lifetime"
+                ? "offerts"
+                : usage.period === "monthly"
+                  ? "ce mois"
+                  : "briefs"}
+            </Badge>
+          )}
+          {credits > 0 && (
+            <Badge variant="outline" className="border-emerald-500/30 text-emerald-100">
+              {credits} crédit{credits > 1 ? "s" : ""}
+            </Badge>
+          )}
+          {usage.limit === null && plan === "creator" && (
+            <Badge variant="creator">Illimité</Badge>
+          )}
+        </div>
       </div>
 
       {!openaiReady && (
@@ -240,14 +248,19 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
               {plan === "free"
-                ? `Tes briefs offerts sont utilisés. Packs de crédits, Starter (${PLAN_PRICES.starter.label}) ou Pro (${PLAN_PRICES.plus.label}) — à toi de choisir.`
+                ? `Tes essais offerts sont terminés. Un pack de crédits ou Starter (${PLAN_PRICES.starter.label}) suffit pour continuer.`
                 : plan === "starter"
-                  ? `Quota Starter (${STARTER_MONTHLY_LIMIT}/mois) atteint. Un pack ou Pro (${PLAN_PRICES.plus.label}) peut prolonger.`
-                  : `Quota Pro (${PLUS_MONTHLY_LIMIT}/mois) atteint. Pack de crédits ou Creator (${PLAN_PRICES.creator.label}).`}
+                  ? `Quota Starter atteint. Un pack de crédits ou Pro (${PLAN_PRICES.plus.label}) peut prolonger.`
+                  : `Quota mensuel atteint. Pack de crédits ou Creator (${PLAN_PRICES.creator.label}).`}
             </p>
-            <Button size="sm" asChild>
-              <Link href="/pricing">Voir les options</Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+              <Button size="sm" asChild>
+                <Link href="/pricing#credits">Acheter des crédits</Link>
+              </Button>
+              <Button size="sm" variant="outline" asChild>
+                <Link href="/pricing">Voir les plans</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -256,7 +269,7 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         <PromptGeneratorForm
           onSubmit={handleSubmit}
           isLoading={isLoading}
-          disabled={atLimit || !openaiReady}
+          disabled={!canGenerate || !openaiReady}
           defaultValues={prefillDefaults}
           plan={plan}
         />
@@ -281,38 +294,43 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
               setIsFavorite(false);
             }}
           />
-          <UpgradeValuePanel
-            plan={plan}
-            promptScore={result.prompt_score ?? undefined}
-          />
+          {(plan === "free" || plan === "starter") &&
+            (result.prompt_score ?? 0) >= 70 && (
+              <UpgradeValuePanel
+                plan={plan}
+                promptScore={result.prompt_score ?? undefined}
+              />
+            )}
         </>
-      )}
-
-      {isLoading && (
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            Génération en cours… 10 à 30 secondes en moyenne.
-          </CardContent>
-        </Card>
       )}
 
       {plan === "free" && !atLimit && !result && (
         <Card className="border-white/10 bg-white/[0.02]">
           <CardContent className="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-xs text-muted-foreground">
-              Plan Free · {usage.remaining ?? 0} génération(s) gratuite(s) restante(s)
+              {credits > 0
+                ? `Tu génères aussi avec tes crédits · ${credits} restant${credits > 1 ? "s" : ""}`
+                : `Free · ${usage.remaining ?? 0} brief${(usage.remaining ?? 0) !== 1 ? "s" : ""} offert${(usage.remaining ?? 0) !== 1 ? "s" : ""}`}
             </p>
             <Button size="sm" variant="outline" asChild>
-              <Link href="/pricing?plan=pro">Voir Pro — {PLAN_PRICES.plus.label}</Link>
+              <Link href="/pricing">Comparer les plans</Link>
             </Button>
           </CardContent>
         </Card>
       )}
-      {plan === "starter" && (
+      {plan === "starter" && !result && (
         <p className="text-center text-xs text-muted-foreground">
-          Plan Starter · Expert à l&apos;unité, ou inclus avec{" "}
+          Starter · Expert à l&apos;unité, ou inclus avec{" "}
           <Link href="/pricing?plan=pro" className="text-primary hover:underline">
             Pro ({PLAN_PRICES.plus.label})
+          </Link>
+        </p>
+      )}
+      {plan === "plus" && !result && (
+        <p className="text-center text-xs text-muted-foreground">
+          Pro · workflows avec{" "}
+          <Link href="/pricing?plan=creator" className="text-primary hover:underline">
+            Creator ({PLAN_PRICES.creator.label})
           </Link>
         </p>
       )}

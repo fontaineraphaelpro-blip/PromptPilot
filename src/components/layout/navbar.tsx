@@ -8,13 +8,14 @@ import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { BrandMark } from "@/components/brand/brand-mark";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ScrollLink } from "@/components/navigation/scroll-link";
 import type { HomeSectionId } from "@/lib/scroll-to-section";
 import { scrollToHomeTop } from "@/lib/scroll-to-section";
 import { useLocale } from "@/components/providers/locale-provider";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { useScrollLock } from "@/hooks/use-scroll-lock";
 
 const NAV_SECTIONS: { key: "beforeAfter" | "demo" | "how"; section: HomeSectionId }[] = [
   { key: "beforeAfter", section: "examples" },
@@ -30,14 +31,11 @@ export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { messages: m } = useLocale();
+  const reduce = useReducedMotion();
+  useScrollLock(mobileOpen);
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="glass-nav sticky top-0 z-50 w-full"
-    >
+    <header className="glass-nav sticky top-0 z-50 w-full pt-[env(safe-area-inset-top)]">
       <div className={cn(MARKETING_CONTAINER, "flex h-14 sm:h-16 items-center justify-between gap-3")}>
         <Link
           href="/"
@@ -94,8 +92,9 @@ export function Navbar({ user }: NavbarProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="md:hidden h-9 w-9"
+            className="md:hidden h-11 w-11"
             aria-label={mobileOpen ? m.nav.closeMenu : m.nav.openMenu}
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((o) => !o)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -106,13 +105,18 @@ export function Navbar({ user }: NavbarProps) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="md:hidden overflow-hidden border-t border-white/10 bg-black/95 backdrop-blur-xl"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduce ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden border-t border-white/10 bg-black/95 backdrop-blur-xl"
           >
-            <nav className={cn(MARKETING_CONTAINER, "flex flex-col gap-1 py-4 max-h-[70vh] overflow-y-auto")}>
+            <nav
+              className={cn(
+                MARKETING_CONTAINER,
+                "flex flex-col gap-1 py-4 max-h-[min(70vh,70dvh)] overflow-y-auto overscroll-contain"
+              )}
+            >
               <div className="px-3 pb-2 sm:hidden">
                 <LanguageSwitcher />
               </div>
@@ -120,7 +124,7 @@ export function Navbar({ user }: NavbarProps) {
                 <ScrollLink
                   key={section}
                   section={section}
-                  className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                  className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 min-h-11 flex items-center"
                   onClick={() => setMobileOpen(false)}
                 >
                   {m.nav[key]}
@@ -128,7 +132,7 @@ export function Navbar({ user }: NavbarProps) {
               ))}
               <Link
                 href="/pricing"
-                className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 min-h-11 flex items-center"
                 onClick={() => setMobileOpen(false)}
               >
                 {m.nav.pricing}
@@ -137,14 +141,14 @@ export function Navbar({ user }: NavbarProps) {
                 <>
                   <ScrollLink
                     section="funnel"
-                    className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                    className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 min-h-11 flex items-center"
                     onClick={() => setMobileOpen(false)}
                   >
                     {m.nav.tryNow}
                   </ScrollLink>
                   <Link
                     href="/login"
-                    className="rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-white/5"
+                    className="rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-white/5 min-h-11 flex items-center"
                     onClick={() => setMobileOpen(false)}
                   >
                     {m.nav.login}
@@ -154,7 +158,7 @@ export function Navbar({ user }: NavbarProps) {
               {user && (
                 <Link
                   href="/dashboard"
-                  className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5"
+                  className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 min-h-11 flex items-center"
                   onClick={() => setMobileOpen(false)}
                 >
                   {m.nav.dashboard}
@@ -164,6 +168,6 @@ export function Navbar({ user }: NavbarProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

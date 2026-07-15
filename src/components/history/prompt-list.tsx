@@ -134,7 +134,20 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-center text-muted-foreground py-12">Aucun prompt trouvé.</p>
+        <p className="text-center text-muted-foreground py-12">
+          Aucun brief avec ces filtres.{" "}
+          <button
+            type="button"
+            className="underline underline-offset-2 hover:text-foreground"
+            onClick={() => {
+              setFilterAI("Tous");
+              setFilterTask("Tous");
+              setFilterTag("Tous");
+            }}
+          >
+            Tout réafficher
+          </button>
+        </p>
       ) : (
         <ul className="space-y-3">
           {filtered.map((p) => {

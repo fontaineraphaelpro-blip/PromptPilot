@@ -22,7 +22,7 @@ export function CopyFeedback({ promptId, initial }: CopyFeedbackProps) {
       });
       if (!res.ok) throw new Error();
       setSent(true);
-      toast.success("Merci pour votre retour !");
+      toast.success("Merci pour ton retour !");
     } catch {
       toast.error("Impossible d'enregistrer le retour");
     }
@@ -32,13 +32,13 @@ export function CopyFeedback({ promptId, initial }: CopyFeedbackProps) {
 
   if (sent) {
     return (
-      <p className="text-xs text-muted-foreground">Merci pour votre retour sur ce prompt.</p>
+      <p className="text-xs text-muted-foreground">Merci pour ton retour sur ce prompt.</p>
     );
   }
 
   return (
     <div className="rounded-lg border border-border/60 bg-muted/30 p-3">
-      <p className="text-sm font-medium mb-2">Ça a marché dans votre IA ?</p>
+      <p className="text-sm font-medium mb-2">Ça a marché dans ton IA ?</p>
       <div className="flex gap-2">
         <Button size="sm" variant="outline" onClick={() => submit("yes")}>
           <ThumbsUp className="h-4 w-4" />

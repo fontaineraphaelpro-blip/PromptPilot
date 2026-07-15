@@ -39,7 +39,7 @@ export function PlanComparisonTable({
   return (
     <FadeIn>
       <div className="mt-16 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto overscroll-x-contain">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
               <tr className="border-b border-white/10">
