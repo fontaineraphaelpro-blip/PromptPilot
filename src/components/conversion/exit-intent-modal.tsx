@@ -7,13 +7,16 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Sparkles, Clock } from "lucide-react";
 import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
+import { PLAN_PRICES } from "@/lib/plans";
 import { useScrollLock } from "@/hooks/use-scroll-lock";
+import { isMarketingProPush } from "@/lib/sales-mode";
 
 const DISMISS_KEY = "pp_exit_dismissed";
 
 export function ExitIntentModal() {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
+  const pushPro = isMarketingProPush();
   useScrollLock(open);
 
   useEffect(() => {
@@ -81,8 +84,9 @@ export function ExitIntentModal() {
               Compte gratuit en 30 secondes —{" "}
               <strong className="text-foreground">
                 {FREE_LIFETIME_LIMIT} briefs scorés /100
-              </strong>{" "}
-              pour juger la qualité sur ton vrai projet. Sans carte.
+              </strong>
+              . Sans carte. Ou passe Pro ({PLAN_PRICES.plus.label}) pour Expert à
+              chaque génération.
             </p>
             <p className="mt-4 inline-flex items-center gap-2 text-xs text-emerald-200/90">
               <Clock className="h-3.5 w-3.5 shrink-0" />
@@ -94,11 +98,19 @@ export function ExitIntentModal() {
                   Créer mon compte — gratuit
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="w-full" asChild>
-                <ScrollLink section="funnel" onClick={dismiss}>
-                  Voir un aperçu en 30 s
-                </ScrollLink>
-              </Button>
+              {pushPro ? (
+                <Button variant="outline" size="lg" className="w-full" asChild>
+                  <Link href="/pricing?plan=pro" onClick={dismiss}>
+                    Voir Pro — {PLAN_PRICES.plus.label}
+                  </Link>
+                </Button>
+              ) : (
+                <Button variant="outline" size="lg" className="w-full" asChild>
+                  <ScrollLink section="funnel" onClick={dismiss}>
+                    Voir un aperçu en 30 s
+                  </ScrollLink>
+                </Button>
+              )}
             </div>
           </motion.div>
         </>

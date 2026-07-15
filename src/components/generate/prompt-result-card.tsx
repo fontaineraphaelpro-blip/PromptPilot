@@ -212,8 +212,14 @@ export function PromptResultCard({
                         prompt seul, ou l’avoir à chaque génération avec Pro.
                       </p>
                       <div className="flex flex-col sm:flex-row gap-2 w-full max-w-xs">
+                        <Button size="sm" className="flex-1" asChild>
+                          <Link href="/pricing?plan=pro">
+                            Pro — {PLAN_PRICES.plus.label}
+                          </Link>
+                        </Button>
                         <Button
                           size="sm"
+                          variant="outline"
                           className="flex-1"
                           onClick={handleExpertUnlock}
                           disabled={unlocking || !result.id}
@@ -221,12 +227,7 @@ export function PromptResultCard({
                           {unlocking ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                           ) : null}
-                          Débloquer — {EXPERT_UNLOCK.label}
-                        </Button>
-                        <Button size="sm" variant="outline" className="flex-1" asChild>
-                          <Link href="/pricing?plan=pro">
-                            Pro — {PLAN_PRICES.plus.label}
-                          </Link>
+                          Ce brief — {EXPERT_UNLOCK.label}
                         </Button>
                       </div>
                     </div>

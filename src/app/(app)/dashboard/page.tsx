@@ -52,7 +52,9 @@ export default async function DashboardPage() {
         <CheckoutSuccessBanner />
       </Suspense>
       <OnboardingBanner />
-      {profile.plan === "free" && hasGenerated && <FreePlanUpgradeBanner />}
+      {profile.plan === "free" && hasGenerated && (
+        <FreePlanUpgradeBanner remaining={usage.remaining} />
+      )}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -83,8 +85,8 @@ export default async function DashboardPage() {
           </CardHeader>
           {profile.plan === "free" && (
             <CardContent className="pt-0">
-              <Button variant="link" className="h-auto p-0 text-xs" asChild>
-                <Link href="/pricing">Voir les options</Link>
+              <Button variant="outline" asChild>
+                <Link href="/pricing?plan=pro">Voir les options</Link>
               </Button>
             </CardContent>
           )}

@@ -10,9 +10,12 @@ import { MARKETING_CONTAINER } from "@/lib/layout-width";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/components/providers/locale-provider";
+import { isMarketingProPush } from "@/lib/sales-mode";
+import { PLAN_PRICES } from "@/lib/plans";
 
 export function HeroSection() {
   const { messages: m } = useLocale();
+  const pushPro = isMarketingProPush();
 
   return (
     <section className="relative w-full min-h-[min(85dvh,900px)] flex items-center overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-20">
@@ -58,14 +61,25 @@ export function HeroSection() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </ScrollLink>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto sm:min-w-[180px] border-white/20"
-              asChild
-            >
-              <Link href="/signup">{m.hero.ctaSignup}</Link>
-            </Button>
+            {pushPro ? (
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto sm:min-w-[180px] border-white/20"
+                asChild
+              >
+                <Link href="/pricing?plan=pro">Pro — {PLAN_PRICES.plus.label}</Link>
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto sm:min-w-[180px] border-white/20"
+                asChild
+              >
+                <Link href="/signup">{m.hero.ctaSignup}</Link>
+              </Button>
+            )}
           </div>
           <p className="mt-4 text-xs text-muted-foreground px-4">{m.hero.footnote}</p>
         </FadeInHero>

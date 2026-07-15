@@ -42,8 +42,8 @@ export function PricingSection({
             Un rythme clair — Free, Starter, Pro ou Creator
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg px-2">
-            {ROI_HEADLINE} Commence gratuitement, puis choisis ce qui correspond à ton
-            usage — sans pression.
+            {ROI_HEADLINE} Commence gratuit — Pro ({PLAN_PRICES.plus.label}) quand tu
+            enchaînes les briefs.
           </p>
           <div className="mt-6 flex justify-center">
             <GuaranteeBadge />
@@ -130,7 +130,8 @@ export function PricingSection({
                 Des crédits quand tu en as besoin
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Pas envie d’un abonnement ? Achète un pack et utilise-le à ton rythme.
+                Usage chaque semaine → Pro rentabilisé en 1–2 briefs. Besoin ponctuel → un pack
+                de crédits, sans abonnement.
               </p>
             </div>
 

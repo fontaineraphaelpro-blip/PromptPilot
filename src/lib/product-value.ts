@@ -163,14 +163,14 @@ export function getUpgradeHighlights(currentPlan: Plan): UpgradeHighlight[] {
   if (currentPlan === "free") {
     return [
       {
-        title: "Starter pour un rythme régulier",
-        description: `${STARTER_MONTHLY_LIMIT} briefs / mois et variante Détaillée — sans engagement compliqué.`,
-        plan: "starter",
+        title: "Pro — Expert à chaque génération",
+        description: `Variante Expert, templates premium, favoris et regen score < 70 — ${PLAN_PRICES.plus.label}. Rentabilisé dès 1–2 briefs.`,
+        plan: "plus",
       },
       {
-        title: "Pro — Expert à chaque génération",
-        description: `Variante Expert, templates premium et favoris — ${PLAN_PRICES.plus.label}.`,
-        plan: "plus",
+        title: "Starter — rythme régulier",
+        description: `${STARTER_MONTHLY_LIMIT} briefs / mois + variante Détaillée — ${PLAN_PRICES.starter.label}.`,
+        plan: "starter",
       },
       {
         title: "Creator — workflows & volume",

@@ -22,7 +22,8 @@ export async function sendQuotaExhaustedEmail(email: string): Promise<void> {
     subject: `Quota gratuit épuisé — ${APP_NAME}`,
     html: `
       <p>Vous avez utilisé vos ${FREE_LIFETIME_LIMIT} générations gratuites.</p>
-      <p><a href="${appUrl}/pricing?plan=pro">Voir Pro</a> (19€/mois, Expert inclus) ou un pack de crédits pour continuer à ton rythme.</p>
+      <p><a href="${appUrl}/pricing?plan=pro"><strong>Passer Pro (19€/mois)</strong></a> — Expert inclus à chaque brief, annulation en 1 clic.</p>
+      <p style="color:#888;font-size:14px">Sinon : <a href="${appUrl}/pricing#credits">un pack de crédits</a> pour un besoin ponctuel.</p>
     `,
   });
 }

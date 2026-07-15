@@ -7,8 +7,12 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
 import { MARKETING_CONTAINER } from "@/lib/layout-width";
+import { PLAN_PRICES } from "@/lib/plans";
+import { isMarketingProPush } from "@/lib/sales-mode";
 
 export function FinalCtaSection() {
+  const pushPro = isMarketingProPush();
+
   return (
     <section className="py-16 sm:py-24 w-full">
       <FadeIn className={MARKETING_CONTAINER}>
@@ -16,7 +20,7 @@ export function FinalCtaSection() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-emerald-200/90 mb-6">
             <Sparkles className="h-4 w-4" />
-            {FREE_LIFETIME_LIMIT} briefs offerts · sans carte · risque zéro
+            {FREE_LIFETIME_LIMIT} briefs offerts · Pro dès {PLAN_PRICES.plus.label}
           </p>
           <h2 className="text-2xl font-bold sm:text-4xl tracking-tight relative px-2 text-balance">
             Ce soir, tu peux récupérer 45 minutes — ou les reperdre sur ChatGPT
@@ -32,9 +36,17 @@ export function FinalCtaSection() {
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:min-w-[200px]" asChild>
-              <ScrollLink section="roi">Calculer mon ROI</ScrollLink>
-            </Button>
+            {pushPro ? (
+              <Button size="lg" variant="outline" className="w-full sm:min-w-[200px]" asChild>
+                <Link href="/pricing?plan=pro">
+                  Pro — {PLAN_PRICES.plus.label}
+                </Link>
+              </Button>
+            ) : (
+              <Button size="lg" variant="outline" className="w-full sm:min-w-[200px]" asChild>
+                <ScrollLink section="roi">Calculer mon ROI</ScrollLink>
+              </Button>
+            )}
           </div>
         </div>
       </FadeIn>

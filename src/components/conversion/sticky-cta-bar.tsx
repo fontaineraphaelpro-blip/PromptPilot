@@ -1,18 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ScrollLink } from "@/components/navigation/scroll-link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FREE_LIFETIME_LIMIT } from "@/lib/constants";
+import { PLAN_PRICES } from "@/lib/plans";
 import { useLocale } from "@/components/providers/locale-provider";
+import { isMarketingProPush } from "@/lib/sales-mode";
 
-export function StickyCtaBar() {
+type StickyMode = "guest" | "free";
+
+export function StickyCtaBar({ mode = "guest" }: { mode?: StickyMode }) {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const { messages: m } = useLocale();
   const reduce = useReducedMotion();
+  const pushPro = isMarketingProPush() || mode === "free";
 
   useEffect(() => {
     const onScroll = () => {
@@ -36,20 +42,51 @@ export function StickyCtaBar() {
         >
           <div className="mx-auto flex max-w-4xl items-center gap-2 sm:gap-3">
             <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium leading-snug inline-flex flex-wrap items-baseline gap-x-1.5">
-                <span className="tabular-nums">{FREE_LIFETIME_LIMIT}</span>
-                <span>{m.sticky.promptsToday}</span>
+              <p className="text-xs sm:text-sm font-medium leading-snug">
+                {mode === "free"
+                  ? `Pro — Expert inclus · ${PLAN_PRICES.plus.label}`
+                  : pushPro
+                    ? `${FREE_LIFETIME_LIMIT} briefs offerts · Pro dès ${PLAN_PRICES.plus.label}`
+                    : (
+                        <>
+                          <span className="tabular-nums">{FREE_LIFETIME_LIMIT}</span>{" "}
+                          {m.sticky.promptsToday}
+                        </>
+                      )}
               </p>
               <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
-                {m.sticky.sub}
+                {mode === "free"
+                  ? "Annulation 1 clic · rentabilisé dès 1–2 briefs"
+                  : m.sticky.sub}
               </p>
             </div>
-            <Button size="sm" className="shrink-0 text-xs sm:text-sm h-9" asChild>
-              <ScrollLink section="funnel">
-                {m.sticky.cta}
-                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              </ScrollLink>
-            </Button>
+            {mode === "free" ? (
+              <Button size="sm" className="shrink-0 text-xs sm:text-sm h-9" asChild>
+                <Link href="/pricing?plan=pro">
+                  Passer Pro
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </Link>
+              </Button>
+            ) : pushPro ? (
+              <div className="flex shrink-0 gap-2">
+                <Button size="sm" className="text-xs sm:text-sm h-9" asChild>
+                  <Link href="/pricing?plan=pro">
+                    Voir Pro
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+                <Button size="sm" variant="outline" className="hidden sm:inline-flex h-9" asChild>
+                  <ScrollLink section="funnel">{m.sticky.cta}</ScrollLink>
+                </Button>
+              </div>
+            ) : (
+              <Button size="sm" className="shrink-0 text-xs sm:text-sm h-9" asChild>
+                <ScrollLink section="funnel">
+                  {m.sticky.cta}
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </ScrollLink>
+              </Button>
+            )}
             <button
               type="button"
               onClick={() => setDismissed(true)}

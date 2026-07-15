@@ -32,7 +32,7 @@ export const messages = {
       "Une phrase suffit. Tu reçois un brief expert scoré /100, avec preview et 4 variantes — 30 à 60 min de travail manuel économisées à chaque génération.",
     ctaTry: "Générer mon brief gratuit",
     ctaSignup: "Créer mon compte",
-    footnote: `${FREE_LIFETIME_LIMIT} briefs offerts · sans carte · packs ou abo selon ton rythme`,
+    footnote: `${FREE_LIFETIME_LIMIT} briefs offerts · sans carte · Pro dès 19€/mois`,
     statAis: "IA supportées",
     statScore: "Score /100",
     statVariants: "Variantes",
@@ -67,9 +67,9 @@ export const messages = {
     errorLimit: "Limite démo atteinte",
   },
   sticky: {
-    promptsToday: "prompts experts offerts",
-    sub: "Brief scoré + 4 variantes — sans carte",
-    cta: "Générer mon brief",
+    promptsToday: "briefs experts offerts",
+    sub: "Ou Pro — Expert inclus, annulation 1 clic",
+    cta: "Essayer gratuitement",
     close: "Fermer",
   },
   home: {

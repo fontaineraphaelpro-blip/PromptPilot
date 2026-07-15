@@ -248,17 +248,27 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
               {plan === "free"
-                ? `Tes essais offerts sont terminés. Un pack de crédits ou Starter (${PLAN_PRICES.starter.label}) suffit pour continuer.`
+                ? `Tes essais offerts sont terminés. Pro (${PLAN_PRICES.plus.label}) — Expert inclus, prêt en 1 clic.`
                 : plan === "starter"
-                  ? `Quota Starter atteint. Un pack de crédits ou Pro (${PLAN_PRICES.plus.label}) peut prolonger.`
-                  : `Quota mensuel atteint. Pack de crédits ou Creator (${PLAN_PRICES.creator.label}).`}
+                  ? `Quota Starter atteint. Passe Pro (${PLAN_PRICES.plus.label}) pour Expert + volume, ou un pack de crédits.`
+                  : `Quota mensuel atteint. Creator (${PLAN_PRICES.creator.label}) pour l’illimité, ou un pack de crédits.`}
             </p>
             <div className="flex flex-col sm:flex-row gap-2 shrink-0">
               <Button size="sm" asChild>
-                <Link href="/pricing#credits">Acheter des crédits</Link>
+                <Link
+                  href={
+                    plan === "plus"
+                      ? "/pricing?plan=creator"
+                      : "/pricing?plan=pro"
+                  }
+                >
+                  {plan === "plus"
+                    ? `Creator — ${PLAN_PRICES.creator.label}`
+                    : `Passer Pro — ${PLAN_PRICES.plus.label}`}
+                </Link>
               </Button>
               <Button size="sm" variant="outline" asChild>
-                <Link href="/pricing">Voir les plans</Link>
+                <Link href="/pricing#credits">Pack crédits</Link>
               </Button>
             </div>
           </CardContent>
@@ -310,10 +320,14 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
             <p className="text-xs text-muted-foreground">
               {credits > 0
                 ? `Tu génères aussi avec tes crédits · ${credits} restant${credits > 1 ? "s" : ""}`
-                : `Free · ${usage.remaining ?? 0} brief${(usage.remaining ?? 0) !== 1 ? "s" : ""} offert${(usage.remaining ?? 0) !== 1 ? "s" : ""}`}
+                : (usage.remaining ?? 0) <= 2
+                  ? `Plus que ${usage.remaining ?? 0} brief${(usage.remaining ?? 0) !== 1 ? "s" : ""} — Pro avant de bloquer`
+                  : `Free · ${usage.remaining ?? 0} brief${(usage.remaining ?? 0) !== 1 ? "s" : ""} offert${(usage.remaining ?? 0) !== 1 ? "s" : ""}`}
             </p>
-            <Button size="sm" variant="outline" asChild>
-              <Link href="/pricing">Comparer les plans</Link>
+            <Button size="sm" asChild>
+              <Link href="/pricing?plan=pro">
+                Pro — {PLAN_PRICES.plus.label}
+              </Link>
             </Button>
           </CardContent>
         </Card>

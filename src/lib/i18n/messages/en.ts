@@ -32,7 +32,7 @@ export const messages = {
       "One sentence in. You get an expert brief scored /100, with preview and 4 variants — 30–60 minutes of manual work saved every time.",
     ctaTry: "Generate my free brief",
     ctaSignup: "Create my account",
-    footnote: `${FREE_LIFETIME_LIMIT} free briefs · no card · packs or a plan that fits your pace`,
+    footnote: `${FREE_LIFETIME_LIMIT} free briefs · no card · Pro from €19/mo`,
     statAis: "AIs supported",
     statScore: "Score /100",
     statVariants: "Variants",
@@ -67,9 +67,9 @@ export const messages = {
     errorLimit: "Demo limit reached",
   },
   sticky: {
-    promptsToday: "expert prompts free",
-    sub: "Scored brief + 4 variants — no card",
-    cta: "Generate my brief",
+    promptsToday: "expert briefs free",
+    sub: "Or Pro — Expert included, cancel anytime",
+    cta: "Try for free",
     close: "Close",
   },
   home: {

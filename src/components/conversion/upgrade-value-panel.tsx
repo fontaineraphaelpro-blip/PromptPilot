@@ -31,7 +31,7 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
 
   function goToCheckout(target: PaidPlan) {
     startCheckout(target, session, () => {
-      router.push(`/login?redirect=/pricing&plan=${target}`);
+      router.push(`/login?redirect=/pricing&plan=${target === "plus" ? "pro" : target}`);
     });
   }
 
@@ -40,18 +40,20 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
           <Crown className="h-4 w-4 text-primary" />
-          Aller plus loin, à ton rythme
+          {typeof promptScore === "number" && promptScore >= 70
+            ? `Garde ce ${promptScore}/100 avec Pro`
+            : "Passe Pro — Expert à chaque brief"}
         </CardTitle>
         {typeof promptScore === "number" && promptScore >= 70 && (
           <p className="text-xs text-muted-foreground">
-            Ton brief est déjà scoré {promptScore}/100 — un abonnement Pro ou un déblocage Expert
-            peut prolonger ce niveau de qualité.
+            Ce niveau est déjà là. Pro ({PLAN_PRICES.plus.label}) le met en série —
+            Expert inclus, annulation en 1 clic.
           </p>
         )}
       </CardHeader>
       <CardContent className="space-y-4">
         <ul className="grid gap-3 sm:grid-cols-2">
-          {highlights.map((item) => (
+          {highlights.slice(0, 2).map((item) => (
             <li
               key={item.title}
               className="rounded-lg border border-white/10 bg-white/[0.03] p-3"
@@ -67,28 +69,21 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
           ))}
         </ul>
         <div className="flex flex-col sm:flex-row gap-3">
-          {primaryPlan !== "creator" ? (
-            <>
-              <Button className="flex-1" onClick={() => goToCheckout(primaryPlan)}>
-                {PLAN_LABELS[primaryPlan]} — {PLAN_PRICES[primaryPlan].label}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => goToCheckout("creator")}
-              >
-                Creator — {PLAN_PRICES.creator.label}
-              </Button>
-            </>
-          ) : (
-            <Button className="w-full sm:w-auto" onClick={() => goToCheckout("creator")}>
+          <Button className="flex-1" onClick={() => goToCheckout(primaryPlan)}>
+            Passer {PLAN_LABELS[primaryPlan]} — {PLAN_PRICES[primaryPlan].label}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+          {primaryPlan !== "creator" && (
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => goToCheckout("creator")}
+            >
               Creator — {PLAN_PRICES.creator.label}
-              <ArrowRight className="h-4 w-4" />
             </Button>
           )}
           <Button variant="ghost" size="sm" className="sm:ml-auto" asChild>
-            <Link href="/pricing">Voir les tarifs</Link>
+            <Link href="/pricing?plan=pro">Voir les tarifs</Link>
           </Button>
         </div>
       </CardContent>

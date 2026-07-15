@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FREE_LIFETIME_LIMIT, TARGET_AIS } from "@/lib/constants";
+import { PLAN_PRICES } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -338,6 +339,11 @@ export function FunnelWizard() {
                     >
                       Débloquer mon prompt — gratuit
                       <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                    <Button size="lg" variant="outline" className="w-full" asChild>
+                      <Link href="/pricing?plan=pro">
+                        Ou Pro — Expert toujours inclus ({PLAN_PRICES.plus.label})
+                      </Link>
                     </Button>
                     <p className="text-center text-xs text-muted-foreground">
                       Déjà inscrit ?{" "}
