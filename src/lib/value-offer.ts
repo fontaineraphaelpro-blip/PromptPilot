@@ -16,7 +16,7 @@ export function computeMonthlyRoi(briefsPerWeek: number, hourlyRate: number) {
   const hoursHigh = (briefsPerMonth * MINUTES_SAVED_HIGH) / 60;
   const hoursAvg = (briefsPerMonth * MINUTES_SAVED_AVG) / 60;
   const eurosAvg = Math.round(hoursAvg * hourlyRate);
-  const proBreakEven = PLAN_PRICES.pro.amount / (hourlyRate * (MINUTES_SAVED_AVG / 60));
+  const proBreakEven = PLAN_PRICES.plus.amount / (hourlyRate * (MINUTES_SAVED_AVG / 60));
 
   return {
     briefsPerMonth: Math.round(briefsPerMonth),
@@ -124,12 +124,12 @@ export const PRO_VALUE_STACK = [
 ] as const;
 
 export const PRO_VALUE_TOTAL_LABEL = "Valeur estimée : 150–250 € / mois d’usage sérieux";
-export const PRO_PRICE_HOOK = `${PLAN_PRICES.pro.label} — soit le prix d’un café par jour de travail`;
+export const PRO_PRICE_HOOK = `${PLAN_PRICES.plus.label} — un rythme pro, sans surenchère`;
 
 export const DOUBT_KILLERS = [
   {
     title: "Pas besoin de 200 prompts",
-    text: "Tu n’en fais peut-être que 8 par mois. Chaque brief te rend 30–60 min. Pro est rentable dès le 2ᵉ.",
+    text: "Tu n’en fais peut-être que 8 par mois. Chaque brief te rend 30–60 min. Pro (ou Starter) se rentabilise vite.",
   },
   {
     title: "Ce n’est pas « encore un ChatGPT »",

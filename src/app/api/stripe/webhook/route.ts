@@ -7,13 +7,23 @@ import {
   updateProfileByUserId,
 } from "@/lib/profile";
 import type { Plan } from "@/lib/constants";
+import { normalizePlan } from "@/lib/plans";
+import { prisma } from "@/lib/db";
+import { addPromptCredits } from "@/lib/usage";
+import {
+  creditsForProduct,
+  isCreditPackProduct,
+  isOneShotProductId,
+  oneShotProductFromPriceId,
+} from "@/lib/stripe-oneshot";
+import type { OneShotProductId } from "@/lib/commerce-products";
 
 async function resolvePlanFromSession(
   stripe: Stripe,
   session: Stripe.Checkout.Session,
   fallbackPlan?: Plan
 ): Promise<Plan> {
-  if (fallbackPlan && fallbackPlan !== "free") return fallbackPlan;
+  if (fallbackPlan && fallbackPlan !== "free") return normalizePlan(fallbackPlan);
 
   if (session.subscription) {
     const subscription = await stripe.subscriptions.retrieve(
@@ -24,7 +34,66 @@ async function resolvePlanFromSession(
     if (fromPrice !== "free") return fromPrice;
   }
 
-  return fallbackPlan ?? "free";
+  return fallbackPlan ? normalizePlan(fallbackPlan) : "free";
+}
+
+async function fulfillOneShot(
+  userId: string,
+  product: OneShotProductId,
+  promptId?: string | null
+): Promise<void> {
+  if (isCreditPackProduct(product)) {
+    await addPromptCredits(userId, creditsForProduct(product));
+    return;
+  }
+
+  if (product === "expert_unlock" && promptId) {
+    await prisma.prompt.updateMany({
+      where: { id: promptId, userId },
+      data: { expertUnlocked: true },
+    });
+    return;
+  }
+
+  if (product === "workflow_pack") {
+    await updateProfileByUserId(userId, { workflowUnlocked: true });
+  }
+}
+
+async function resolveOneShotFromSession(
+  stripe: Stripe,
+  session: Stripe.Checkout.Session
+): Promise<{ product: OneShotProductId; promptId?: string } | null> {
+  const metaProduct = session.metadata?.oneshot_product;
+  if (metaProduct && isOneShotProductId(metaProduct)) {
+    return {
+      product: metaProduct,
+      promptId: session.metadata?.prompt_id,
+    };
+  }
+
+  // Payment mode — resolve from line items price
+  if (session.mode === "payment" && session.id) {
+    try {
+      const full = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ["line_items"],
+      });
+      const priceId = full.line_items?.data[0]?.price?.id;
+      if (priceId) {
+        const product = oneShotProductFromPriceId(priceId);
+        if (product) {
+          return {
+            product,
+            promptId: session.metadata?.prompt_id,
+          };
+        }
+      }
+    } catch (err) {
+      console.error("Failed to expand checkout session for oneshot:", err);
+    }
+  }
+
+  return null;
 }
 
 export async function POST(request: Request) {
@@ -55,22 +124,41 @@ export async function POST(request: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       const fromRef = parseClientReferenceId(session.client_reference_id);
       const userId = session.metadata?.user_id ?? fromRef?.userId;
-      let plan = (session.metadata?.plan as Plan | undefined) ?? fromRef?.plan;
 
-      if (userId) {
-        plan = await resolvePlanFromSession(stripe, session, plan);
+      if (!userId) break;
 
-        if (plan && plan !== "free") {
-          await updateProfileByUserId(userId, {
-            plan,
-            stripeCustomerId:
-              typeof session.customer === "string" ? session.customer : undefined,
-            stripeSubscriptionId:
-              typeof session.subscription === "string"
-                ? session.subscription
-                : undefined,
-          });
+      const customerId =
+        typeof session.customer === "string" ? session.customer : undefined;
+
+      // One-shot payments
+      if (session.mode === "payment") {
+        const oneshot = await resolveOneShotFromSession(stripe, session);
+        if (oneshot) {
+          if (customerId) {
+            await updateProfileByUserId(userId, { stripeCustomerId: customerId });
+          }
+          await fulfillOneShot(userId, oneshot.product, oneshot.promptId);
+          break;
         }
+      }
+
+      // Subscriptions
+      let plan =
+        (session.metadata?.plan
+          ? normalizePlan(session.metadata.plan)
+          : undefined) ?? fromRef?.plan;
+
+      plan = await resolvePlanFromSession(stripe, session, plan);
+
+      if (plan && plan !== "free") {
+        await updateProfileByUserId(userId, {
+          plan,
+          stripeCustomerId: customerId,
+          stripeSubscriptionId:
+            typeof session.subscription === "string"
+              ? session.subscription
+              : undefined,
+        });
       }
       break;
     }

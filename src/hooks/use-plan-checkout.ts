@@ -4,6 +4,8 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import type { PaidPlan } from "@/lib/plans";
+import { planFromCheckoutQuery } from "@/lib/plans";
 import { startCheckout } from "@/lib/start-checkout";
 import { isPaymentsLive } from "@/lib/sales-mode";
 
@@ -12,7 +14,10 @@ export function usePlanCheckout(billingInterval: "monthly" | "yearly" = "monthly
   const { data: session, status } = useSession();
 
   const handleCheckout = useCallback(
-    (plan: "pro" | "creator") => {
+    (planInput: PaidPlan | "pro") => {
+      const plan = planFromCheckoutQuery(planInput);
+      if (!plan) return;
+
       if (status === "loading") return;
 
       if (!isPaymentsLive()) {

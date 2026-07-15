@@ -5,6 +5,8 @@ export interface Profile {
   user_id: string;
   email: string;
   plan: Plan;
+  prompt_credits: number;
+  workflow_unlocked: boolean;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   preferred_language: Language;
@@ -42,6 +44,7 @@ export interface PromptRecord {
   share_token: string | null;
   share_enabled: boolean;
   copy_feedback?: string | null;
+  expert_unlocked: boolean;
   created_at: string;
 }
 

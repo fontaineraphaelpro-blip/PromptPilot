@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { getAppUrl } from "@/lib/env";
+import type { PaidPlan } from "@/lib/plans";
+import { planFromCheckoutQuery } from "@/lib/plans";
 import { stripeConfigErrorMessage } from "@/lib/stripe";
 import { createCheckoutUrl } from "@/lib/stripe-checkout-server";
+import { isCheckoutPlanInput } from "@/lib/stripe-checkout-url";
 
-function isValidPlan(plan: unknown): plan is "pro" | "creator" {
-  return plan === "pro" || plan === "creator";
+function resolvePlan(raw: unknown): PaidPlan | null {
+  if (!isCheckoutPlanInput(raw)) return null;
+  return planFromCheckoutQuery(raw);
 }
 
-function loginRedirect(plan: "pro" | "creator") {
+function loginRedirect(plan: PaidPlan) {
   return NextResponse.redirect(
     new URL(`/login?redirect=/pricing&plan=${plan}`, getAppUrl())
   );
@@ -24,7 +28,7 @@ function parseInterval(value: string | null): "monthly" | "yearly" {
   return value === "yearly" ? "yearly" : "monthly";
 }
 
-async function handleCheckout(plan: "pro" | "creator", interval: "monthly" | "yearly") {
+async function handleCheckout(plan: PaidPlan, interval: "monthly" | "yearly") {
   const user = await getAuthUser();
 
   if (!user) {
@@ -43,10 +47,10 @@ async function handleCheckout(plan: "pro" | "creator", interval: "monthly" | "ye
 /** Redirection directe vers Stripe — le navigateur part immédiatement au clic. */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const plan = searchParams.get("plan");
+  const plan = resolvePlan(searchParams.get("plan"));
   const interval = parseInterval(searchParams.get("interval"));
 
-  if (!isValidPlan(plan)) {
+  if (!plan) {
     return pricingErrorRedirect();
   }
 
@@ -56,9 +60,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const plan = body?.plan;
+    const plan = resolvePlan(body?.plan);
 
-    if (!isValidPlan(plan)) {
+    if (!plan) {
       return NextResponse.json({ error: "Plan invalide" }, { status: 400 });
     }
 

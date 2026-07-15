@@ -32,7 +32,7 @@ export const messages = {
       "Une phrase suffit. Tu reçois un brief expert scoré /100, avec preview et 4 variantes — 30 à 60 min de travail manuel économisées à chaque génération.",
     ctaTry: "Générer mon brief gratuit",
     ctaSignup: "Créer mon compte",
-    footnote: `${FREE_LIFETIME_LIMIT} prompts offerts · sans carte · Pro à 9€/mois rentabilisé dès la 2ᵉ génération`,
+    footnote: `${FREE_LIFETIME_LIMIT} briefs offerts · sans carte · packs ou abo selon ton rythme`,
     statAis: "IA supportées",
     statScore: "Score /100",
     statVariants: "Variantes",
@@ -120,15 +120,19 @@ export const messages = {
       },
       {
         q: "Combien de prompts gratuits ?",
-        a: `Le plan Free inclut ${FREE_LIFETIME_LIMIT} générations offertes pour tester la qualité. Pro : 200/jour. Creator : illimité.`,
+        a: `Le plan Free inclut ${FREE_LIFETIME_LIMIT} générations offertes (Principal + Court). Starter : 40/mois. Pro : 80/mois + Expert. Creator : illimité.`,
       },
       {
-        q: "Quelle différence entre Pro (9€) et Creator (19€) ?",
-        a: "Pro : score /100, preview, templates premium, favoris — idéal si tu génères souvent. Creator : variante Expert, workflows métier et illimité.",
+        q: "Quelle différence entre Starter (9€), Pro (19€) et Creator (39€) ?",
+        a: "Starter : rythme régulier avec variante Détaillée. Pro : Expert inclus, templates premium et favoris. Creator : workflows métier et volume illimité.",
       },
       {
         q: "En quoi PromptPilot est différent de ChatGPT ?",
-        a: "ChatGPT répond à ta question. PromptPilot produit le brief à coller : adapté à 12+ IA, scoré /100, avec preview et 4 variantes. Un prompt expert structuré = 30 à 60 min gagnées — Pro à 9€/mois est rentabilisé dès la 2ᵉ génération.",
+        a: "ChatGPT répond à ta question. PromptPilot produit le brief à coller : adapté à 12+ IA, scoré /100, avec preview et variantes. Un prompt expert structuré = 30 à 60 min gagnées — Pro à 19€/mois quand tu veux Expert à chaque fois.",
+      },
+      {
+        q: "Puis-je payer sans abonnement ?",
+        a: "Oui : packs de crédits, déblocage Expert à l’unité, ou pack workflows — sans engagement mensuel.",
       },
       {
         q: "Garantie qualité si le score est bas ?",

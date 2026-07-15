@@ -1,14 +1,23 @@
 import { toast } from "sonner";
+import type { PaidPlan } from "@/lib/plans";
+import { PLAN_LABELS, PLAN_PRICES, planFromCheckoutQuery } from "@/lib/plans";
 
-type UpgradePlan = "pro" | "creator";
+type UpgradePlan = PaidPlan | "pro";
 
-export function toastUpgradeRequired(message: string, plan: UpgradePlan = "pro") {
+export function toastUpgradeRequired(
+  message: string,
+  planInput: UpgradePlan = "plus"
+) {
+  const plan = planFromCheckoutQuery(planInput) ?? "plus";
+  const label = PLAN_LABELS[plan];
+  const price = PLAN_PRICES[plan].label;
+
   toast.error(message, {
     duration: 8000,
     action: {
-      label: plan === "creator" ? "Débloquer Creator — 19€" : "Pro illimité — 9€",
+      label: `${label} — ${price}`,
       onClick: () => {
-        window.location.href = `/pricing?plan=${plan}`;
+        window.location.href = `/pricing?plan=${plan === "plus" ? "pro" : plan}`;
       },
     },
   });

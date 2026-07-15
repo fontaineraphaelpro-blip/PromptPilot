@@ -9,6 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { usePlanCheckout } from "@/hooks/use-plan-checkout";
+import { planFromCheckoutQuery, PLAN_PRICES, PLAN_LABELS } from "@/lib/plans";
+import { startOneShotCheckout } from "@/lib/start-checkout";
+import { isOneShotProductId } from "@/lib/stripe-oneshot";
+import { isPaymentsLive } from "@/lib/sales-mode";
 
 export function PricingPageClient() {
   const searchParams = useSearchParams();
@@ -19,18 +23,33 @@ export function PricingPageClient() {
   const { handleCheckout, sessionLoading } = usePlanCheckout(billingInterval);
 
   useEffect(() => {
-    const plan = searchParams.get("plan");
+    const plan = planFromCheckoutQuery(searchParams.get("plan"));
     if (autoCheckoutDone.current) return;
-    if (
-      plan &&
-      (plan === "pro" || plan === "creator") &&
-      session &&
-      status === "authenticated"
-    ) {
+    if (plan && session && status === "authenticated") {
       autoCheckoutDone.current = true;
       handleCheckout(plan);
     }
   }, [searchParams, session, status, handleCheckout]);
+
+  useEffect(() => {
+    const product = searchParams.get("product");
+    if (autoCheckoutDone.current) return;
+    if (
+      product &&
+      isOneShotProductId(product) &&
+      session &&
+      status === "authenticated"
+    ) {
+      autoCheckoutDone.current = true;
+      if (!isPaymentsLive()) {
+        toast.error("Paiements en cours de configuration.");
+        return;
+      }
+      startOneShotCheckout(product).catch((err) => {
+        toast.error(err instanceof Error ? err.message : "Erreur checkout");
+      });
+    }
+  }, [searchParams, session, status]);
 
   useEffect(() => {
     if (searchParams.get("checkout") === "error") {
@@ -39,6 +58,20 @@ export function PricingPageClient() {
   }, [searchParams]);
 
   const cancelled = searchParams.get("checkout") === "cancelled";
+
+  async function handleCreditPack(packId: string) {
+    if (status === "loading") return;
+    if (!session) {
+      toast.info("Connectez-vous pour acheter des crédits");
+      window.location.href = `/login?redirect=/pricing&product=${packId}`;
+      return;
+    }
+    try {
+      await startOneShotCheckout(packId);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erreur checkout");
+    }
+  }
 
   return (
     <div className="py-12">
@@ -69,26 +102,31 @@ export function PricingPageClient() {
       )}
       <PricingSection
         onSelectPlan={handleCheckout}
+        onSelectCreditPack={handleCreditPack}
         checkoutLoading={sessionLoading ? "session" : null}
       />
       <div className="mx-auto max-w-2xl px-4 mt-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Choisir un abonnement</CardTitle>
+            <CardTitle className="text-base">Accès rapide abonnements</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
             <Button
-              onClick={() => handleCheckout("pro")}
+              variant="outline"
+              onClick={() => handleCheckout("starter")}
               disabled={sessionLoading}
             >
-              Pro — 9€/mois
+              {PLAN_LABELS.starter} — {PLAN_PRICES.starter.label}
+            </Button>
+            <Button onClick={() => handleCheckout("plus")} disabled={sessionLoading}>
+              {PLAN_LABELS.plus} — {PLAN_PRICES.plus.label}
             </Button>
             <Button
               variant="outline"
               onClick={() => handleCheckout("creator")}
               disabled={sessionLoading}
             >
-              Creator — 19€/mois
+              {PLAN_LABELS.creator} — {PLAN_PRICES.creator.label}
             </Button>
           </CardContent>
         </Card>

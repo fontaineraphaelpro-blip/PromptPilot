@@ -71,7 +71,11 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>
-              {usage.period === "lifetime" ? "Prompts gratuits" : "Prompts aujourd'hui"}
+              {usage.period === "lifetime"
+                ? "Prompts gratuits"
+                : usage.period === "monthly"
+                  ? "Prompts ce mois"
+                  : "Usage"}
             </CardDescription>
             <CardTitle>
               {unlimited ? (
@@ -89,7 +93,8 @@ export default async function DashboardPage() {
             <CardContent className="pt-0">
               <p className="text-xs text-muted-foreground">
                 {usage.remaining ?? 0} restant(s)
-                {usage.period === "daily" ? " aujourd'hui" : ""}
+                {usage.period === "monthly" ? " ce mois" : ""}
+                {usage.credits > 0 ? ` · ${usage.credits} crédit(s)` : ""}
               </p>
             </CardContent>
           )}
@@ -109,14 +114,16 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {profile.plan === "pro" && !hasAdvancedVariants(profile.plan) && (
+      {(profile.plan === "free" || profile.plan === "starter") &&
+        !hasAdvancedVariants(profile.plan) && (
         <Card className="border-white/15 bg-white/[0.02]">
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm text-muted-foreground">
-              Débloquez la variante <strong className="text-foreground">Expert</strong> et le support prioritaire avec Creator.
+              La variante <strong className="text-foreground">Expert</strong> et les templates
+              premium sont inclus avec Pro — ou déblocables à l&apos;unité.
             </p>
             <Button size="sm" variant="outline" asChild>
-              <Link href="/pricing?plan=creator">Creator — 19€/mois</Link>
+              <Link href="/pricing?plan=pro">Voir Pro</Link>
             </Button>
           </CardContent>
         </Card>

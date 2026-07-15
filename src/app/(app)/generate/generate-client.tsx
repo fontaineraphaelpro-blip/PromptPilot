@@ -7,8 +7,9 @@ import { PromptResultCard } from "@/components/generate/prompt-result-card";
 import type { GeneratePromptFormValues } from "@/lib/validations/prompt";
 import type { GeneratePromptResult } from "@/types";
 import { TARGET_AIS, type Plan, type TargetAI } from "@/lib/constants";
-import { canUseFavorites } from "@/lib/plans";
+import { canUseFavorites, PLAN_PRICES } from "@/lib/plans";
 import { canUseExpertDetailLevel } from "@/lib/generate-plan-guard";
+import { PLUS_MONTHLY_LIMIT, STARTER_MONTHLY_LIMIT } from "@/lib/constants";
 import { getFunnelDraft } from "@/lib/conversion/funnel-storage";
 import { getTemplatePrefill } from "@/lib/conversion/template-prefill";
 import { getAdaptPrefill } from "@/lib/conversion/adapt-prefill";
@@ -27,7 +28,8 @@ interface GenerateClientProps {
     used: number;
     limit: number | null;
     remaining: number | null;
-    period?: "lifetime" | "daily" | null;
+    period?: "lifetime" | "monthly" | "daily" | null;
+    credits?: number;
   };
   openaiReady: boolean;
 }
@@ -121,8 +123,8 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         }
         if (res.status === 429) {
           toastUpgradeRequired(
-            json.message ?? "Limite quotidienne atteinte — passe au Pro pour continuer.",
-            "pro"
+            json.message ?? "Quota atteint — un pack de crédits ou un abonnement peut t’aider.",
+            plan === "plus" ? "creator" : "plus"
           );
           return;
         }
@@ -162,7 +164,10 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
     if (!result?.id) return;
 
     if (!canUseFavorites(plan)) {
-      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      toastUpgradeRequired(
+        `Les favoris sont inclus dans Pro (${PLAN_PRICES.plus.label}).`,
+        "plus"
+      );
       return;
     }
 
@@ -179,7 +184,10 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
     }
 
     if (res.status === 403) {
-      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      toastUpgradeRequired(
+        `Les favoris sont inclus dans Pro (${PLAN_PRICES.plus.label}).`,
+        "plus"
+      );
       return;
     }
 
@@ -203,7 +211,11 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         {usage.limit !== null && (
           <Badge variant={atLimit ? "outline" : "default"} className="shrink-0">
             {usage.used}/{usage.limit}{" "}
-            {usage.period === "lifetime" ? "prompts gratuits" : "prompts aujourd'hui"}
+            {usage.period === "lifetime"
+              ? "prompts gratuits"
+              : usage.period === "monthly"
+                ? "ce mois"
+                : "prompts"}
           </Badge>
         )}
         {usage.limit === null && plan === "creator" && (
@@ -228,11 +240,13 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
               {plan === "free"
-                ? "Tes prompts gratuits sont épuisés. Passe au Pro (200/jour) ou Creator (illimité) pour continuer."
-                : "Limite Pro atteinte (200/jour). Passez au Creator pour continuer."}
+                ? `Tes briefs offerts sont utilisés. Packs de crédits, Starter (${PLAN_PRICES.starter.label}) ou Pro (${PLAN_PRICES.plus.label}) — à toi de choisir.`
+                : plan === "starter"
+                  ? `Quota Starter (${STARTER_MONTHLY_LIMIT}/mois) atteint. Un pack ou Pro (${PLAN_PRICES.plus.label}) peut prolonger.`
+                  : `Quota Pro (${PLUS_MONTHLY_LIMIT}/mois) atteint. Pack de crédits ou Creator (${PLAN_PRICES.creator.label}).`}
             </p>
             <Button size="sm" asChild>
-              <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>
+              <Link href="/pricing">Voir les options</Link>
             </Button>
           </CardContent>
         </Card>
@@ -289,16 +303,16 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
               Plan Free · {usage.remaining ?? 0} génération(s) gratuite(s) restante(s)
             </p>
             <Button size="sm" variant="outline" asChild>
-              <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>
+              <Link href="/pricing?plan=pro">Voir Pro — {PLAN_PRICES.plus.label}</Link>
             </Button>
           </CardContent>
         </Card>
       )}
-      {plan === "pro" && (
+      {plan === "starter" && (
         <p className="text-center text-xs text-muted-foreground">
-          Plan Pro · variante Expert disponible avec{" "}
-          <Link href="/pricing?plan=creator" className="text-primary hover:underline">
-            Creator (19€/mois)
+          Plan Starter · Expert à l&apos;unité, ou inclus avec{" "}
+          <Link href="/pricing?plan=pro" className="text-primary hover:underline">
+            Pro ({PLAN_PRICES.plus.label})
           </Link>
         </p>
       )}

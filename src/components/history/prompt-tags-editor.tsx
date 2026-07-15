@@ -24,7 +24,7 @@ export function PromptTagsEditor({ promptId, initialTags, plan }: PromptTagsEdit
 
   async function save(next: string[]) {
     if (!allowed) {
-      toastUpgradeRequired("Les tags sont inclus dans le plan Pro (9€/mois).", "pro");
+      toastUpgradeRequired("Les tags sont inclus dans Pro (19€/mois).", "plus");
       return;
     }
     setSaving(true);

@@ -19,7 +19,9 @@ export function isSalesMode(): boolean {
 /** Paiements Stripe configurés côté public (Price ID ou Payment Link). */
 export function isPaymentsLive(): boolean {
   return Boolean(
-    process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID?.trim() ||
+    process.env.NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID?.trim() ||
+      process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID?.trim() ||
+      process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() ||
       process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID?.trim()
   );
 }

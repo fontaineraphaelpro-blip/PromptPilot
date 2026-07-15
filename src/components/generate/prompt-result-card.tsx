@@ -15,15 +15,23 @@ import {
   Lightbulb,
   Lock,
   ShieldCheck,
+  Loader2,
 } from "lucide-react";
 import type { GeneratePromptResult } from "@/types";
 import type { Plan, TargetAI } from "@/lib/constants";
-import { hasAdvancedVariants, canUseFavorites } from "@/lib/plans";
+import {
+  hasAdvancedVariants,
+  canUseFavorites,
+  PLAN_PRICES,
+  canUseDetailedVariant,
+} from "@/lib/plans";
+import { EXPERT_UNLOCK } from "@/lib/commerce-products";
 import { computePromptScore } from "@/lib/prompt-score";
 import { PromptScoreDisplay } from "@/components/generate/prompt-score-display";
 import { PromptPreviewPanel } from "@/components/generate/prompt-preview-panel";
 import { PromptExportMenu } from "@/components/generate/prompt-export-menu";
 import { toastUpgradeRequired } from "@/lib/upgrade-toast";
+import { startOneShotCheckout } from "@/lib/start-checkout";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CopyFeedback } from "@/components/generate/copy-feedback";
@@ -35,6 +43,7 @@ interface PromptResultCardProps {
     target_ai?: TargetAI;
     guarantee_regen_available?: boolean;
     copy_feedback?: string | null;
+    expert_unlocked?: boolean;
   };
   plan?: Plan;
   isFavorite?: boolean;
@@ -58,9 +67,12 @@ export function PromptResultCard({
   const { copy, copied } = useCopy();
   const [activeTab, setActiveTab] = useState("main");
   const [saving, setSaving] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
   const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
-  const expertUnlocked = hasAdvancedVariants(plan);
+  const expertUnlocked =
+    Boolean(result.expert_unlocked) || hasAdvancedVariants(plan);
+  const detailedUnlocked = canUseDetailedVariant(plan);
   const favoritesAllowed = canUseFavorites(plan);
 
   const score =
@@ -88,11 +100,31 @@ export function PromptResultCard({
 
   const activeVariant = activeTab as "main" | "short" | "detailed" | "expert";
 
+  async function handleExpertUnlock() {
+    if (!result.id) {
+      toast.info("Sauvegarde d’abord ce prompt pour débloquer Expert.");
+      return;
+    }
+    setUnlocking(true);
+    try {
+      await startOneShotCheckout(EXPERT_UNLOCK.id, { promptId: result.id });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Impossible de lancer le paiement");
+      setUnlocking(false);
+    }
+  }
+
   async function handleCopy() {
     if (activeTab === "expert" && !expertUnlocked) {
+      toast.info(
+        `Expert est disponible pour ${EXPERT_UNLOCK.label} sur ce prompt, ou inclus avec Pro (${PLAN_PRICES.plus.label}).`
+      );
+      return;
+    }
+    if (activeTab === "detailed" && !detailedUnlocked) {
       toastUpgradeRequired(
-        "La variante Expert est réservée au plan Creator (19€/mois).",
-        "creator"
+        `La variante Détaillée est disponible dès Starter (${PLAN_PRICES.starter.label}).`,
+        "starter"
       );
       return;
     }
@@ -144,7 +176,10 @@ export function PromptResultCard({
           <TabsList className="flex flex-wrap h-auto gap-1">
             <TabsTrigger value="main">Principal</TabsTrigger>
             <TabsTrigger value="short">Court</TabsTrigger>
-            <TabsTrigger value="detailed">Détaillé</TabsTrigger>
+            <TabsTrigger value="detailed" className="gap-1.5">
+              Détaillé
+              {!detailedUnlocked && <Lock className="h-3 w-3 opacity-60" />}
+            </TabsTrigger>
             <TabsTrigger value="expert" className="gap-1.5">
               Expert
               {!expertUnlocked && <Lock className="h-3 w-3 opacity-60" />}
@@ -152,15 +187,17 @@ export function PromptResultCard({
           </TabsList>
           {Object.entries(variants).map(([key, text]) => {
             const isExpertLocked = key === "expert" && !expertUnlocked;
+            const isDetailedLocked = key === "detailed" && !detailedUnlocked;
+            const isLocked = isExpertLocked || isDetailedLocked;
             return (
               <TabsContent key={key} value={key}>
                 <div className="relative">
                   <pre
                     className={cn(
                       "max-h-96 overflow-auto rounded-lg bg-muted p-4 text-sm whitespace-pre-wrap font-mono",
-                      isExpertLocked && "blur-[5px] select-none pointer-events-none"
+                      isLocked && "blur-[5px] select-none pointer-events-none"
                     )}
-                    aria-hidden={isExpertLocked}
+                    aria-hidden={isLocked}
                   >
                     {text}
                   </pre>
@@ -170,12 +207,38 @@ export function PromptResultCard({
                         <Lock className="h-4 w-4" />
                       </span>
                       <p className="text-sm font-medium">Variante Expert — déjà générée</p>
+                      <p className="text-xs text-muted-foreground max-w-[300px]">
+                        Brief production complet (~2 000 mots). Tu peux le débloquer pour ce
+                        prompt seul, ou l’avoir à chaque génération avec Pro.
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-2 w-full max-w-xs">
+                        <Button
+                          size="sm"
+                          className="flex-1"
+                          onClick={handleExpertUnlock}
+                          disabled={unlocking || !result.id}
+                        >
+                          {unlocking ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : null}
+                          Débloquer — {EXPERT_UNLOCK.label}
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1" asChild>
+                          <Link href="/pricing?plan=pro">
+                            Pro — {PLAN_PRICES.plus.label}
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  {isDetailedLocked && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg bg-gradient-to-b from-black/10 via-black/60 to-black/90 px-4 text-center">
+                      <p className="text-sm font-medium">Variante Détaillée</p>
                       <p className="text-xs text-muted-foreground max-w-[280px]">
-                        Tu vois un extrait. Le brief complet (~2 000 mots) inclut edge cases,
-                        critères d&apos;acceptation et annexes — inclus dans Creator.
+                        Disponible dès Starter ({PLAN_PRICES.starter.label}).
                       </p>
                       <Button size="sm" asChild>
-                        <Link href="/pricing?plan=creator">Passer au Creator</Link>
+                        <Link href="/pricing?plan=starter">Voir Starter</Link>
                       </Button>
                     </div>
                   )}

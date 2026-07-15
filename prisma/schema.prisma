@@ -36,6 +36,10 @@ model Profile {
   userId               String   @unique @map("user_id") @db.Uuid
   email                String
   plan                 String   @default("free")
+  /// Crédits one-shot restants (packs achetés)
+  promptCredits        Int      @default(0) @map("prompt_credits")
+  /// Packs workflows débloqués (paiement unique)
+  workflowUnlocked     Boolean  @default(false) @map("workflow_unlocked")
   stripeCustomerId     String?  @unique @map("stripe_customer_id")
   stripeSubscriptionId String?  @map("stripe_subscription_id")
   preferredLanguage    String   @default("Français") @map("preferred_language")
@@ -70,6 +74,8 @@ model Prompt {
   shareEnabled    Boolean  @default(false) @map("share_enabled")
   copyFeedback    String?  @map("copy_feedback")
   copyFeedbackAt  DateTime? @map("copy_feedback_at")
+  /// Déblocage Expert one-shot (1,29€) pour ce prompt
+  expertUnlocked  Boolean  @default(false) @map("expert_unlocked")
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@index([userId])

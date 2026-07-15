@@ -106,7 +106,7 @@ function TemplateCard({
             <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
               <Link href="/pricing?plan=pro">
                 <Lock className="h-3 w-3" />
-                Débloquer — dès 9€/mois
+                Débloquer — Pro 19€/mois
               </Link>
             </Button>
           ) : (
@@ -146,7 +146,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   async function handleCopy(id: string, content: string, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toastUpgradeRequired("Passez au Pro (9€) pour accéder à ce template.", "pro");
+      toastUpgradeRequired("Les templates premium sont inclus avec Pro (19€/mois).", "plus");
       return;
     }
     await copy(content, id);
@@ -155,7 +155,7 @@ export function TemplateGrid({ templates, plan }: TemplateGridProps) {
 
   function handleUse(t: Template, isPremium: boolean) {
     if (isPremium && !hasPremium) {
-      toastUpgradeRequired("Passez au Pro (9€) pour utiliser ce template.", "pro");
+      toastUpgradeRequired("Les templates premium sont inclus avec Pro (19€/mois).", "plus");
       return;
     }
     saveTemplatePrefill({

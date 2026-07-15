@@ -95,8 +95,8 @@ export function PromptGeneratorForm({
   function handleDetailLevelChange(value: string) {
     if (value === "Expert" && !canUseExpertDetailLevel(plan)) {
       toastUpgradeRequired(
-        "Le niveau Expert est réservé au plan Creator (19€/mois).",
-        "creator"
+        "Le niveau Expert est inclus avec Pro (19€/mois), ou déblocable à l’unité après génération.",
+        "plus"
       );
       return;
     }
@@ -151,7 +151,7 @@ export function PromptGeneratorForm({
               {!canUseExpertDetailLevel(plan) && (
                 <p className="text-[11px] text-muted-foreground flex items-center gap-1">
                   <Lock className="h-3 w-3" />
-                  Niveau Expert — plan Creator
+                  Niveau Expert — inclus avec Pro
                 </p>
               )}
             </div>
@@ -218,7 +218,7 @@ export function PromptGeneratorForm({
                 Débloque toutes les options avancées avec le plan Pro.
               </p>
               <Button size="sm" variant="outline" asChild>
-                <Link href="/pricing?plan=pro">Passer au Pro — 9€/mois</Link>
+                <Link href="/pricing?plan=pro">Voir Pro — 19€/mois</Link>
               </Button>
             </div>
           )}

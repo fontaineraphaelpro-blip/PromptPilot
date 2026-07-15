@@ -7,20 +7,32 @@ import { Check, Loader2 } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PRICING_PLANS } from "@/lib/plans";
+import { PRICING_PLANS, PLAN_PRICES, type PaidPlan } from "@/lib/plans";
 import { ROI_HEADLINE } from "@/lib/product-value";
-import { PlanComparisonTable } from "@/components/landing/plan-comparison-table";
+import {
+  CREDIT_PACKS,
+  EXPERT_UNLOCK,
+  WORKFLOW_PACK_UNLOCK,
+} from "@/lib/commerce-products";
 import { GuaranteeBadge } from "@/components/conversion/guarantee-badge";
 import { PaymentTrustRow } from "@/components/conversion/payment-trust-row";
 
 interface PricingSectionProps {
-  onSelectPlan?: (plan: "pro" | "creator") => void;
+  onSelectPlan?: (plan: PaidPlan) => void;
   checkoutLoading?: string | null;
+  onSelectCreditPack?: (packId: string) => void;
 }
 
-export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSectionProps) {
+export function PricingSection({
+  onSelectPlan,
+  checkoutLoading,
+  onSelectCreditPack,
+}: PricingSectionProps) {
   return (
-    <section id="pricing" className="relative px-4 py-28 sm:px-6 border-t border-border/60 scroll-mt-20 sm:scroll-mt-24">
+    <section
+      id="pricing"
+      className="relative px-4 py-28 sm:px-6 border-t border-border/60 scroll-mt-20 sm:scroll-mt-24"
+    >
       <div className="absolute inset-0 bg-gradient-radial-top opacity-50 pointer-events-none" />
       <div className="relative w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-10">
         <FadeIn className="text-center">
@@ -28,22 +40,22 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
             Tarifs
           </p>
           <h2 className="text-2xl font-bold sm:text-5xl tracking-tight px-2">
-            30–60 min gagnées par brief — Pro rentabilisé dès le 2ᵉ
+            Un rythme clair — Free, Starter, Pro ou Creator
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg px-2">
-            {ROI_HEADLINE} Teste gratuitement sur ton vrai projet, puis passe au Pro pour
-            produire sans limite de qualité.
+            {ROI_HEADLINE} Commence gratuitement, puis choisis ce qui correspond à ton
+            usage — sans pression.
           </p>
           <div className="mt-6 flex justify-center">
             <GuaranteeBadge />
           </div>
         </FadeIn>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {PRICING_PLANS.map((plan, i) => (
-            <FadeIn key={plan.name} delay={i * 0.1}>
+            <FadeIn key={plan.name} delay={i * 0.08}>
               <motion.div
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 <Card
@@ -55,7 +67,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
                 >
                   {plan.highlighted && (
                     <div className="bg-white text-black text-center text-xs font-semibold py-1.5 tracking-wide">
-                      POPULAIRE
+                      RECOMMANDÉ
                     </div>
                   )}
                   <CardHeader>
@@ -93,7 +105,7 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
                       <Button
                         className="w-full"
                         variant={plan.highlighted ? "default" : "outline"}
-                        onClick={() => onSelectPlan(plan.id as "pro" | "creator")}
+                        onClick={() => onSelectPlan(plan.id as PaidPlan)}
                         disabled={!!checkoutLoading}
                       >
                         {!!checkoutLoading && (
@@ -109,7 +121,64 @@ export function PricingSection({ onSelectPlan, checkoutLoading }: PricingSection
           ))}
         </div>
 
-        <PlanComparisonTable onSelectPlan={onSelectPlan} />
+        <FadeIn className="mt-20">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-6 py-10 sm:px-10">
+            <div className="text-center max-w-xl mx-auto">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                Sans abonnement
+              </p>
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">
+                Des crédits quand tu en as besoin
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Pas envie d’un abonnement ? Achète un pack et utilise-le à ton rythme.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {CREDIT_PACKS.map((pack) => (
+                <div
+                  key={pack.id}
+                  className={cn(
+                    "rounded-xl border border-white/10 px-5 py-5 text-center",
+                    pack.highlighted && "border-white/25 bg-white/[0.03]"
+                  )}
+                >
+                  <p className="text-sm font-medium">{pack.title}</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight">
+                    {pack.label}
+                  </p>
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    {pack.description}
+                  </p>
+                  {onSelectCreditPack ? (
+                    <Button
+                      className="mt-4 w-full"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onSelectCreditPack(pack.id)}
+                      disabled={!!checkoutLoading}
+                    >
+                      Choisir
+                    </Button>
+                  ) : (
+                    <Button className="mt-4 w-full" variant="outline" size="sm" asChild>
+                      <Link href={`/pricing?product=${pack.id}`}>Choisir</Link>
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-8 text-center text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
+              Variante Expert sur un prompt : {EXPERT_UNLOCK.label} une fois.{" "}
+              Packs workflows (SaaS, LinkedIn, Dev) : {WORKFLOW_PACK_UNLOCK.label}{" "}
+              — paiement unique. Expert aussi inclus avec Pro à{" "}
+              {PLAN_PRICES.plus.label}.
+            </p>
+          </div>
+        </FadeIn>
+
         <PaymentTrustRow />
       </div>
     </section>

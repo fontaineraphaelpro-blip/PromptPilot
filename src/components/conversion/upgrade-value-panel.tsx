@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Crown, Zap } from "lucide-react";
 import type { Plan } from "@/lib/constants";
 import { getUpgradeHighlights } from "@/lib/product-value";
-import { PLAN_PRICES } from "@/lib/plans";
+import { PLAN_LABELS, PLAN_PRICES, type PaidPlan } from "@/lib/plans";
 import { startCheckout } from "@/lib/start-checkout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -23,9 +23,13 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
 
   if (highlights.length === 0) return null;
 
-  const primaryPlan = highlights.some((h) => h.plan === "pro") ? "pro" : "creator";
+  const primaryPlan: PaidPlan = highlights.some((h) => h.plan === "plus")
+    ? "plus"
+    : highlights.some((h) => h.plan === "starter")
+      ? "starter"
+      : "creator";
 
-  function goToCheckout(target: "pro" | "creator") {
+  function goToCheckout(target: PaidPlan) {
     startCheckout(target, session, () => {
       router.push(`/login?redirect=/pricing&plan=${target}`);
     });
@@ -36,12 +40,12 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
           <Crown className="h-4 w-4 text-primary" />
-          Passe au Pro — rentabilisé dès 2 briefs
+          Aller plus loin, à ton rythme
         </CardTitle>
         {typeof promptScore === "number" && promptScore >= 70 && (
           <p className="text-xs text-muted-foreground">
-            Ton brief est déjà scoré {promptScore}/100 — débloque le volume Pro et la variante
-            Expert pour produire sans frein.
+            Ton brief est déjà scoré {promptScore}/100 — un abonnement Pro ou un déblocage Expert
+            peut prolonger ce niveau de qualité.
           </p>
         )}
       </CardHeader>
@@ -63,24 +67,28 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
           ))}
         </ul>
         <div className="flex flex-col sm:flex-row gap-3">
-          {primaryPlan === "pro" ? (
+          {primaryPlan !== "creator" ? (
             <>
-              <Button className="flex-1" onClick={() => goToCheckout("pro")}>
-                Pro — {PLAN_PRICES.pro.label}
+              <Button className="flex-1" onClick={() => goToCheckout(primaryPlan)}>
+                {PLAN_LABELS[primaryPlan]} — {PLAN_PRICES[primaryPlan].label}
                 <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button variant="outline" className="flex-1" onClick={() => goToCheckout("creator")}>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => goToCheckout("creator")}
+              >
                 Creator — {PLAN_PRICES.creator.label}
               </Button>
             </>
           ) : (
             <Button className="w-full sm:w-auto" onClick={() => goToCheckout("creator")}>
-              Débloquer Creator — {PLAN_PRICES.creator.label}
+              Creator — {PLAN_PRICES.creator.label}
               <ArrowRight className="h-4 w-4" />
             </Button>
           )}
           <Button variant="ghost" size="sm" className="sm:ml-auto" asChild>
-            <Link href="/pricing">Comparer les plans</Link>
+            <Link href="/pricing">Voir les tarifs</Link>
           </Button>
         </div>
       </CardContent>

@@ -22,7 +22,7 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import type { Plan } from "@/lib/constants";
-import { PLAN_LABELS } from "@/lib/plans";
+import { PLAN_LABELS, getPlanBadgeVariant } from "@/lib/plans";
 
 const navItems = [
   { href: "/dashboard", labelKey: "dashboard" as const, icon: LayoutDashboard },
@@ -82,7 +82,7 @@ export function DashboardSidebar({ plan }: DashboardSidebarProps) {
         })}
       </nav>
       <div className="border-t border-border p-4">
-        <Badge variant={plan === "free" ? "free" : "pro"} className="mb-3">
+        <Badge variant={getPlanBadgeVariant(plan)} className="mb-3">
           Plan {PLAN_LABELS[plan]}
         </Badge>
         <button

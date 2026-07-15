@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 import type { Plan } from "@/lib/constants";
+import type { PaidPlan } from "@/lib/plans";
+import { isPaidPlan, normalizePlan, planFromCheckoutQuery } from "@/lib/plans";
 import {
   getPublicPlanCheckoutEnv,
   isStripePaymentLink,
@@ -25,31 +27,41 @@ export function getStripe(): Stripe {
   return stripeInstance;
 }
 
-function getRawPlanEnv(plan: "pro" | "creator", interval: "monthly" | "yearly" = "monthly"): string {
+function yearlyEnvFor(plan: PaidPlan): string | undefined {
+  if (plan === "starter") {
+    return (
+      process.env.NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID_YEARLY?.trim() ||
+      process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID_YEARLY?.trim()
+    );
+  }
+  if (plan === "plus") {
+    return process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID_YEARLY?.trim();
+  }
+  return process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
+}
+
+function getRawPlanEnv(plan: PaidPlan, interval: "monthly" | "yearly" = "monthly"): string {
   if (interval === "yearly") {
-    const yearly =
-      plan === "pro"
-        ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID_YEARLY?.trim()
-        : process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
+    const yearly = yearlyEnvFor(plan);
     if (yearly) return yearly;
   }
   return getPublicPlanCheckoutEnv(plan);
 }
 
-export function hasYearlyPricing(plan: "pro" | "creator"): boolean {
-  const yearly =
-    plan === "pro"
-      ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID_YEARLY?.trim()
-      : process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
-  return Boolean(yearly);
+export function hasYearlyPricing(plan: PaidPlan): boolean {
+  return Boolean(yearlyEnvFor(plan));
 }
 
 export function hasAnyYearlyPricing(): boolean {
-  return hasYearlyPricing("pro") || hasYearlyPricing("creator");
+  return (
+    hasYearlyPricing("starter") ||
+    hasYearlyPricing("plus") ||
+    hasYearlyPricing("creator")
+  );
 }
 
 export function getPlanCheckoutRef(
-  plan: "pro" | "creator",
+  plan: PaidPlan,
   interval: "monthly" | "yearly" = "monthly"
 ): StripePlanRef {
   const value = getRawPlanEnv(plan, interval);
@@ -68,7 +80,7 @@ export function getPlanCheckoutRef(
 }
 
 /** @deprecated Préférer getPlanCheckoutRef — conservé pour compatibilité interne */
-export function getPriceIdForPlan(plan: "pro" | "creator"): string {
+export function getPriceIdForPlan(plan: PaidPlan): string {
   const ref = getPlanCheckoutRef(plan);
   if (ref.type !== "price_id") {
     throw new Error(
@@ -78,22 +90,33 @@ export function getPriceIdForPlan(plan: "pro" | "creator"): string {
   return ref.value;
 }
 
-function getKnownPriceIds(plan: "pro" | "creator"): string[] {
+function getKnownPriceIds(plan: PaidPlan): string[] {
   const ids = new Set<string>();
   const publicVal = getRawPlanEnv(plan);
-  const serverVal =
-    plan === "pro"
-      ? process.env.STRIPE_PRO_PRICE_ID?.trim()
-      : process.env.STRIPE_CREATOR_PRICE_ID?.trim();
+  let serverVal: string | undefined;
+  if (plan === "starter") {
+    serverVal =
+      process.env.STRIPE_STARTER_PRICE_ID?.trim() ||
+      process.env.STRIPE_PRO_PRICE_ID?.trim();
+  } else if (plan === "plus") {
+    serverVal = process.env.STRIPE_PLUS_PRICE_ID?.trim();
+  } else {
+    serverVal = process.env.STRIPE_CREATOR_PRICE_ID?.trim();
+  }
 
   if (isStripePriceId(publicVal)) ids.add(publicVal);
   if (serverVal && isStripePriceId(serverVal)) ids.add(serverVal);
+
+  // Annuel
+  const yearly = yearlyEnvFor(plan);
+  if (yearly && isStripePriceId(yearly)) ids.add(yearly);
 
   return [...ids];
 }
 
 export function planFromPriceId(priceId: string): Plan {
-  if (getKnownPriceIds("pro").includes(priceId)) return "pro";
+  if (getKnownPriceIds("starter").includes(priceId)) return "starter";
+  if (getKnownPriceIds("plus").includes(priceId)) return "plus";
   if (getKnownPriceIds("creator").includes(priceId)) return "creator";
   return "free";
 }
@@ -102,12 +125,12 @@ export function parseClientReferenceId(
   ref: string | null | undefined
 ): { userId: string; plan: Plan } | null {
   if (!ref) return null;
-  const [userId, plan] = ref.split(":");
+  const [userId, planRaw] = ref.split(":");
   if (!userId) return null;
-  if (plan === "pro" || plan === "creator") {
-    return { userId, plan };
-  }
-  return { userId, plan: "free" };
+  const fromCheckout = planFromCheckoutQuery(planRaw);
+  if (fromCheckout) return { userId, plan: fromCheckout };
+  if (isPaidPlan(planRaw ?? "")) return { userId, plan: planRaw as PaidPlan };
+  return { userId, plan: normalizePlan(planRaw) };
 }
 
 export function stripeConfigErrorMessage(error: unknown): string | null {
@@ -120,8 +143,8 @@ export function stripeConfigErrorMessage(error: unknown): string | null {
     error.param === "line_items[0][price]"
   ) {
     return (
-      "Configuration Stripe incorrecte : NEXT_PUBLIC_STRIPE_PRO_PRICE_ID et " +
-      "NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID doivent être des ID price_... " +
+      "Configuration Stripe incorrecte : NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID (ou PRO legacy), " +
+      "NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID et NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID doivent être des ID price_... " +
       "(Stripe → Produits → Tarif → ID), pas des liens buy.stripe.com. " +
       "Les Payment Links sont aussi acceptés — redéployez avec la dernière version."
     );

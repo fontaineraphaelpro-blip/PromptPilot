@@ -27,7 +27,7 @@ export async function PATCH(
       return NextResponse.json(
         {
           error: "Favoris réservés au plan Pro",
-          message: "Passez au Pro (9€/mois) pour marquer vos prompts en favoris.",
+          message: "Les favoris sont inclus avec Pro (19€/mois).",
         },
         { status: 403 }
       );

@@ -22,7 +22,7 @@ export async function sendQuotaExhaustedEmail(email: string): Promise<void> {
     subject: `Quota gratuit épuisé — ${APP_NAME}`,
     html: `
       <p>Vous avez utilisé vos ${FREE_LIFETIME_LIMIT} générations gratuites.</p>
-      <p><a href="${appUrl}/pricing?plan=pro">Passer au Pro</a> (200 prompts/jour, 9€/mois) pour continuer à générer des prompts experts.</p>
+      <p><a href="${appUrl}/pricing?plan=pro">Voir Pro</a> (19€/mois, Expert inclus) ou un pack de crédits pour continuer à ton rythme.</p>
     `,
   });
 }

@@ -1,5 +1,11 @@
 import type { Plan } from "@/lib/constants";
-import { FREE_LIFETIME_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
+import {
+  FREE_LIFETIME_LIMIT,
+  STARTER_MONTHLY_LIMIT,
+  PLUS_MONTHLY_LIMIT,
+} from "@/lib/constants";
+import { PLAN_PRICES } from "@/lib/plans";
+import type { PaidPlan } from "@/lib/plans";
 
 /** Différenciateurs visibles — ce que ChatGPT seul ne fait pas pour le client */
 export const PRODUCT_DIFFERENTIATORS = [
@@ -41,8 +47,7 @@ export const PRODUCT_DIFFERENTIATORS = [
   },
 ] as const;
 
-export const ROI_HEADLINE =
-  "Un brief expert = 30 à 60 min de travail manuel économisées. Pro à 9€/mois : rentabilisé dès la 2ᵉ génération.";
+export const ROI_HEADLINE = `Un brief expert = 30 à 60 min de travail manuel économisées. Pro à ${PLAN_PRICES.plus.label} : rentabilisé dès les premiers usages sérieux.`;
 
 export const VALUE_ONE_LINER =
   "ChatGPT répond. PromptPilot te donne le brief à coller — scoré, multi-IA, 4 variantes.";
@@ -53,7 +58,8 @@ export type PlanComparisonRow = {
   feature: string;
   hint?: string;
   free: ComparisonCell;
-  pro: ComparisonCell;
+  starter: ComparisonCell;
+  plus: ComparisonCell;
   creator: ComparisonCell;
 };
 
@@ -61,74 +67,86 @@ export const PLAN_COMPARISON_ROWS: PlanComparisonRow[] = [
   {
     feature: "Prompts inclus",
     free: `${FREE_LIFETIME_LIMIT} offerts`,
-    pro: `${PRO_DAILY_FAIR_USE_LIMIT}/jour`,
+    starter: `${STARTER_MONTHLY_LIMIT}/mois`,
+    plus: `${PLUS_MONTHLY_LIMIT}/mois`,
     creator: "Illimité",
   },
   {
     feature: "Adaptation multi-IA (12+ outils)",
     free: true,
-    pro: true,
+    starter: true,
+    plus: true,
     creator: true,
   },
   {
     feature: "Score qualité /100 + garantie regen",
     free: true,
-    pro: true,
+    starter: true,
+    plus: true,
     creator: true,
   },
   {
     feature: "Preview « tester avant de coller »",
     free: true,
-    pro: true,
+    starter: true,
+    plus: true,
     creator: true,
   },
   {
-    feature: "Variantes Principal, Court, Détaillé",
+    feature: "Variantes Principal + Court",
     free: true,
-    pro: true,
+    starter: true,
+    plus: true,
+    creator: true,
+  },
+  {
+    feature: "Variante Détaillée",
+    free: false,
+    starter: true,
+    plus: true,
     creator: true,
   },
   {
     feature: "Variante Expert (brief production)",
     hint: "2 000+ mots, edge cases, critères d'acceptation",
-    free: false,
-    pro: false,
+    free: "À l’unité",
+    starter: "À l’unité",
+    plus: true,
     creator: true,
   },
   {
     feature: "Niveau Expert au générateur",
     free: false,
-    pro: false,
+    starter: false,
+    plus: true,
     creator: true,
   },
   {
-    feature: "Historique complet + favoris",
+    feature: "Historique + favoris",
     free: "30 derniers",
-    pro: true,
+    starter: "30 derniers",
+    plus: true,
     creator: true,
   },
   {
     feature: "Templates premium",
     free: false,
-    pro: true,
+    starter: false,
+    plus: true,
     creator: true,
   },
   {
     feature: "Options avancées (exemples, checklist…)",
     free: false,
-    pro: true,
+    starter: false,
+    plus: true,
     creator: true,
   },
   {
     feature: "Workflows métier (SaaS, LinkedIn, Dev)",
     free: false,
-    pro: false,
-    creator: true,
-  },
-  {
-    feature: "Tags & organisation bibliothèque",
-    free: false,
-    pro: true,
+    starter: false,
+    plus: false,
     creator: true,
   },
 ];
@@ -136,7 +154,7 @@ export const PLAN_COMPARISON_ROWS: PlanComparisonRow[] = [
 export type UpgradeHighlight = {
   title: string;
   description: string;
-  plan: "pro" | "creator";
+  plan: PaidPlan;
 };
 
 export function getUpgradeHighlights(currentPlan: Plan): UpgradeHighlight[] {
@@ -145,39 +163,48 @@ export function getUpgradeHighlights(currentPlan: Plan): UpgradeHighlight[] {
   if (currentPlan === "free") {
     return [
       {
-        title: "Volume Pro pour produire",
-        description: `Plus de limite à ${FREE_LIFETIME_LIMIT} prompts — génère pour tes clients et projets, 200/jour.`,
-        plan: "pro",
+        title: "Starter pour un rythme régulier",
+        description: `${STARTER_MONTHLY_LIMIT} briefs / mois et variante Détaillée — sans engagement compliqué.`,
+        plan: "starter",
       },
       {
-        title: "Templates premium & favoris",
-        description: "Bibliothèque pro + retrouve tes meilleurs briefs en 1 clic.",
-        plan: "pro",
+        title: "Pro — Expert à chaque génération",
+        description: `Variante Expert, templates premium et favoris — ${PLAN_PRICES.plus.label}.`,
+        plan: "plus",
       },
       {
-        title: "Variante Expert débloquée",
-        description:
-          "Brief production complet (edge cases, critères d'acceptation) — ce que tu as vu flouté.",
-        plan: "creator",
-      },
-      {
-        title: "Workflows Creator",
-        description: "Enchaîne des prompts métier sans repartir de zéro à chaque fois.",
+        title: "Creator — workflows & volume",
+        description: "Illimité, packs métier SaaS / LinkedIn / Dev, Expert par défaut.",
         plan: "creator",
       },
     ];
   }
 
+  if (currentPlan === "starter") {
+    return [
+      {
+        title: "Passer Pro",
+        description: "Expert inclus, templates premium, favoris — pour quand le brief fait partie du métier.",
+        plan: "plus",
+      },
+      {
+        title: "Creator",
+        description: "Workflows et volume illimité quand tu produis en série.",
+        plan: "creator",
+      },
+    ];
+  }
+
+  // plus → creator
   return [
-    {
-      title: "Variante Expert complète",
-      description:
-        "La version la plus longue et actionnable de ton prompt — déjà générée, il suffit de débloquer.",
-      plan: "creator",
-    },
     {
       title: "Workflows métier",
       description: "Packs SaaS, LinkedIn, Dev : gagne des heures sur les projets récurrents.",
+      plan: "creator",
+    },
+    {
+      title: "Volume illimité",
+      description: "Plus de plafond mensuel — usage raisonnable, pour les équipes et les freelances intensifs.",
       plan: "creator",
     },
     {

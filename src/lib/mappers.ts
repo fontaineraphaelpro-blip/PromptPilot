@@ -1,5 +1,6 @@
 import type { Profile, PromptRecord, Template, PromptScoreBreakdown } from "@/types";
-import type { Plan, TargetAI } from "@/lib/constants";
+import type { TargetAI } from "@/lib/constants";
+import { normalizePlan } from "@/lib/plans";
 import type { Profile as PrismaProfile, Prompt, Template as PrismaTemplate } from "@prisma/client";
 
 export function mapProfile(row: PrismaProfile): Profile {
@@ -7,7 +8,9 @@ export function mapProfile(row: PrismaProfile): Profile {
     id: row.id,
     user_id: row.userId,
     email: row.email,
-    plan: row.plan as Plan,
+    plan: normalizePlan(row.plan),
+    prompt_credits: row.promptCredits,
+    workflow_unlocked: row.workflowUnlocked,
     stripe_customer_id: row.stripeCustomerId,
     stripe_subscription_id: row.stripeSubscriptionId,
     preferred_language: row.preferredLanguage as Profile["preferred_language"],
@@ -40,6 +43,7 @@ export function mapPrompt(row: Prompt): PromptRecord {
     share_token: row.shareToken,
     share_enabled: row.shareEnabled,
     copy_feedback: row.copyFeedback,
+    expert_unlocked: row.expertUnlocked,
     created_at: row.createdAt.toISOString(),
   };
 }

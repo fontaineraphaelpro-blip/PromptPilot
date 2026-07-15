@@ -13,8 +13,15 @@ import { computePromptScore, qualifiesForScoreGuarantee } from "@/lib/prompt-sco
 import { prisma } from "@/lib/db";
 import { isOpenAIConfigured } from "@/lib/env";
 import { GENERATE_RATE_LIMIT_PER_MIN } from "@/lib/constants";
+import {
+  FREE_LIFETIME_LIMIT,
+  STARTER_MONTHLY_LIMIT,
+  PLUS_MONTHLY_LIMIT,
+} from "@/lib/constants";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { safeErrorMessage } from "@/lib/api-error";
+import { PLAN_PRICES, normalizePlan } from "@/lib/plans";
+import type { Plan } from "@/lib/constants";
 import type { GeneratePromptInput, GeneratePromptResult } from "@/types";
 
 const generateRequestSchema = generatePromptSchema.extend({
@@ -48,9 +55,22 @@ function enrichResult(
   };
 }
 
+function upgradeMessageForPlan(plan: Plan): string {
+  if (plan === "free") {
+    return `Vos ${FREE_LIFETIME_LIMIT} briefs offerts sont utilisés. Vous pouvez ajouter un pack de crédits, ou continuer avec Starter (${PLAN_PRICES.starter.label}) ou Pro (${PLAN_PRICES.plus.label}).`;
+  }
+  if (plan === "starter") {
+    return `Votre quota Starter (${STARTER_MONTHLY_LIMIT}/mois) est atteint. Un pack de crédits ou Pro (${PLAN_PRICES.plus.label}) peut prolonger votre rythme.`;
+  }
+  if (plan === "plus") {
+    return `Votre quota Pro (${PLUS_MONTHLY_LIMIT}/mois) est atteint. Un pack de crédits ou Creator (${PLAN_PRICES.creator.label}) pour un volume plus large.`;
+  }
+  return "Limite atteinte pour le moment.";
+}
+
 export async function POST(request: Request) {
   let userId: string | null = null;
-  let userPlan: "free" | "pro" | "creator" = "free";
+  let userPlan: Plan = "free";
   let usageReserved = false;
 
   try {
@@ -98,7 +118,7 @@ export async function POST(request: Request) {
     }
 
     const profile = await getOrCreateProfile(user.id, user.email);
-    userPlan = profile.plan;
+    userPlan = normalizePlan(profile.plan);
 
     let skipUsage = false;
     if (parsed.data.guaranteeRegen && parsed.data.parentPromptId) {
@@ -122,7 +142,8 @@ export async function POST(request: Request) {
       used: 0,
       limit: null as number | null,
       remaining: null as number | null,
-      period: null as "lifetime" | "daily" | null,
+      period: null as "lifetime" | "monthly" | null,
+      credits: profile.prompt_credits,
     };
 
     if (!skipUsage) {
@@ -130,18 +151,13 @@ export async function POST(request: Request) {
       usageReserved = true;
       if (!usage.allowed) {
         const isFree = profile.plan === "free";
-        const errorTitle = isFree ? "Quota gratuit épuisé" : "Limite quotidienne atteinte";
-        const upgradeMessage = isFree
-          ? "Vous avez utilisé vos prompts gratuits. Passez au Pro (200 prompts/jour, 9€/mois) ou Creator (illimité) pour continuer."
-          : profile.plan === "pro"
-            ? "Limite d'usage équitable atteinte (200/jour). Passez au Creator pour l'illimité."
-            : "Limite quotidienne atteinte.";
         return NextResponse.json(
           {
-            error: errorTitle,
-            message: upgradeMessage,
+            error: isFree ? "Quota gratuit épuisé" : "Quota mensuel atteint",
+            message: upgradeMessageForPlan(profile.plan),
             used: usage.used,
             limit: usage.limit,
+            credits: usage.credits,
           },
           { status: 429 }
         );
@@ -199,7 +215,9 @@ export async function POST(request: Request) {
       },
     });
 
-    const filtered = filterGenerateResultForPlan(profile.plan, result);
+    const filtered = filterGenerateResultForPlan(profile.plan, result, {
+      expertUnlocked: saved.expertUnlocked,
+    });
 
     return NextResponse.json({
       ...filtered,
@@ -208,11 +226,14 @@ export async function POST(request: Request) {
       preview_summary: result.preview_summary,
       preview_questions: result.preview_questions,
       id: saved.id,
+      expert_unlocked: saved.expertUnlocked,
       guarantee_regen_available: qualifiesForScoreGuarantee(result.prompt_score),
       usage: {
         used: usage.used,
         limit: usage.limit,
         remaining: usage.remaining,
+        credits: usage.credits,
+        period: usage.period,
       },
     });
   } catch (error) {

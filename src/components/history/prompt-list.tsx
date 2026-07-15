@@ -62,7 +62,7 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
 
   async function toggleFavorite(id: string, current: boolean) {
     if (!favoritesAllowed) {
-      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      toastUpgradeRequired("Les favoris sont inclus dans Pro (19€/mois).", "plus");
       return;
     }
     const res = await fetch(`/api/prompts/${id}/favorite`, {
@@ -76,7 +76,7 @@ export function PromptList({ prompts: initial, plan = "free" }: PromptListProps)
       );
       toast.success(current ? "Retiré des favoris" : "Ajouté aux favoris");
     } else if (res.status === 403) {
-      toastUpgradeRequired("Les favoris sont inclus dans le plan Pro (9€/mois).", "pro");
+      toastUpgradeRequired("Les favoris sont inclus dans Pro (19€/mois).", "plus");
     } else {
       toast.error("Impossible de mettre à jour le favori");
     }

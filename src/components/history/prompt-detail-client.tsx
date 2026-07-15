@@ -44,6 +44,7 @@ export function PromptDetailClient({ prompt, plan }: PromptDetailClientProps) {
           preview_questions: prompt.preview_questions,
           guarantee_regen_available: qualifiesForScoreGuarantee(prompt.prompt_score),
           copy_feedback: prompt.copy_feedback,
+          expert_unlocked: prompt.expert_unlocked,
         }}
         isFavorite={isFavorite}
         onToggleFavorite={toggleFavorite}

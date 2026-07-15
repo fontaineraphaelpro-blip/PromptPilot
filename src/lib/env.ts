@@ -15,9 +15,13 @@ const serverSchema = z.object({
   STRIPE_SECRET_KEY: z.string().min(1).optional(),
   STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
   STRIPE_PRO_PRICE_ID: z.string().optional(),
+  STRIPE_STARTER_PRICE_ID: z.string().optional(),
+  STRIPE_PLUS_PRICE_ID: z.string().optional(),
   STRIPE_CREATOR_PRICE_ID: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().optional(),
   NEXT_PUBLIC_STRIPE_PRO_PRICE_ID: z.string().optional(),
+  NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID: z.string().optional(),
+  NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID: z.string().optional(),
   NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID: z.string().optional(),
 });
 
@@ -43,7 +47,10 @@ export function isOpenAIConfigured(): boolean {
 export function isStripeConfigured(): boolean {
   return Boolean(
     process.env.STRIPE_SECRET_KEY?.trim() &&
-      process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID?.trim()
+      (process.env.NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID?.trim() ||
+        process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID?.trim() ||
+        process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() ||
+        process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID?.trim())
   );
 }
 

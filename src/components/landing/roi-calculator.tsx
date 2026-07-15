@@ -19,7 +19,7 @@ export function RoiCalculator() {
   const [rate, setRate] = useState(DEFAULT_HOURLY_RATE);
 
   const roi = useMemo(() => computeMonthlyRoi(briefs, rate), [briefs, rate]);
-  const monthsOfPro = Math.max(1, Math.floor(roi.eurosAvg / PLAN_PRICES.pro.amount));
+  const monthsOfPro = Math.max(1, Math.floor(roi.eurosAvg / PLAN_PRICES.plus.amount));
 
   return (
     <section
@@ -108,9 +108,9 @@ export function RoiCalculator() {
             </div>
 
             <p className="mt-6 text-center text-sm text-muted-foreground leading-relaxed">
-              À ton rythme, {PLAN_PRICES.pro.label} (~{PLAN_PRICES.pro.amount}€) représente environ{" "}
+              À ton rythme, {PLAN_PRICES.plus.label} (~{PLAN_PRICES.plus.amount}€) représente environ{" "}
               <strong className="text-foreground">
-                {((PLAN_PRICES.pro.amount / Math.max(roi.eurosAvg, 1)) * 100).toFixed(0)}%
+                {((PLAN_PRICES.plus.amount / Math.max(roi.eurosAvg, 1)) * 100).toFixed(0)}%
               </strong>{" "}
               de la valeur que tu récupères — soit{" "}
               <strong className="text-foreground">

@@ -42,10 +42,19 @@ export const TONES = [
 
 export const LANGUAGES = ["Français", "Anglais"] as const;
 
-export const PLANS = ["free", "pro", "creator"] as const;
+/**
+ * free → starter → plus (affiché « Pro ») → creator
+ * « plus » évite la collision avec l’ancien plan « pro » (9€) en base.
+ */
+export const PLANS = ["free", "starter", "plus", "creator"] as const;
 
-/** Quota gratuit TOTAL (à vie, pas de reset journalier) — pousse à l'upgrade */
+/** Essais gratuits à vie (qualité découverte : Principal + Court) */
 export const FREE_LIFETIME_LIMIT = 5;
+/** Starter : briefs / mois */
+export const STARTER_MONTHLY_LIMIT = 40;
+/** Plus (Pro) : briefs / mois */
+export const PLUS_MONTHLY_LIMIT = 80;
+/** Legacy / référence */
 export const PRO_DAILY_FAIR_USE_LIMIT = 200;
 export const FREE_HISTORY_LIMIT = 30;
 

@@ -28,9 +28,9 @@ export default async function FavoritesPage() {
       <h1 className="text-2xl font-bold">Favoris</h1>
       {!favoritesAllowed && (
         <p className="text-sm text-muted-foreground rounded-lg border border-border bg-muted/30 p-4">
-          Les favoris sont inclus dans le plan Pro (9€/mois).{" "}
+          Les favoris sont inclus dans Pro (19€/mois).{" "}
           <Button variant="link" className="h-auto p-0 text-sm" asChild>
-            <Link href="/pricing?plan=pro">Passer au Pro</Link>
+            <Link href="/pricing?plan=pro">Voir Pro</Link>
           </Button>
         </p>
       )}

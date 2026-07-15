@@ -1,6 +1,10 @@
 import type { Plan } from "@/lib/constants";
-import { FREE_LIFETIME_LIMIT, PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
-import { hasUnlimitedPrompts } from "@/lib/plans";
+import {
+  FREE_LIFETIME_LIMIT,
+  STARTER_MONTHLY_LIMIT,
+  PLUS_MONTHLY_LIMIT,
+} from "@/lib/constants";
+import { hasUnlimitedPrompts, normalizePlan } from "@/lib/plans";
 import { prisma } from "@/lib/db";
 
 export type UsageStatus = {
@@ -8,8 +12,9 @@ export type UsageStatus = {
   used: number;
   limit: number | null;
   remaining: number | null;
-  /** "lifetime" (free) ou "daily" (pro) — null si illimité */
-  period: "lifetime" | "daily" | null;
+  period: "lifetime" | "monthly" | null;
+  /** Crédits one-shot restants (packs) */
+  credits: number;
 };
 
 function todayDateString(): string {
@@ -20,6 +25,28 @@ function todayDateString(): string {
   return paris.toISOString().split("T")[0];
 }
 
+/** Préfixe YYYY-MM (Europe/Paris) pour agrégat mensuel */
+function monthKey(): string {
+  return todayDateString().slice(0, 7);
+}
+
+export async function getLifetimeUsage(userId: string): Promise<number> {
+  const agg = await prisma.dailyUsage.aggregate({
+    where: { userId },
+    _sum: { promptCount: true },
+  });
+  return agg._sum.promptCount ?? 0;
+}
+
+export async function getMonthUsage(userId: string): Promise<number> {
+  const prefix = monthKey();
+  const rows = await prisma.dailyUsage.findMany({
+    where: { userId, date: { startsWith: prefix } },
+    select: { promptCount: true },
+  });
+  return rows.reduce((sum, r) => sum + r.promptCount, 0);
+}
+
 export async function getTodayUsage(userId: string): Promise<number> {
   const today = todayDateString();
   const row = await prisma.dailyUsage.findUnique({
@@ -28,13 +55,12 @@ export async function getTodayUsage(userId: string): Promise<number> {
   return row?.promptCount ?? 0;
 }
 
-/** Total de prompts générés depuis la création du compte (somme des lignes journalières). */
-export async function getLifetimeUsage(userId: string): Promise<number> {
-  const agg = await prisma.dailyUsage.aggregate({
+async function getCredits(userId: string): Promise<number> {
+  const profile = await prisma.profile.findUnique({
     where: { userId },
-    _sum: { promptCount: true },
+    select: { promptCredits: true },
   });
-  return agg._sum.promptCount ?? 0;
+  return profile?.promptCredits ?? 0;
 }
 
 async function incrementToday(
@@ -50,79 +76,136 @@ async function incrementToday(
 }
 
 /**
- * Vérifie la limite et incrémente atomiquement — évite le double comptage concurrent.
- * Free : quota TOTAL à vie (FREE_LIFETIME_LIMIT). Pro : plafond journalier. Creator : illimité.
+ * Free : quota à vie OU crédits packs.
+ * Starter / Pro : plafond mensuel (crédits packs en plus si besoin).
+ * Creator : illimité.
  */
 export async function reservePromptSlot(
   userId: string,
-  plan: Plan
+  planInput: Plan | string
 ): Promise<UsageStatus> {
-  if (plan === "creator") {
+  const plan = normalizePlan(planInput);
+
+  if (hasUnlimitedPrompts(plan)) {
     await incrementToday(prisma, userId);
-    return { allowed: true, used: 0, limit: null, remaining: null, period: null };
+    const credits = await getCredits(userId);
+    return {
+      allowed: true,
+      used: 0,
+      limit: null,
+      remaining: null,
+      period: null,
+      credits,
+    };
   }
 
-  if (plan === "free") {
-    return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx) => {
+    const profile = await tx.profile.findUnique({
+      where: { userId },
+      select: { promptCredits: true },
+    });
+    const credits = profile?.promptCredits ?? 0;
+
+    if (plan === "free") {
       const agg = await tx.dailyUsage.aggregate({
         where: { userId },
         _sum: { promptCount: true },
       });
       const used = agg._sum.promptCount ?? 0;
+      const lifetimeLeft = Math.max(0, FREE_LIFETIME_LIMIT - used);
 
-      if (used >= FREE_LIFETIME_LIMIT) {
+      if (lifetimeLeft > 0) {
+        await incrementToday(tx, userId);
         return {
-          allowed: false,
+          allowed: true,
+          used: used + 1,
+          limit: FREE_LIFETIME_LIMIT,
+          remaining: lifetimeLeft - 1,
+          period: "lifetime" as const,
+          credits,
+        };
+      }
+
+      if (credits > 0) {
+        await tx.profile.update({
+          where: { userId },
+          data: { promptCredits: { decrement: 1 } },
+        });
+        await incrementToday(tx, userId);
+        return {
+          allowed: true,
           used,
           limit: FREE_LIFETIME_LIMIT,
           remaining: 0,
           period: "lifetime" as const,
+          credits: credits - 1,
         };
       }
 
-      await incrementToday(tx, userId);
-
-      return {
-        allowed: true,
-        used: used + 1,
-        limit: FREE_LIFETIME_LIMIT,
-        remaining: Math.max(0, FREE_LIFETIME_LIMIT - used - 1),
-        period: "lifetime" as const,
-      };
-    });
-  }
-
-  // Pro — plafond d'usage équitable journalier
-  const today = todayDateString();
-  return prisma.$transaction(async (tx) => {
-    const row = await tx.dailyUsage.findUnique({
-      where: { userId_date: { userId, date: today } },
-    });
-    const used = row?.promptCount ?? 0;
-
-    if (used >= PRO_DAILY_FAIR_USE_LIMIT) {
       return {
         allowed: false,
         used,
-        limit: PRO_DAILY_FAIR_USE_LIMIT,
+        limit: FREE_LIFETIME_LIMIT,
         remaining: 0,
-        period: "daily" as const,
+        period: "lifetime" as const,
+        credits: 0,
       };
     }
 
-    await incrementToday(tx, userId);
+    // starter / plus — mensuel, puis crédits
+    const monthlyLimit =
+      plan === "starter" ? STARTER_MONTHLY_LIMIT : PLUS_MONTHLY_LIMIT;
+    const prefix = monthKey();
+    const monthRows = await tx.dailyUsage.findMany({
+      where: { userId, date: { startsWith: prefix } },
+      select: { promptCount: true },
+    });
+    const used = monthRows.reduce((s, r) => s + r.promptCount, 0);
+
+    if (used < monthlyLimit) {
+      await incrementToday(tx, userId);
+      return {
+        allowed: true,
+        used: used + 1,
+        limit: monthlyLimit,
+        remaining: monthlyLimit - used - 1,
+        period: "monthly" as const,
+        credits,
+      };
+    }
+
+    if (credits > 0) {
+      await tx.profile.update({
+        where: { userId },
+        data: { promptCredits: { decrement: 1 } },
+      });
+      await incrementToday(tx, userId);
+      return {
+        allowed: true,
+        used,
+        limit: monthlyLimit,
+        remaining: 0,
+        period: "monthly" as const,
+        credits: credits - 1,
+      };
+    }
 
     return {
-      allowed: true,
-      used: used + 1,
-      limit: PRO_DAILY_FAIR_USE_LIMIT,
-      remaining: Math.max(0, PRO_DAILY_FAIR_USE_LIMIT - used - 1),
-      period: "daily" as const,
+      allowed: false,
+      used,
+      limit: monthlyLimit,
+      remaining: 0,
+      period: "monthly" as const,
+      credits: 0,
     };
   });
 }
 
-export async function releasePromptSlot(userId: string, plan: Plan): Promise<void> {
+export async function releasePromptSlot(
+  userId: string,
+  planInput: Plan | string
+): Promise<void> {
+  const plan = normalizePlan(planInput);
   if (hasUnlimitedPrompts(plan)) return;
 
   const today = todayDateString();
@@ -139,29 +222,56 @@ export async function releasePromptSlot(userId: string, plan: Plan): Promise<voi
 
 export async function checkUsageLimit(
   userId: string,
-  plan: Plan
+  planInput: Plan | string
 ): Promise<UsageStatus> {
-  if (plan === "creator") {
-    return { allowed: true, used: 0, limit: null, remaining: null, period: null };
+  const plan = normalizePlan(planInput);
+  const credits = await getCredits(userId);
+
+  if (hasUnlimitedPrompts(plan)) {
+    return {
+      allowed: true,
+      used: 0,
+      limit: null,
+      remaining: null,
+      period: null,
+      credits,
+    };
   }
 
   if (plan === "free") {
     const used = await getLifetimeUsage(userId);
+    const remainingQuota = Math.max(0, FREE_LIFETIME_LIMIT - used);
+    const remaining = remainingQuota + credits;
     return {
-      allowed: used < FREE_LIFETIME_LIMIT,
+      allowed: remaining > 0,
       used,
       limit: FREE_LIFETIME_LIMIT,
-      remaining: Math.max(0, FREE_LIFETIME_LIMIT - used),
+      remaining: remainingQuota,
       period: "lifetime",
+      credits,
     };
   }
 
-  const used = await getTodayUsage(userId);
+  const monthlyLimit =
+    plan === "starter" ? STARTER_MONTHLY_LIMIT : PLUS_MONTHLY_LIMIT;
+  const used = await getMonthUsage(userId);
+  const remainingQuota = Math.max(0, monthlyLimit - used);
   return {
-    allowed: used < PRO_DAILY_FAIR_USE_LIMIT,
+    allowed: remainingQuota > 0 || credits > 0,
     used,
-    limit: PRO_DAILY_FAIR_USE_LIMIT,
-    remaining: Math.max(0, PRO_DAILY_FAIR_USE_LIMIT - used),
-    period: "daily",
+    limit: monthlyLimit,
+    remaining: remainingQuota,
+    period: "monthly",
+    credits,
   };
+}
+
+export async function addPromptCredits(
+  userId: string,
+  amount: number
+): Promise<void> {
+  await prisma.profile.update({
+    where: { userId },
+    data: { promptCredits: { increment: amount } },
+  });
 }

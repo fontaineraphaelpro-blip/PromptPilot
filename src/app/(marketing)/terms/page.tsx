@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 import { APP_NAME } from "@/lib/constants";
 import { getSupportEmail } from "@/lib/support";
-import { PRO_DAILY_FAIR_USE_LIMIT } from "@/lib/constants";
+import {
+  FREE_LIFETIME_LIMIT,
+  STARTER_MONTHLY_LIMIT,
+  PLUS_MONTHLY_LIMIT,
+} from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: `Conditions d'utilisation — ${APP_NAME}`,
@@ -22,9 +26,11 @@ export default function TermsPage() {
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Plans et paiements</h2>
       <p>
-        Le plan Free inclut un nombre limité de générations offertes (sans renouvellement). Le plan Pro inclut un usage
-        généreux de {PRO_DAILY_FAIR_USE_LIMIT} générations par jour. Le plan Creator est illimité
-        sous réserve d&apos;un usage raisonnable. Les abonnements sont facturés via Stripe
+        Le plan Free inclut {FREE_LIFETIME_LIMIT} générations offertes (sans renouvellement automatique).
+        Starter : jusqu&apos;à {STARTER_MONTHLY_LIMIT} générations par mois. Pro : jusqu&apos;à{" "}
+        {PLUS_MONTHLY_LIMIT} générations par mois avec variantes avancées. Creator : illimité sous
+        réserve d&apos;un usage raisonnable, avec workflows. Des achats ponctuels (crédits, déblocage
+        Expert, pack workflows) peuvent aussi être proposés. Les abonnements sont facturés via Stripe
         (mensuel ou annuel si proposé). Annulation à tout moment depuis le portail de facturation.
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Usage acceptable</h2>

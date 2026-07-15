@@ -32,7 +32,7 @@ export const messages = {
       "One sentence in. You get an expert brief scored /100, with preview and 4 variants — 30–60 minutes of manual work saved every time.",
     ctaTry: "Generate my free brief",
     ctaSignup: "Create my account",
-    footnote: `${FREE_LIFETIME_LIMIT} free prompts · no card · Pro at €9/mo pays for itself after 2 briefs`,
+    footnote: `${FREE_LIFETIME_LIMIT} free briefs · no card · packs or a plan that fits your pace`,
     statAis: "AIs supported",
     statScore: "Score /100",
     statVariants: "Variants",
@@ -120,15 +120,19 @@ export const messages = {
       },
       {
         q: "How many free prompts do I get?",
-        a: `The Free plan includes ${FREE_LIFETIME_LIMIT} free generations to try the quality. Pro: 200/day. Creator: unlimited.`,
+        a: `The Free plan includes ${FREE_LIFETIME_LIMIT} free generations (Main + Short). Starter: 40/mo. Pro: 80/mo + Expert. Creator: unlimited.`,
       },
       {
-        q: "What's the difference between Pro ($9) and Creator ($19)?",
-        a: "Pro: score /100, preview, premium templates, favorites — ideal if you generate often. Creator: Expert variant, industry workflows, unlimited.",
+        q: "What's the difference between Starter (€9), Pro (€19) and Creator (€39)?",
+        a: "Starter: steady rhythm with Detailed variant. Pro: Expert included, premium templates and favorites. Creator: industry workflows and unlimited volume.",
       },
       {
         q: "How is PromptPilot different from ChatGPT?",
-        a: "ChatGPT answers your question. PromptPilot produces the brief to paste: tailored for 12+ AIs, scored /100, with preview and 4 variants. One expert brief = 30–60 min saved — Pro at €9/mo pays for itself after 2 generations.",
+        a: "ChatGPT answers your question. PromptPilot produces the brief to paste: tailored for 12+ AIs, scored /100, with preview and variants. One expert brief = 30–60 min saved — Pro at €19/mo when you want Expert every time.",
+      },
+      {
+        q: "Can I pay without a subscription?",
+        a: "Yes: credit packs, one-off Expert unlock, or a workflows pack — no monthly commitment.",
       },
       {
         q: "Quality guarantee if the score is low?",

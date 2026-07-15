@@ -67,7 +67,7 @@ export function ValueStackSection() {
               Empilement de valeur
             </p>
             <h2 className="text-3xl font-bold sm:text-4xl tracking-tight">
-              Tout ça pour {PLAN_PRICES.pro.label} ?
+              Tout ça pour {PLAN_PRICES.plus.label} ?
             </h2>
             <p className="mt-4 text-muted-foreground">
               Compare à ce que tu payerais (ou dépenserais en temps) pour obtenir la même qualité
@@ -144,7 +144,7 @@ export function ValueStackSection() {
               </p>
               <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
                 Tu ne restes jamais bloqué avec un brief mediocre. + paiement Stripe, annulation en
-                1 clic, {PLAN_PRICES.pro.label} sans engagement long.
+                1 clic, {PLAN_PRICES.plus.label} sans engagement long.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
                 <Button size="lg" className="group" asChild>

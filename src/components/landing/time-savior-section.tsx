@@ -111,7 +111,7 @@ export function TimeSaviorSection() {
             </Button>
           </div>
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Un brief = 30 à 60 min rendues. Pro à 9€/mois se rembourse au 2ᵉ.
+            Un brief = 30 à 60 min rendues. Pro à 19€/mois quand Expert fait partie du métier.
           </p>
         </FadeIn>
       </div>

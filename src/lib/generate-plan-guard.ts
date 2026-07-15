@@ -2,18 +2,25 @@ import type { Plan } from "@/lib/constants";
 import { DETAIL_LEVELS, type DetailLevel } from "@/lib/constants";
 import type { GeneratePromptInput, GeneratePromptResult } from "@/types";
 import type { PromptRecord } from "@/types";
+import { PLAN_PRICES, hasAdvancedVariants, canUseDetailedVariant } from "@/lib/plans";
+import { EXPERT_UNLOCK } from "@/lib/commerce-products";
 
 export function canUseExpertDetailLevel(plan: Plan): boolean {
-  return plan === "creator";
+  return hasAdvancedVariants(plan);
 }
 
 export function canUseAdvancedGeneratorOptions(plan: Plan): boolean {
-  return plan === "pro" || plan === "creator";
+  return plan === "plus" || plan === "creator";
 }
 
 export function getAllowedDetailLevels(plan: Plan): readonly DetailLevel[] {
   if (canUseExpertDetailLevel(plan)) return DETAIL_LEVELS;
-  return DETAIL_LEVELS.filter((level) => level !== "Expert");
+  if (canUseDetailedVariant(plan)) {
+    return DETAIL_LEVELS.filter((level) => level !== "Expert");
+  }
+  return DETAIL_LEVELS.filter(
+    (level) => level !== "Expert" && level !== "Détaillé"
+  );
 }
 
 const FREE_GENERATOR_DEFAULTS = {
@@ -29,8 +36,9 @@ export function clampGenerateInputForPlan(
   input: GeneratePromptInput
 ): GeneratePromptInput {
   let detailLevel = input.detailLevel;
-  if (detailLevel === "Expert" && !canUseExpertDetailLevel(plan)) {
-    detailLevel = "Détaillé";
+  const allowed = getAllowedDetailLevels(plan);
+  if (!allowed.includes(detailLevel)) {
+    detailLevel = allowed[allowed.length - 1] ?? "Rapide";
   }
 
   if (!canUseAdvancedGeneratorOptions(plan)) {
@@ -56,41 +64,71 @@ function buildExpertTeaser(fullExpert: string): string {
   return `${preview}
 
 ────────────────────────────
-🔒 Encore ~${extraWords} mots dans la variante Expert (brief production)
+🔒 Encore ~${extraWords} mots dans la variante Expert
 
-Inclus dans Creator : edge cases, critères d'acceptation testables, annexes techniques, variantes A/B, workflow pas-à-pas.
+Brief production : edge cases, critères d’acceptation, annexes.
 
-→ Débloquer avec Creator (19€/mois) — ton prompt Expert est déjà généré.`;
+→ Débloquer ce brief (${EXPERT_UNLOCK.label}) ou inclus avec Pro (${PLAN_PRICES.plus.label}).`;
+}
+
+function buildDetailedTeaser(full: string): string {
+  const preview = full.slice(0, 280).trim();
+  return `${preview}…
+
+🔒 Variante Détaillée disponible dès Starter (${PLAN_PRICES.starter.label}/mois).`;
 }
 
 export function filterGenerateResultForPlan(
   plan: Plan,
-  result: GeneratePromptResult
+  result: GeneratePromptResult,
+  opts?: { expertUnlocked?: boolean }
 ): GeneratePromptResult {
-  if (canUseExpertDetailLevel(plan)) return result;
+  let next = { ...result };
+
+  if (!canUseDetailedVariant(plan)) {
+    const detailed = result.detailed_variant?.trim() ?? "";
+    if (detailed.length > 40 && !detailed.startsWith("🔒")) {
+      next.detailed_variant = buildDetailedTeaser(detailed);
+    }
+  }
+
+  if (opts?.expertUnlocked || canUseExpertDetailLevel(plan)) {
+    return next;
+  }
 
   const expert = result.expert_variant?.trim() ?? "";
-  const teaser =
+  next.expert_variant =
     expert.length > 80 && !expert.startsWith("🔒")
       ? buildExpertTeaser(expert)
-      : "🔒 Variante Expert réservée au plan Creator (19€/mois).\n\nBrief production complet : contraintes HARD/SOFT, critères d'acceptation, edge cases — généré automatiquement à chaque prompt.";
+      : `🔒 Variante Expert — brief production complet.
 
-  return {
-    ...result,
-    expert_variant: teaser,
-  };
+Débloque ce prompt pour ${EXPERT_UNLOCK.label}, ou Pro (${PLAN_PRICES.plus.label}) pour l’avoir à chaque génération.`;
+
+  return next;
 }
 
-export function filterPromptRecordForPlan(plan: Plan, prompt: PromptRecord): PromptRecord {
-  if (canUseExpertDetailLevel(plan)) return prompt;
-  return {
-    ...prompt,
-    expert_variant: filterGenerateResultForPlan(plan, {
+export function filterPromptRecordForPlan(
+  plan: Plan,
+  prompt: PromptRecord,
+  opts?: { expertUnlocked?: boolean }
+): PromptRecord {
+  if (opts?.expertUnlocked || canUseExpertDetailLevel(plan)) {
+    if (canUseDetailedVariant(plan) || opts?.expertUnlocked) return prompt;
+  }
+  const filtered = filterGenerateResultForPlan(
+    plan,
+    {
       generated_prompt: prompt.generated_prompt,
       short_variant: prompt.short_variant,
       detailed_variant: prompt.detailed_variant,
       expert_variant: prompt.expert_variant,
       ai_tips: prompt.ai_tips,
-    }).expert_variant,
+    },
+    opts
+  );
+  return {
+    ...prompt,
+    detailed_variant: filtered.detailed_variant,
+    expert_variant: filtered.expert_variant,
   };
 }

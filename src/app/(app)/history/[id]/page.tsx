@@ -26,7 +26,10 @@ export default async function HistoryDetailPage({
 
   if (!row) notFound();
 
-  const prompt = filterPromptRecordForPlan(profile.plan, mapPrompt(row));
+  const mapped = mapPrompt(row);
+  const prompt = filterPromptRecordForPlan(profile.plan, mapped, {
+    expertUnlocked: mapped.expert_unlocked,
+  });
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
