@@ -1,4 +1,12 @@
-export type HomeSectionId = "funnel" | "how" | "demo" | "examples" | "pricing";
+export type HomeSectionId =
+  | "funnel"
+  | "how"
+  | "demo"
+  | "examples"
+  | "pricing"
+  | "temps"
+  | "roi"
+  | "valeur";
 
 const SCROLL_TARGET_KEY = "pp_scroll_target";
 
@@ -8,6 +16,9 @@ const VALID_SECTIONS = new Set<HomeSectionId>([
   "demo",
   "examples",
   "pricing",
+  "temps",
+  "roi",
+  "valeur",
 ]);
 
 export function isHomeSectionId(value: string): value is HomeSectionId {

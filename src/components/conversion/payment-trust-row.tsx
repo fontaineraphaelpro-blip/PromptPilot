@@ -1,10 +1,11 @@
-import { CreditCard, RefreshCw, Shield } from "lucide-react";
-export function PaymentTrustRow({ className = "" }: { className?: string }) {
+import { CreditCard, RefreshCw, Shield, Timer } from "lucide-react";
 
+export function PaymentTrustRow({ className = "" }: { className?: string }) {
   const items = [
+    { icon: Timer, text: "Rentabilisé dès 2 briefs" },
     { icon: CreditCard, text: "Paiement sécurisé Stripe" },
     { icon: RefreshCw, text: "Annulation en 1 clic" },
-    { icon: Shield, text: "Sans engagement long terme" },
+    { icon: Shield, text: "Regen offerte si score < 70" },
   ] as const;
 
   return (

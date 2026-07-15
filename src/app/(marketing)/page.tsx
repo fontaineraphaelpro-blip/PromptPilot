@@ -9,6 +9,9 @@ import { FaqSection } from "@/components/landing/faq-section";
 import { HomeUseCases } from "@/components/landing/home-use-cases";
 import { BeforeAfterSection } from "@/components/landing/before-after-section";
 import { ValuePropositionSection } from "@/components/landing/value-proposition-section";
+import { TimeSaviorSection } from "@/components/landing/time-savior-section";
+import { RoiCalculator } from "@/components/landing/roi-calculator";
+import { ValueStackSection } from "@/components/landing/value-stack-section";
 import { SocialProofCounter } from "@/components/conversion/social-proof-counter";
 import { HomeSeoJsonLd } from "@/components/landing/home-seo";
 import { DemoVideoSection } from "@/components/landing/demo-video-section";
@@ -23,17 +26,18 @@ export default function HomePage() {
       <div className="flex justify-center px-4 -mt-8 mb-4">
         <SocialProofCounter />
       </div>
-      {/* Preuve → produit → action : convaincre avant de demander l'inscription */}
+      {/* Preuve visuelle → émotion temps → produit → ROI → action */}
       <BeforeAfterSection />
+      <TimeSaviorSection />
       <DemoVideoSection />
       <FunnelWizard />
       <SocialProof />
       <ValuePropositionSection />
+      <RoiCalculator />
       <HowItWorks />
       <AIMarquee />
-
       <HomeUseCases />
-
+      <ValueStackSection />
       <PricingSection />
       <FaqSection />
       <FinalCtaSection />

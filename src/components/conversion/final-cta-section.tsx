@@ -16,24 +16,24 @@ export function FinalCtaSection() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-emerald-200/90 mb-6">
             <Sparkles className="h-4 w-4" />
-            {FREE_LIFETIME_LIMIT} briefs experts offerts · sans carte
+            {FREE_LIFETIME_LIMIT} briefs offerts · sans carte · risque zéro
           </p>
-          <h2 className="text-2xl font-bold sm:text-4xl tracking-tight relative px-2">
-            Prêt à économiser 30–60 min sur ton prochain prompt ?
+          <h2 className="text-2xl font-bold sm:text-4xl tracking-tight relative px-2 text-balance">
+            Ce soir, tu peux récupérer 45 minutes — ou les reperdre sur ChatGPT
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg max-w-xl mx-auto relative px-2">
-            Inscris-toi en 30 secondes. Génère un brief scoré /100, avec preview et 4 variantes —
-            adapté à ton IA. Pro à 9€/mois se rentabilise dès la 2ᵉ génération.
+            PromptPilot est le raccourci : idée → brief scoré /100 → coller → livrer. Les gens qui
+            avancent ne perdent plus leur temps à réécrire des prompts. Ils génèrent.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center relative px-4 sm:px-0">
-            <Button size="lg" className="group w-full sm:min-w-[240px]" asChild>
+            <Button size="lg" className="group w-full sm:min-w-[260px]" asChild>
               <Link href="/signup">
-                Créer mon compte gratuit
+                Je récupère mon temps — gratuit
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:min-w-[200px]" asChild>
-              <ScrollLink section="funnel">Aperçu en 30 secondes</ScrollLink>
+              <ScrollLink section="roi">Calculer mon ROI</ScrollLink>
             </Button>
           </div>
         </div>
