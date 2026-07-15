@@ -61,9 +61,9 @@ export default async function SettingsPage() {
               <Link href="/pricing?plan=pro">Voir Pro</Link>
             </Button>
           )}
-          {(profile.plan === "starter" || profile.plan === "plus") && (
+          {profile.plan === "starter" && (
             <Button asChild variant="outline">
-              <Link href="/pricing?plan=creator">Passer au Creator</Link>
+              <Link href="/pricing?plan=pro">Passer Pro</Link>
             </Button>
           )}
         </CardContent>

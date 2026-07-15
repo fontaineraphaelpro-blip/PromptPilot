@@ -121,13 +121,6 @@ export function PricingPageClient() {
             <Button onClick={() => handleCheckout("plus")} disabled={sessionLoading}>
               {PLAN_LABELS.plus} — {PLAN_PRICES.plus.label}
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleCheckout("creator")}
-              disabled={sessionLoading}
-            >
-              {PLAN_LABELS.creator} — {PLAN_PRICES.creator.label}
-            </Button>
           </CardContent>
         </Card>
       </div>

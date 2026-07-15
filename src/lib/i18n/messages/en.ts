@@ -120,11 +120,11 @@ export const messages = {
       },
       {
         q: "How many free prompts do I get?",
-        a: `The Free plan includes ${FREE_LIFETIME_LIMIT} free generations (Main + Short). Starter: 40/mo. Pro: 80/mo + Expert. Creator: unlimited.`,
+        a: `The Free plan includes ${FREE_LIFETIME_LIMIT} free generations (Main + Short). Starter: 40/mo. Pro: 80/mo + Expert and workflows.`,
       },
       {
-        q: "What's the difference between Starter (€9), Pro (€19) and Creator (€39)?",
-        a: "Starter: steady rhythm with Detailed variant. Pro: Expert included, premium templates and favorites. Creator: industry workflows and unlimited volume.",
+        q: "What's the difference between Starter (€9) and Pro (€19)?",
+        a: "Starter: steady rhythm with Detailed variant. Pro: Expert included, premium templates, favorites and workflows.",
       },
       {
         q: "How is PromptPilot different from ChatGPT?",

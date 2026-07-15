@@ -28,16 +28,16 @@ Sans `NEXT_PUBLIC_STRIPE_*_PRICE_ID`, une bannière admin s’affiche en haut du
 
 ## Paiements Stripe
 
-1. Créer **3** tarifs abo : Starter **9€/mois**, Pro (plus) **19€/mois**, Creator **39€/mois**
+1. Créer **2** tarifs abo : Starter **9€/mois**, Pro (plus) **19€/mois**
 2. Configurer :
    - `NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID`
-   - `NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID` (affiché Pro ; legacy `NEXT_PUBLIC_STRIPE_PRO_PRICE_ID` → starter)
-   - `NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID`
+   - `NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID` (affiché Pro)
 3. Webhook : `https://VOTRE-URL/api/stripe/webhook`  
    Événements : `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
 4. Packs crédits / Expert / workflows : **pas besoin** de Price IDs (price_data à la volée)
 5. (Optionnel) Tarifs annuels : `NEXT_PUBLIC_STRIPE_*_PRICE_ID_YEARLY`
 6. Couper le push Pro marketing : `NEXT_PUBLIC_MARKETING_PRO_PUSH=false`
+   *(L’ancien plan Creator 39€ est retiré — workflows inclus dans Pro.)*
 
 ## Emails (recommandé)
 

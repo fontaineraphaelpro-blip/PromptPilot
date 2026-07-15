@@ -9,43 +9,44 @@ export const PLAN_LABELS: Record<Plan, string> = {
   free: "Free",
   starter: "Starter",
   plus: "Pro",
-  creator: "Creator",
+  /** Legacy — plus vendu, conservé pour d'anciens comptes */
+  creator: "Pro",
 };
 
 export const PLAN_PRICES = {
   starter: { amount: 9, label: "9€/mois" },
   plus: { amount: 19, label: "19€/mois" },
-  creator: { amount: 39, label: "39€/mois" },
 };
 
-/** @deprecated alias — préférer PLAN_PRICES.plus */
+/** @deprecated */
 export const PRO_PRICE_ALIAS = PLAN_PRICES.plus;
 
-export type PaidPlan = "starter" | "plus" | "creator";
+/** Plans réellement vendus (Creator 39€ retiré). */
+export type PaidPlan = "starter" | "plus";
 
 export function isPaidPlan(plan: string): plan is PaidPlan {
-  return plan === "starter" || plan === "plus" || plan === "creator";
+  return plan === "starter" || plan === "plus";
 }
 
 /**
  * Normalise les anciens IDs DB / URL.
  * - ancien « pro » (9€ volume) → starter
- * - « pro » dans les URLs marketing → plus (affiché Pro)
+ * - « creator » (39€, retiré) → plus (Pro)
+ * - « pro » dans les URLs marketing → plus
  */
 export function normalizePlan(raw: string | null | undefined): Plan {
   if (!raw) return "free";
-  if (raw === "free" || raw === "starter" || raw === "plus" || raw === "creator") {
-    return raw;
-  }
+  if (raw === "creator") return "plus";
+  if (raw === "free" || raw === "starter" || raw === "plus") return raw;
   if (raw === "pro") return "starter";
   return "free";
 }
 
-/** Pour ?plan=pro dans l’URL → plus */
+/** Pour ?plan= dans l’URL → checkout */
 export function planFromCheckoutQuery(raw: string | null | undefined): PaidPlan | null {
   if (!raw) return null;
-  if (raw === "starter" || raw === "plus" || raw === "creator") return raw;
-  if (raw === "pro") return "plus";
+  if (raw === "starter" || raw === "plus") return raw;
+  if (raw === "pro" || raw === "creator") return "plus";
   return null;
 }
 
@@ -100,97 +101,82 @@ export const PRICING_PLANS: PricingPlanCard[] = [
     name: "Pro",
     price: "19€",
     period: "/mois",
-    description: "Quand le brief Expert fait partie du métier",
+    description: "Expert inclus + workflows — le plan complet",
     features: [
       `${PLUS_MONTHLY_LIMIT} briefs / mois`,
       "Variante Expert à chaque génération",
       "Templates premium & favoris",
+      "Workflows métier (SaaS, LinkedIn, Dev)",
       "Regen offerte si score < 70",
-      "Options avancées (exemples, checklist…)",
     ],
     cta: "Choisir Pro",
     href: "/pricing?plan=pro",
     highlighted: true,
   },
-  {
-    id: "creator",
-    name: "Creator",
-    price: "39€",
-    period: "/mois",
-    description: "Workflows et volume — produire en série",
-    features: [
-      "Briefs illimités (usage raisonnable)",
-      "Tout Pro inclus",
-      "Workflows métier (SaaS, LinkedIn, Dev)",
-      "Niveau Expert par défaut",
-      "Support prioritaire",
-    ],
-    cta: "Choisir Creator",
-    href: "/pricing?plan=creator",
-    highlighted: false,
-  },
 ];
 
 export function getMonthlyQuota(plan: Plan): number | null {
-  if (plan === "free") return FREE_LIFETIME_LIMIT;
-  if (plan === "starter") return STARTER_MONTHLY_LIMIT;
-  if (plan === "plus") return PLUS_MONTHLY_LIMIT;
+  const p = normalizePlan(plan);
+  if (p === "free") return FREE_LIFETIME_LIMIT;
+  if (p === "starter") return STARTER_MONTHLY_LIMIT;
+  if (p === "plus") return PLUS_MONTHLY_LIMIT;
   return null;
 }
 
 export function getPromptQuota(
   plan: Plan
 ): { limit: number; period: "lifetime" | "monthly" } | null {
-  if (plan === "free") return { limit: FREE_LIFETIME_LIMIT, period: "lifetime" };
-  if (plan === "starter") return { limit: STARTER_MONTHLY_LIMIT, period: "monthly" };
-  if (plan === "plus") return { limit: PLUS_MONTHLY_LIMIT, period: "monthly" };
+  const p = normalizePlan(plan);
+  if (p === "free") return { limit: FREE_LIFETIME_LIMIT, period: "lifetime" };
+  if (p === "starter") return { limit: STARTER_MONTHLY_LIMIT, period: "monthly" };
+  if (p === "plus") return { limit: PLUS_MONTHLY_LIMIT, period: "monthly" };
   return null;
 }
 
 export function canAccessPremiumTemplates(plan: Plan): boolean {
-  return plan === "plus" || plan === "creator";
+  const p = normalizePlan(plan);
+  return p === "plus";
 }
 
 export function hasUnlimitedPrompts(plan: Plan): boolean {
-  return plan === "creator";
+  // Plus de plan illimité commercialisé — quotas Pro uniquement
+  return false;
 }
 
 export function hasFullHistory(plan: Plan): boolean {
-  return plan === "plus" || plan === "creator";
+  return normalizePlan(plan) === "plus";
 }
 
 export function canUseFavorites(plan: Plan): boolean {
-  return plan === "plus" || plan === "creator";
+  return normalizePlan(plan) === "plus";
 }
 
 export function hasAdvancedVariants(plan: Plan): boolean {
-  return plan === "plus" || plan === "creator";
+  return normalizePlan(plan) === "plus";
 }
 
 export function canUseDetailedVariant(plan: Plan): boolean {
-  return plan !== "free";
+  return normalizePlan(plan) !== "free";
 }
 
 export function canAccessWorkflows(plan: Plan, workflowUnlocked = false): boolean {
-  return plan === "creator" || workflowUnlocked;
+  return normalizePlan(plan) === "plus" || workflowUnlocked;
 }
 
 export function getPlanBadgeVariant(
   plan: Plan
 ): "free" | "starter" | "pro" | "creator" {
-  if (plan === "free") return "free";
-  if (plan === "starter") return "starter";
-  if (plan === "creator") return "creator";
-  return "pro"; // plus displayed as Pro
+  const p = normalizePlan(plan);
+  if (p === "free") return "free";
+  if (p === "starter") return "starter";
+  return "pro";
 }
 
 export function getPlanFeaturesSummary(plan: Plan): string {
-  if (plan === "free") return `${FREE_LIFETIME_LIMIT} briefs · Principal + Court`;
-  if (plan === "starter") {
+  const p = normalizePlan(plan);
+  if (p === "free") return `${FREE_LIFETIME_LIMIT} briefs · Principal + Court`;
+  if (p === "starter") {
     return `${PLAN_PRICES.starter.label} · ${STARTER_MONTHLY_LIMIT}/mois`;
   }
-  if (plan === "plus") {
-    return `${PLAN_PRICES.plus.label} · Expert · templates`;
-  }
-  return `${PLAN_PRICES.creator.label} · workflows · illimité`;
+  return `${PLAN_PRICES.plus.label} · Expert · workflows`;
 }

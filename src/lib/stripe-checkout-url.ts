@@ -24,13 +24,7 @@ export function getPublicPlanCheckoutEnv(plan: PaidPlan): string {
       ""
     );
   }
-  if (plan === "plus") {
-    return (
-      process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() ||
-      ""
-    );
-  }
-  return process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID?.trim() || "";
+  return process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID?.trim() || "";
 }
 
 export function buildPaymentLinkUrl(

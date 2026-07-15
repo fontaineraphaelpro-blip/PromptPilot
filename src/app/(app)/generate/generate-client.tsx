@@ -122,8 +122,8 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
         }
         if (res.status === 429) {
           toastUpgradeRequired(
-            json.message ?? "Quota atteint — un pack de crédits ou un abonnement peut t’aider.",
-            plan === "plus" ? "creator" : "plus"
+            json.message ?? "Quota atteint — un pack de crédits ou Pro peut t’aider.",
+            "plus"
           );
           return;
         }
@@ -225,8 +225,8 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
               {credits} crédit{credits > 1 ? "s" : ""}
             </Badge>
           )}
-          {usage.limit === null && plan === "creator" && (
-            <Badge variant="creator">Illimité</Badge>
+          {usage.limit === null && (
+            <Badge variant="pro">Illimité</Badge>
           )}
         </div>
       </div>
@@ -248,28 +248,26 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm">
               {plan === "free"
-                ? `Tes essais offerts sont terminés. Pro (${PLAN_PRICES.plus.label}) — Expert inclus, prêt en 1 clic.`
+                ? `Tes essais offerts sont terminés. Pro (${PLAN_PRICES.plus.label}) — Expert + workflows, prêt en 1 clic.`
                 : plan === "starter"
-                  ? `Quota Starter atteint. Passe Pro (${PLAN_PRICES.plus.label}) pour Expert + volume, ou un pack de crédits.`
-                  : `Quota mensuel atteint. Creator (${PLAN_PRICES.creator.label}) pour l’illimité, ou un pack de crédits.`}
+                  ? `Quota Starter atteint. Passe Pro (${PLAN_PRICES.plus.label}) pour Expert + workflows, ou un pack de crédits.`
+                  : `Quota mensuel atteint. Un pack de crédits pour prolonger sans changer de plan.`}
             </p>
             <div className="flex flex-col sm:flex-row gap-2 shrink-0">
               <Button size="sm" asChild>
                 <Link
-                  href={
-                    plan === "plus"
-                      ? "/pricing?plan=creator"
-                      : "/pricing?plan=pro"
-                  }
+                  href={plan === "plus" ? "/pricing#credits" : "/pricing?plan=pro"}
                 >
                   {plan === "plus"
-                    ? `Creator — ${PLAN_PRICES.creator.label}`
+                    ? "Pack crédits"
                     : `Passer Pro — ${PLAN_PRICES.plus.label}`}
                 </Link>
               </Button>
-              <Button size="sm" variant="outline" asChild>
-                <Link href="/pricing#credits">Pack crédits</Link>
-              </Button>
+              {plan !== "plus" && (
+                <Button size="sm" variant="outline" asChild>
+                  <Link href="/pricing#credits">Pack crédits</Link>
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -342,9 +340,9 @@ export function GenerateClient({ plan, usage, openaiReady }: GenerateClientProps
       )}
       {plan === "plus" && !result && (
         <p className="text-center text-xs text-muted-foreground">
-          Pro · workflows avec{" "}
-          <Link href="/pricing?plan=creator" className="text-primary hover:underline">
-            Creator ({PLAN_PRICES.creator.label})
+          Pro · Expert + workflows inclus ·{" "}
+          <Link href="/workflows" className="text-primary hover:underline">
+            Voir les workflows
           </Link>
         </p>
       )}

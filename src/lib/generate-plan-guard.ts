@@ -10,7 +10,7 @@ export function canUseExpertDetailLevel(plan: Plan): boolean {
 }
 
 export function canUseAdvancedGeneratorOptions(plan: Plan): boolean {
-  return plan === "plus" || plan === "creator";
+  return hasAdvancedVariants(plan);
 }
 
 export function getAllowedDetailLevels(plan: Plan): readonly DetailLevel[] {

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Crown, Zap } from "lucide-react";
 import type { Plan } from "@/lib/constants";
 import { getUpgradeHighlights } from "@/lib/product-value";
-import { PLAN_LABELS, PLAN_PRICES, type PaidPlan } from "@/lib/plans";
+import { PLAN_LABELS, PLAN_PRICES, normalizePlan, type PaidPlan } from "@/lib/plans";
 import { startCheckout } from "@/lib/start-checkout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -21,13 +21,11 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
   const { data: session } = useSession();
   const router = useRouter();
 
-  if (highlights.length === 0) return null;
+  if (highlights.length === 0 || normalizePlan(plan) === "plus") return null;
 
   const primaryPlan: PaidPlan = highlights.some((h) => h.plan === "plus")
     ? "plus"
-    : highlights.some((h) => h.plan === "starter")
-      ? "starter"
-      : "creator";
+    : "starter";
 
   function goToCheckout(target: PaidPlan) {
     startCheckout(target, session, () => {
@@ -42,12 +40,12 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
           <Crown className="h-4 w-4 text-primary" />
           {typeof promptScore === "number" && promptScore >= 70
             ? `Garde ce ${promptScore}/100 avec Pro`
-            : "Passe Pro — Expert à chaque brief"}
+            : "Passe Pro — Expert + workflows"}
         </CardTitle>
         {typeof promptScore === "number" && promptScore >= 70 && (
           <p className="text-xs text-muted-foreground">
             Ce niveau est déjà là. Pro ({PLAN_PRICES.plus.label}) le met en série —
-            Expert inclus, annulation en 1 clic.
+            Expert + workflows inclus, annulation en 1 clic.
           </p>
         )}
       </CardHeader>
@@ -73,13 +71,13 @@ export function UpgradeValuePanel({ plan, promptScore }: UpgradeValuePanelProps)
             Passer {PLAN_LABELS[primaryPlan]} — {PLAN_PRICES[primaryPlan].label}
             <ArrowRight className="h-4 w-4" />
           </Button>
-          {primaryPlan !== "creator" && (
+          {primaryPlan === "plus" && normalizePlan(plan) === "free" && (
             <Button
               variant="outline"
               className="flex-1"
-              onClick={() => goToCheckout("creator")}
+              onClick={() => goToCheckout("starter")}
             >
-              Creator — {PLAN_PRICES.creator.label}
+              Starter — {PLAN_PRICES.starter.label}
             </Button>
           )}
           <Button variant="ghost" size="sm" className="sm:ml-auto" asChild>

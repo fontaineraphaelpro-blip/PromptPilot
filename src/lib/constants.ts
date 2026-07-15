@@ -43,8 +43,9 @@ export const TONES = [
 export const LANGUAGES = ["Français", "Anglais"] as const;
 
 /**
- * free → starter → plus (affiché « Pro ») → creator
+ * free → starter → plus (affiché « Pro »)
  * « plus » évite la collision avec l’ancien plan « pro » (9€) en base.
+ * « creator » (legacy 39€) est normalisé vers plus à la lecture.
  */
 export const PLANS = ["free", "starter", "plus", "creator"] as const;
 
@@ -83,7 +84,7 @@ export type Plan = (typeof PLANS)[number];
 const UNLIMITED_ACCESS_EMAILS = new Set(["jeanretaz@gmail.com"]);
 
 export function getInitialPlanForEmail(email: string): Plan {
-  if (UNLIMITED_ACCESS_EMAILS.has(email.toLowerCase().trim())) return "creator";
+  if (UNLIMITED_ACCESS_EMAILS.has(email.toLowerCase().trim())) return "plus";
   return "free";
 }
 

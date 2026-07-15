@@ -27,7 +27,7 @@ export default function AboutPage() {
         <li>Score qualité /100 et regénération gratuite si score &lt; 70</li>
         <li>Preview « tester avant de coller »</li>
         <li>4 variantes par génération (Principal, Court, Détaillé, Expert)</li>
-        <li>Workflows métier (plan Creator)</li>
+        <li>Workflows métier (inclus Pro)</li>
       </ul>
       <h2>Pour qui ?</h2>
       <p>

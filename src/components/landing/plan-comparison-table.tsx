@@ -40,19 +40,18 @@ export function PlanComparisonTable({
     <FadeIn>
       <div className="mt-16 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
         <div className="overflow-x-auto overscroll-x-contain">
-          <table className="w-full min-w-[720px] text-left text-sm">
+          <table className="w-full min-w-[560px] text-left text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="p-4 font-medium text-muted-foreground w-[28%]">Fonctionnalité</th>
-                <th className="p-4 font-semibold text-center w-[18%]">Free</th>
-                <th className="p-4 font-semibold text-center w-[18%]">Starter</th>
-                <th className="p-4 font-semibold text-center w-[18%] bg-white/[0.04]">
+                <th className="p-4 font-medium text-muted-foreground w-[34%]">Fonctionnalité</th>
+                <th className="p-4 font-semibold text-center w-[22%]">Free</th>
+                <th className="p-4 font-semibold text-center w-[22%]">Starter</th>
+                <th className="p-4 font-semibold text-center w-[22%] bg-white/[0.04]">
                   Pro
                   <span className="block text-[10px] font-normal text-primary mt-0.5">
                     {PLAN_PRICES.plus.label}
                   </span>
                 </th>
-                <th className="p-4 font-semibold text-center w-[18%]">Creator</th>
               </tr>
             </thead>
             <tbody>
@@ -75,16 +74,13 @@ export function PlanComparisonTable({
                   <td className={cn("p-4 text-center bg-white/[0.02]")}>
                     <CellValue value={row.plus} />
                   </td>
-                  <td className="p-4 text-center">
-                    <CellValue value={row.creator} />
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         {showCta && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-4 border-t border-white/10">
+          <div className="grid grid-cols-3 gap-2 p-4 border-t border-white/10">
             <Button size="sm" variant="outline" asChild>
               <Link href="/signup">Free</Link>
             </Button>
@@ -106,21 +102,12 @@ export function PlanComparisonTable({
                 <Link href="/pricing?plan=pro">Pro</Link>
               </Button>
             )}
-            {onSelectPlan ? (
-              <Button size="sm" variant="outline" onClick={() => onSelectPlan("creator")}>
-                Creator
-              </Button>
-            ) : (
-              <Button size="sm" variant="outline" asChild>
-                <Link href="/pricing?plan=creator">Creator</Link>
-              </Button>
-            )}
           </div>
         )}
       </div>
       <p className="mt-3 text-center text-xs text-muted-foreground hidden sm:block">
         <Minus className="inline h-3 w-3 mr-1 opacity-0" />
-        Pro inclut Expert. Creator ajoute workflows et volume illimité.
+        Pro inclut Expert, templates, favoris et workflows métier.
       </p>
     </FadeIn>
   );

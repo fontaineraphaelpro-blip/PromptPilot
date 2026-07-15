@@ -31,7 +31,7 @@ export default async function WorkflowsPage() {
           <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 min-w-0">
             <p className="text-sm flex items-center gap-2 min-w-0 break-words">
               <Lock className="h-4 w-4 shrink-0" />
-              Inclus avec Creator ({PLAN_PRICES.creator.label}), ou pack unique à{" "}
+              Inclus avec Pro ({PLAN_PRICES.plus.label}), ou pack unique à{" "}
               {WORKFLOW_PACK_UNLOCK.label}.
             </p>
             <div className="flex flex-wrap gap-2 shrink-0">
@@ -41,7 +41,7 @@ export default async function WorkflowsPage() {
                 </Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/pricing?plan=creator">Creator</Link>
+                <Link href="/pricing?plan=pro">Pro</Link>
               </Button>
             </div>
           </CardContent>

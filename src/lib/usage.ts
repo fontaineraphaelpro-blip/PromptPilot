@@ -78,7 +78,7 @@ async function incrementToday(
 /**
  * Free : quota à vie OU crédits packs.
  * Starter / Pro : plafond mensuel (crédits packs en plus si besoin).
- * Creator : illimité.
+ * Creator : legacy DB only (normalisé → Pro).
  */
 export async function reservePromptSlot(
   userId: string,

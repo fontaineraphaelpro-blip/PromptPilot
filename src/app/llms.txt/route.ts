@@ -17,7 +17,7 @@ export function GET() {
 - Générateur de prompts avec score qualité /100
 - Preview avant de coller dans l'IA cible
 - 4 variantes : Principal, Court, Détaillé, Expert
-- Plans : Free (${FREE_LIFETIME_LIMIT} offerts), Starter (${STARTER_MONTHLY_LIMIT}/mois), Pro (${PLUS_MONTHLY_LIMIT}/mois + Expert), Creator (illimité + workflows)
+- Plans : Free (${FREE_LIFETIME_LIMIT} offerts), Starter (${STARTER_MONTHLY_LIMIT}/mois), Pro (${PLUS_MONTHLY_LIMIT}/mois + Expert + workflows)
 - Sans abonnement : packs de crédits, Expert à l'unité, pack workflows
 
 ## Pages utiles

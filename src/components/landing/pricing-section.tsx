@@ -39,7 +39,7 @@ export function PricingSection({
             Tarifs
           </p>
           <h2 className="text-2xl font-bold sm:text-5xl tracking-tight px-2">
-            Un rythme clair — Free, Starter, Pro ou Creator
+            Un rythme clair — Free, Starter ou Pro
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg px-2">
             {ROI_HEADLINE} Commence gratuit — Pro ({PLAN_PRICES.plus.label}) quand tu
@@ -50,7 +50,7 @@ export function PricingSection({
           </div>
         </FadeIn>
 
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PRICING_PLANS.map((plan, i) => (
             <FadeIn key={plan.name} delay={i * 0.08}>
               <div className="hover-lift h-full">

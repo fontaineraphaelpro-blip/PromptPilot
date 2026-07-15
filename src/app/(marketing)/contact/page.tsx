@@ -37,7 +37,7 @@ export default function ContactPage() {
             <MessageCircle className="h-6 w-6 mb-3" />
             <h2 className="text-lg font-semibold text-foreground">Chat en direct</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Disponible en bas à droite sur le site (plan Creator : priorité).
+              Disponible en bas à droite sur le site (comptes Pro : priorité).
             </p>
             <p className="text-xs text-muted-foreground mt-4">
               Cliquez sur la bulle de chat pour nous écrire.

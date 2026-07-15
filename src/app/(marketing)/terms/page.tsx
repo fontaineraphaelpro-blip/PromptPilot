@@ -28,10 +28,10 @@ export default function TermsPage() {
       <p>
         Le plan Free inclut {FREE_LIFETIME_LIMIT} générations offertes (sans renouvellement automatique).
         Starter : jusqu&apos;à {STARTER_MONTHLY_LIMIT} générations par mois. Pro : jusqu&apos;à{" "}
-        {PLUS_MONTHLY_LIMIT} générations par mois avec variantes avancées. Creator : illimité sous
-        réserve d&apos;un usage raisonnable, avec workflows. Des achats ponctuels (crédits, déblocage
-        Expert, pack workflows) peuvent aussi être proposés. Les abonnements sont facturés via Stripe
-        (mensuel ou annuel si proposé). Annulation à tout moment depuis le portail de facturation.
+        {PLUS_MONTHLY_LIMIT} générations par mois avec variantes avancées et workflows.
+        Des achats ponctuels (crédits, déblocage Expert, pack workflows) peuvent aussi être proposés.
+        Les abonnements sont facturés via Stripe (mensuel ou annuel si proposé). Annulation à tout
+        moment depuis le portail de facturation.
       </p>
       <h2 className="text-lg font-semibold text-foreground pt-4">Usage acceptable</h2>
       <p>

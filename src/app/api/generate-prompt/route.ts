@@ -63,7 +63,7 @@ function upgradeMessageForPlan(plan: Plan): string {
     return `Votre quota Starter (${STARTER_MONTHLY_LIMIT}/mois) est atteint. Un pack de crédits ou Pro (${PLAN_PRICES.plus.label}) peut prolonger votre rythme.`;
   }
   if (plan === "plus") {
-    return `Votre quota Pro (${PLUS_MONTHLY_LIMIT}/mois) est atteint. Un pack de crédits ou Creator (${PLAN_PRICES.creator.label}) pour un volume plus large.`;
+    return `Votre quota Pro (${PLUS_MONTHLY_LIMIT}/mois) est atteint. Un pack de crédits pour prolonger sans changer de plan.`;
   }
   return "Limite atteinte pour le moment.";
 }

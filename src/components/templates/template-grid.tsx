@@ -78,7 +78,7 @@ function TemplateCard({
               </span>
               <p className="text-sm font-medium">Prompt Premium</p>
               <p className="text-xs text-muted-foreground max-w-[220px]">
-                Inclus avec Pro ou Creator — pour lire, copier et utiliser ce template.
+                Inclus avec Pro — pour lire, copier et utiliser ce template.
               </p>
             </div>
           )}

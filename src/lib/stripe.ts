@@ -37,7 +37,7 @@ function yearlyEnvFor(plan: PaidPlan): string | undefined {
   if (plan === "plus") {
     return process.env.NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID_YEARLY?.trim();
   }
-  return process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID_YEARLY?.trim();
+  return undefined;
 }
 
 function getRawPlanEnv(plan: PaidPlan, interval: "monthly" | "yearly" = "monthly"): string {
@@ -53,11 +53,7 @@ export function hasYearlyPricing(plan: PaidPlan): boolean {
 }
 
 export function hasAnyYearlyPricing(): boolean {
-  return (
-    hasYearlyPricing("starter") ||
-    hasYearlyPricing("plus") ||
-    hasYearlyPricing("creator")
-  );
+  return hasYearlyPricing("starter") || hasYearlyPricing("plus");
 }
 
 export function getPlanCheckoutRef(
@@ -100,8 +96,6 @@ function getKnownPriceIds(plan: PaidPlan): string[] {
       process.env.STRIPE_PRO_PRICE_ID?.trim();
   } else if (plan === "plus") {
     serverVal = process.env.STRIPE_PLUS_PRICE_ID?.trim();
-  } else {
-    serverVal = process.env.STRIPE_CREATOR_PRICE_ID?.trim();
   }
 
   if (isStripePriceId(publicVal)) ids.add(publicVal);
@@ -117,7 +111,11 @@ function getKnownPriceIds(plan: PaidPlan): string[] {
 export function planFromPriceId(priceId: string): Plan {
   if (getKnownPriceIds("starter").includes(priceId)) return "starter";
   if (getKnownPriceIds("plus").includes(priceId)) return "plus";
-  if (getKnownPriceIds("creator").includes(priceId)) return "creator";
+  // Ancien Price ID Creator → Pro
+  const legacyCreator =
+    process.env.NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID?.trim() ||
+    process.env.STRIPE_CREATOR_PRICE_ID?.trim();
+  if (legacyCreator && legacyCreator === priceId) return "plus";
   return "free";
 }
 
@@ -143,8 +141,8 @@ export function stripeConfigErrorMessage(error: unknown): string | null {
     error.param === "line_items[0][price]"
   ) {
     return (
-      "Configuration Stripe incorrecte : NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID (ou PRO legacy), " +
-      "NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID et NEXT_PUBLIC_STRIPE_CREATOR_PRICE_ID doivent être des ID price_... " +
+      "Configuration Stripe incorrecte : NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID (ou PRO legacy) et " +
+      "NEXT_PUBLIC_STRIPE_PLUS_PRICE_ID doivent être des ID price_... " +
       "(Stripe → Produits → Tarif → ID), pas des liens buy.stripe.com. " +
       "Les Payment Links sont aussi acceptés — redéployez avec la dernière version."
     );
